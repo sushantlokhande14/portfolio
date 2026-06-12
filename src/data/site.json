@@ -1,20 +1,66 @@
 {
   "name": "Sushant Lokhande",
-  "kicker": "// software engineer",
-  "tagline": "CS grad student at SJSU building fast, thoughtful software — from open-source contributions to full-stack products.",
-  "email": "sushantrakesh.lokhande@sjsu.edu",
+  "kicker": "// software engineer — ml/ai + backend",
+  "tagline": "MS CS new grad from San José State building ML systems and production backends — malware-classification research, RAG platforms, and microservices on AWS.",
+  "email": "lokhandesushant094@gmail.com",
   "github": "https://github.com/sushantlokhande14",
-  "linkedin": "https://www.linkedin.com/in/REPLACE-ME",
+  "linkedin": "https://www.linkedin.com/in/sushantlokhande14",
   "resume": "/resume.pdf",
   "repo": "https://github.com/sushantlokhande14/portfolio",
   "about": [
-    "Placeholder — I'm a graduate student in Computer Science at San José State University, focused on building software that feels fast and considered.",
-    "Placeholder — outside of coursework I contribute to open source and ship small things daily. Replace these paragraphs with 3–4 honest sentences about who you are and what you care about building."
+    "I'm a recent MS Computer Science graduate from San José State University (May 2026, GPA 3.8), where my thesis research on image-based malware classification became a co-authored paper now under review.",
+    "I like building across the stack: PyTorch training pipelines on CUDA, FastAPI microservices on AWS, and LLM-powered products grounded with RAG. Before grad school, I shipped production Python microservices at an edtech platform serving ~70K users.",
+    "I work AI-native — Cursor and Claude Code are part of my daily loop — and I ship something small every day. Currently looking for full-time SWE and ML roles in the Bay Area."
+  ],
+  "education": [
+    {
+      "school": "San José State University",
+      "degree": "MS, Computer Science",
+      "dates": "Aug 2024 — May 2026",
+      "gpa": "3.8 / 4.0",
+      "notes": [
+        "ML/AI coursework track",
+        "Spartan Scholar — top 3% of class",
+        "CS298 thesis: image-based malware classification"
+      ]
+    },
+    {
+      "school": "University of Mumbai",
+      "degree": "BE, Computer Engineering",
+      "dates": "Aug 2019 — May 2023",
+      "gpa": "3.9 / 4.0",
+      "notes": [
+        "Data structures & algorithms, operating systems",
+        "Computer networks, computer architecture, DBMS"
+      ]
+    }
+  ],
+  "research": [
+    {
+      "title": "Image-Based Techniques and Ensemble Soft Voting for Malware Classification",
+      "detail": "S. Lokhande, F. Di Troia, M. Stamp — under review, 2026"
+    },
+    {
+      "title": "Comprehensive Big Data Analytics Dashboard on Chats",
+      "detail": "Presented at ICICN 2023, Mumbai, India"
+    }
   ],
   "skills": [
-    { "group": "Languages", "items": ["Python", "TypeScript", "Java", "SQL"] },
-    { "group": "Frameworks", "items": ["React", "Node.js", "Astro", "Express"] },
-    { "group": "Infra & Data", "items": ["PostgreSQL", "Docker", "AWS", "Linux"] },
-    { "group": "Tools", "items": ["Git", "GitHub Actions", "Figma", "VS Code"] }
+    {
+      "group": "Languages",
+      "items": ["Python", "TypeScript", "C++", "SQL", "Java"]
+    },
+    {
+      "group": "ML & AI",
+      "items": ["PyTorch", "scikit-learn", "OpenCV", "RAG & embeddings", "OpenAI API", "CUDA (PyTorch)"]
+    },
+    {
+      "group": "Backend & Data",
+      "items": ["FastAPI", "Flask", "Node.js", "PostgreSQL", "MongoDB", "Neo4j", "Hadoop & Hive"]
+    },
+    {
+      "group": "Infra & Tools",
+      "items": ["AWS EC2", "Docker", "CI/CD", "pytest", "Linux", "Cursor & Claude Code"]
+    }
   ]
 }

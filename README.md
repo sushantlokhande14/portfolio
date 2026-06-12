@@ -31,12 +31,12 @@ Frontmatter is validated by the schemas in `src/content.config.ts` — a typo fa
 ## Build roadmap
 
 - [x] Day 1 — scaffold, design tokens, full skeleton with placeholders
-- [ ] Day 2–3 — typography & spacing refinement, nav polish
-- [ ] Day 4–5 — hero animation detail
-- [ ] Day 6–7 — real project content (2 case studies)
-- [ ] Day 8–9 — project card & detail page polish
-- [ ] Day 10 — experience timeline content
-- [ ] Day 11 — skills & about content
-- [ ] Day 12 — Lenis smooth scroll + GSAP scroll-triggered reveals
-- [ ] Day 13 — responsive/mobile pass
-- [ ] Day 14 — SEO, OG image, favicon, Lighthouse
+- [x] Day 2 — light/dark theme system with toggle, Apple-style visual pass
+- [x] Day 3 — glass UI (frosted cards, ambient backdrop), real content: 7 projects,
+      3 experience entries, education + research section, all-projects page
+- [ ] Hero animation detail pass
+- [ ] Project detail page polish (images/diagrams per case study)
+- [ ] Lenis smooth scroll + GSAP scroll-triggered reveals
+- [ ] Responsive/mobile pass
+- [ ] SEO, OG image, favicon, Lighthouse
+- [ ] resume.pdf in public/ (résumé button 404s until then)

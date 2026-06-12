@@ -19,4 +19,12 @@ const projects = (await getCollection('projects', ({ data }) => data.featured)).
       ))
     }
   </div>
+  <div class="mt-10" data-reveal>
+    <a
+      href="/projects/"
+      class="font-mono text-sm text-muted transition-colors hover:text-accent"
+    >
+      all projects →
+    </a>
+  </div>
 </section>

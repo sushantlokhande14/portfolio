@@ -21,7 +21,9 @@ const rendered = await Promise.all(
           <h3 class="mt-2 text-lg font-medium text-ink">
             {entry.data.role} <span class="text-muted">· {entry.data.org}</span>
           </h3>
-          <div class="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
+          <div
+            class="mt-2 max-w-2xl text-sm leading-relaxed text-muted [&_li]:marker:text-accent [&_ul]:list-disc [&_ul]:space-y-1.5 [&_ul]:pl-4"
+          >
             <Content />
           </div>
           {entry.data.tech.length > 0 && (

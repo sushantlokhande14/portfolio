@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<Layout
+  title="Projects — Sushant Lokhande"
+  description="All projects by Sushant Lokhande — ML systems, backends, distributed pipelines, and LLM apps."
+>
+  <section class="mx-auto max-w-5xl px-6 pb-32 pt-36">
+    <a href="/#projects" class="font-mono text-xs text-muted transition-colors hover:text-accent">
+      ← home
+    </a>
+    <p class="mt-8 font-mono text-xs uppercase tracking-[0.2em] text-muted">
+      <span class="text-accent">01</span> — projects
+    </p>
+    <h1 class="mt-4 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
+      All projects<span class="text-accent">.</span>
+    </h1>
+    <div class="mt-14 grid gap-5 sm:grid-cols-2">
+      {
+        projects.map((project, i) => (
+          <div data-reveal style={`--reveal-delay: ${(i % 2) * 80}ms`}>
+            <ProjectCard project={project} />
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</Layout>
