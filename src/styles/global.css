@@ -4,14 +4,40 @@
 
 @plugin "@tailwindcss/typography";
 
-@theme {
-  --color-base: #0a0a0a;
-  --color-surface: #111113;
-  --color-ink: #ededed;
-  --color-muted: #8b8b8b;
-  --color-line: #ffffff14;
-  --color-accent: #5e9eff;
+@custom-variant dark (&:where(.dark, .dark *));
 
+/* ---------- semantic palette: light (Apple-classic) / dark (technical) ---------- */
+
+:root {
+  --bg-base: #f5f5f7;
+  --bg-surface: #ffffff;
+  --ink-1: #1d1d1f;
+  --ink-2: #6e6e73;
+  --line-1: rgba(0, 0, 0, 0.1);
+  --accent-1: #0071e3;
+  --glow: rgba(0, 113, 227, 0.1);
+}
+
+.dark {
+  --bg-base: #0a0a0a;
+  --bg-surface: #111113;
+  --ink-1: #ededed;
+  --ink-2: #8b8b8b;
+  --line-1: rgba(255, 255, 255, 0.08);
+  --accent-1: #5e9eff;
+  --glow: rgba(94, 158, 255, 0.13);
+}
+
+@theme inline {
+  --color-base: var(--bg-base);
+  --color-surface: var(--bg-surface);
+  --color-ink: var(--ink-1);
+  --color-muted: var(--ink-2);
+  --color-line: var(--line-1);
+  --color-accent: var(--accent-1);
+}
+
+@theme {
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, Consolas, monospace;
 
@@ -33,6 +59,7 @@
     color: var(--color-ink);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
 
   ::selection {
@@ -41,6 +68,66 @@
   }
 }
 
+/* ---------- components ---------- */
+
+/* gradient headline, theme-aware */
+.text-gradient {
+  background: linear-gradient(135deg, var(--ink-1) 45%, var(--ink-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* filled pill button: black in light mode, white in dark mode */
+.btn-primary {
+  background: var(--ink-1);
+  color: var(--bg-base);
+}
+
+/* hero backdrop: faint grid fading out radially + soft accent glow */
+.hero-grid {
+  background-image:
+    linear-gradient(var(--line-1) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line-1) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, black 25%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, black 25%, transparent 75%);
+}
+
+.hero-glow {
+  background: var(--glow);
+}
+
+/* nav gains material once the page scrolls */
+#site-nav {
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s ease, background-color 0.3s ease, backdrop-filter 0.3s ease;
+}
+
+#site-nav.nav-scrolled {
+  border-bottom-color: var(--line-1);
+  background-color: color-mix(in srgb, var(--bg-base) 80%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* scroll cue line at the bottom of the hero */
+.scroll-line {
+  display: block;
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(var(--ink-2), transparent);
+  animation: scroll-pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes scroll-pulse {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+/* ---------- motion ---------- */
+
+/* load-time reveal (hero) */
 @utility reveal {
   animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
   animation-delay: var(--delay, 0ms);
@@ -52,6 +139,31 @@
     transform: translateY(12px);
   }
   to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* scroll-time reveal (sections), triggered by IntersectionObserver */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  [data-reveal] {
+    animation: none;
+    transition: none;
     opacity: 1;
     transform: none;
   }

@@ -3,9 +3,9 @@ import site from '../data/site.json';
 import SectionHeading from './SectionHeading.astro';
 ---
 
-<section id="about" class="mx-auto max-w-5xl scroll-mt-14 px-6 py-28">
+<section id="about" class="mx-auto max-w-5xl scroll-mt-14 px-6 py-32">
   <SectionHeading index="04" label="about" title="A little about me" />
-  <div class="max-w-2xl space-y-4 leading-relaxed text-muted">
+  <div class="max-w-2xl space-y-4 text-lg leading-relaxed text-muted" data-reveal>
     {site.about.map((paragraph) => <p>{paragraph}</p>)}
   </div>
 </section>

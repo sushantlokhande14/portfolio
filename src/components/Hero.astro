@@ -2,22 +2,51 @@
 import site from '../data/site.json';
 ---
 
-<section class="mx-auto flex min-h-screen max-w-5xl flex-col justify-center px-6 pt-14">
-  <p class="reveal font-mono text-sm text-accent">
-    {site.kicker}<span class="ml-1 inline-block h-4 w-2 translate-y-0.5 bg-accent animate-blink"></span>
-  </p>
-  <h1
-    class="reveal mt-6 max-w-3xl text-5xl font-semibold leading-[1.05] tracking-tight text-ink sm:text-7xl"
-    style="--delay: 100ms"
-  >
-    {site.name}
-  </h1>
-  <p class="reveal mt-6 max-w-xl text-lg leading-relaxed text-muted" style="--delay: 200ms">
-    {site.tagline}
-  </p>
-  <div class="reveal mt-10 flex items-center gap-6 font-mono text-sm" style="--delay: 300ms">
-    <a href={site.github} class="text-muted transition-colors hover:text-accent">github ↗</a>
-    <a href={site.linkedin} class="text-muted transition-colors hover:text-accent">linkedin ↗</a>
-    <a href={`mailto:${site.email}`} class="text-muted transition-colors hover:text-accent">email ↗</a>
+<section class="relative flex min-h-screen flex-col justify-center overflow-hidden pt-14">
+  <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+    <div class="hero-grid absolute inset-0"></div>
+    <div
+      class="hero-glow absolute left-1/2 top-1/2 h-[480px] w-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px]"
+    >
+    </div>
+  </div>
+
+  <div class="mx-auto w-full max-w-5xl px-6">
+    <p class="reveal font-mono text-sm text-accent">
+      {site.kicker}<span class="ml-1 inline-block h-4 w-2 translate-y-0.5 bg-accent animate-blink"></span>
+    </p>
+    <h1
+      class="text-gradient reveal mt-6 max-w-4xl text-6xl font-semibold leading-[1.02] tracking-tight sm:text-8xl"
+      style="--delay: 100ms"
+    >
+      {site.name}
+    </h1>
+    <p class="reveal mt-8 max-w-xl text-xl leading-relaxed text-muted" style="--delay: 200ms">
+      {site.tagline}
+    </p>
+    <div class="reveal mt-10 flex flex-wrap items-center gap-3" style="--delay: 300ms">
+      <a
+        href="/#projects"
+        class="btn-primary rounded-full px-5 py-2.5 text-sm font-medium transition-opacity hover:opacity-85"
+      >
+        View my work
+      </a>
+      <a
+        href={site.github}
+        class="rounded-full border border-line px-5 py-2.5 font-mono text-sm text-muted transition-colors hover:border-accent hover:text-accent"
+      >
+        github ↗
+      </a>
+      <a
+        href={site.linkedin}
+        class="rounded-full border border-line px-5 py-2.5 font-mono text-sm text-muted transition-colors hover:border-accent hover:text-accent"
+      >
+        linkedin ↗
+      </a>
+    </div>
+  </div>
+
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2" aria-hidden="true">
+    <span class="scroll-line"></span>
   </div>
 </section>

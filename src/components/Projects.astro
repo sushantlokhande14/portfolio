@@ -8,9 +8,15 @@ const projects = (await getCollection('projects', ({ data }) => data.featured)).
 );
 ---
 
-<section id="projects" class="mx-auto max-w-5xl scroll-mt-14 px-6 py-28">
+<section id="projects" class="mx-auto max-w-5xl scroll-mt-14 px-6 py-32">
   <SectionHeading index="01" label="projects" title="Things I've built" />
-  <div class="grid gap-4 sm:grid-cols-2">
-    {projects.map((project) => <ProjectCard project={project} />)}
+  <div class="grid gap-5 sm:grid-cols-2">
+    {
+      projects.map((project, i) => (
+        <div data-reveal style={`--reveal-delay: ${i * 80}ms`}>
+          <ProjectCard project={project} />
+        </div>
+      ))
+    }
   </div>
 </section>

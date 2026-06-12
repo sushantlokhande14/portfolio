@@ -8,12 +8,12 @@ const rendered = await Promise.all(
 );
 ---
 
-<section id="experience" class="mx-auto max-w-5xl scroll-mt-14 px-6 py-28">
+<section id="experience" class="mx-auto max-w-5xl scroll-mt-14 px-6 py-32">
   <SectionHeading index="02" label="experience" title="Where I've worked" />
-  <ol class="relative ml-1 space-y-12 border-l border-line pl-8">
+  <ol class="relative ml-1 space-y-14 border-l border-line pl-8">
     {
-      rendered.map(({ entry, Content }) => (
-        <li class="relative">
+      rendered.map(({ entry, Content }, i) => (
+        <li class="relative" data-reveal style={`--reveal-delay: ${i * 80}ms`}>
           <span class="absolute -left-[37px] top-1.5 size-2.5 rounded-full bg-accent" />
           <p class="font-mono text-xs text-muted">
             {entry.data.start} — {entry.data.end}

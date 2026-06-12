@@ -1,5 +1,6 @@
 ---
 import site from '../data/site.json';
+import ThemeToggle from './ThemeToggle.astro';
 
 const links = [
   { label: 'projects', href: '/#projects' },
@@ -8,12 +9,12 @@ const links = [
 ];
 ---
 
-<header class="fixed inset-x-0 top-0 z-50 border-b border-line bg-base/80 backdrop-blur-md">
+<header id="site-nav" class="fixed inset-x-0 top-0 z-50">
   <nav class="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
     <a href="/" class="font-mono text-sm text-ink transition-colors hover:text-accent">
       sushant<span class="text-accent">.</span>
     </a>
-    <div class="flex items-center gap-6">
+    <div class="flex items-center gap-5">
       {
         links.map((link) => (
           <a
@@ -26,10 +27,18 @@ const links = [
       }
       <a
         href={site.resume}
-        class="rounded-md border border-line px-3 py-1.5 font-mono text-xs text-ink transition-colors hover:border-accent hover:text-accent"
+        class="rounded-full border border-line px-3.5 py-1.5 font-mono text-xs text-ink transition-colors hover:border-accent hover:text-accent"
       >
         résumé
       </a>
+      <ThemeToggle />
     </div>
   </nav>
 </header>
+
+<script>
+  const nav = document.getElementById('site-nav');
+  const onScroll = () => nav?.classList.toggle('nav-scrolled', window.scrollY > 8);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+</script>
