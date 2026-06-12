@@ -1,0 +1,44 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<Layout title={`${project.data.title} — Sushant Lokhande`} description={project.data.summary}>
+  <article class="mx-auto max-w-3xl px-6 pb-28 pt-36">
+    <a href="/#projects" class="font-mono text-xs text-muted transition-colors hover:text-accent">
+      ← all projects
+    </a>
+    <h1 class="mt-8 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
+      {project.data.title}
+    </h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">{project.data.summary}</p>
+    <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs">
+      <ul class="flex flex-wrap gap-x-4 gap-y-1 text-muted">
+        {project.data.tech.map((t) => <li>{t}</li>)}
+      </ul>
+      {project.data.github && (
+        <a href={project.data.github} class="text-accent hover:underline">github ↗</a>
+      )}
+      {project.data.live && (
+        <a href={project.data.live} class="text-accent hover:underline">live ↗</a>
+      )}
+    </div>
+    <hr class="my-12 border-line" />
+    <div
+      class="prose prose-invert prose-headings:tracking-tight prose-a:text-accent max-w-none prose-p:text-muted"
+    >
+      <Content />
+    </div>
+  </article>
+</Layout>

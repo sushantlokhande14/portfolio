@@ -1,0 +1,16 @@
+---
+import { getCollection } from 'astro:content';
+import SectionHeading from './SectionHeading.astro';
+import ProjectCard from './ProjectCard.astro';
+
+const projects = (await getCollection('projects', ({ data }) => data.featured)).sort(
+  (a, b) => a.data.order - b.data.order
+);
+---
+
+<section id="projects" class="mx-auto max-w-5xl scroll-mt-14 px-6 py-28">
+  <SectionHeading index="01" label="projects" title="Things I've built" />
+  <div class="grid gap-4 sm:grid-cols-2">
+    {projects.map((project) => <ProjectCard project={project} />)}
+  </div>
+</section>

@@ -1,0 +1,20 @@
+{
+  "name": "Sushant Lokhande",
+  "kicker": "// software engineer",
+  "tagline": "CS grad student at SJSU building fast, thoughtful software — from open-source contributions to full-stack products.",
+  "email": "sushantrakesh.lokhande@sjsu.edu",
+  "github": "https://github.com/sushantlokhande14",
+  "linkedin": "https://www.linkedin.com/in/REPLACE-ME",
+  "resume": "/resume.pdf",
+  "repo": "https://github.com/sushantlokhande14/portfolio",
+  "about": [
+    "Placeholder — I'm a graduate student in Computer Science at San José State University, focused on building software that feels fast and considered.",
+    "Placeholder — outside of coursework I contribute to open source and ship small things daily. Replace these paragraphs with 3–4 honest sentences about who you are and what you care about building."
+  ],
+  "skills": [
+    { "group": "Languages", "items": ["Python", "TypeScript", "Java", "SQL"] },
+    { "group": "Frameworks", "items": ["React", "Node.js", "Astro", "Express"] },
+    { "group": "Infra & Data", "items": ["PostgreSQL", "Docker", "AWS", "Linux"] },
+    { "group": "Tools", "items": ["Git", "GitHub Actions", "Figma", "VS Code"] }
+  ]
+}

@@ -1,0 +1,23 @@
+---
+import site from '../data/site.json';
+---
+
+<section class="mx-auto flex min-h-screen max-w-5xl flex-col justify-center px-6 pt-14">
+  <p class="reveal font-mono text-sm text-accent">
+    {site.kicker}<span class="ml-1 inline-block h-4 w-2 translate-y-0.5 bg-accent animate-blink"></span>
+  </p>
+  <h1
+    class="reveal mt-6 max-w-3xl text-5xl font-semibold leading-[1.05] tracking-tight text-ink sm:text-7xl"
+    style="--delay: 100ms"
+  >
+    {site.name}
+  </h1>
+  <p class="reveal mt-6 max-w-xl text-lg leading-relaxed text-muted" style="--delay: 200ms">
+    {site.tagline}
+  </p>
+  <div class="reveal mt-10 flex items-center gap-6 font-mono text-sm" style="--delay: 300ms">
+    <a href={site.github} class="text-muted transition-colors hover:text-accent">github ↗</a>
+    <a href={site.linkedin} class="text-muted transition-colors hover:text-accent">linkedin ↗</a>
+    <a href={`mailto:${site.email}`} class="text-muted transition-colors hover:text-accent">email ↗</a>
+  </div>
+</section>
