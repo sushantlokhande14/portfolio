@@ -3,7 +3,7 @@ title: "Graph Connect"
 summary: "A multi-datastore social platform: FastAPI microservices over Neo4j and MongoDB with JWT auth, full-text search, and 50K+ graph relationships."
 tech: ["Python", "FastAPI", "TypeScript", "Neo4j", "MongoDB", "Docker", "AWS"]
 featured: true
-order: 2
+order: 3
 github: "https://github.com/sushantlokhande14/neo4j-social-network-graph-app"
 ---
 

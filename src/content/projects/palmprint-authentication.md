@@ -3,7 +3,7 @@ title: "Multimodal Palmprint Authentication"
 summary: "Contactless biometric verification with a four-way deep learning ensemble — 99.75% AUC via late-fusion soft voting."
 tech: ["Python", "PyTorch", "OpenCV", "FastAPI", "Docker", "CUDA"]
 featured: false
-order: 5
+order: 6
 github: "https://github.com/sushantlokhande14/Multimodal-contactless-palmprint-verification-using-dual-networks-and-ensemble-scoring"
 ---
 

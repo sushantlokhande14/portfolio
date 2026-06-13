@@ -3,7 +3,7 @@ title: "TCP Sliding Window Simulator"
 summary: "TCP from scratch over raw sockets — three-way handshake, adaptive windowing, retransmission — with a real-time telemetry dashboard."
 tech: ["Python", "Sockets", "TCP"]
 featured: false
-order: 7
+order: 8
 ---
 
 ## Problem

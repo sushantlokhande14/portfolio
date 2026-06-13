@@ -2,8 +2,8 @@
 title: "Melody Metrics"
 summary: "A distributed data pipeline: C++ MapReduce on a Linux Hadoop cluster crunching 1M+ records with fuzzy joins, feeding an 84%-accurate XGBoost model."
 tech: ["C++", "Python", "Hadoop", "MapReduce", "Hive", "XGBoost"]
-featured: true
-order: 4
+featured: false
+order: 5
 github: "https://github.com/sushantlokhande14/Predicting-Song-Popularity-Using-Lyrics"
 ---
 

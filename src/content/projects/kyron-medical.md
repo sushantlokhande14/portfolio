@@ -3,7 +3,7 @@ title: "Kyron Medical"
 summary: "An AI-powered patient service app — LLM chat with voice handoff — shipped end-to-end in under a week with an AI-native workflow."
 tech: ["Python", "FastAPI", "React", "TypeScript", "OpenAI", "Vapi", "AWS EC2"]
 featured: false
-order: 6
+order: 7
 github: "https://github.com/sushantlokhande14/kyron-medicalapp"
 ---
 
