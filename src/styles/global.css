@@ -177,6 +177,137 @@
     background: linear-gradient(var(--ink-2), transparent);
     animation: scroll-pulse 2.2s ease-in-out infinite;
   }
+
+  /* ---------- project coverflow carousel ---------- */
+  .pc {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .pc.is-ready {
+    opacity: 1;
+  }
+
+  .pc-stage {
+    position: relative;
+    height: 340px;
+    perspective: 1600px;
+    transform-style: preserve-3d;
+    touch-action: pan-y;
+  }
+
+  .pc-slide {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: min(360px, 80vw);
+    height: 100%;
+    transform: translate(-50%, 0);
+    transition:
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform, opacity;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .pc-card {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 1rem;
+    padding: 1.75rem;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .pc-slide.is-active {
+    cursor: default;
+  }
+
+  .pc-slide.is-active .pc-card {
+    border-color: color-mix(in srgb, var(--accent-1) 35%, var(--glass-border));
+    box-shadow:
+      inset 0 1px 0 var(--glass-highlight),
+      0 24px 64px var(--glass-shadow);
+  }
+
+  .pc-tick {
+    transition: transform 0.3s ease, color 0.3s ease;
+  }
+
+  .pc-slide.is-active .pc-tick {
+    color: var(--accent-1);
+  }
+
+  .pc-hint {
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  .pc-slide.is-active .pc-hint {
+    opacity: 1;
+    transform: none;
+  }
+
+  .pc-arrow {
+    position: absolute;
+    top: 50%;
+    z-index: 200;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    transform: translateY(-50%);
+    border-radius: 9999px;
+    color: var(--ink-1);
+    transition: opacity 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  }
+
+  .pc-arrow.prev {
+    left: 0.5rem;
+  }
+
+  .pc-arrow.next {
+    right: 0.5rem;
+  }
+
+  .pc-arrow:hover {
+    color: var(--accent-1);
+    border-color: color-mix(in srgb, var(--accent-1) 50%, transparent);
+  }
+
+  .pc-arrow:disabled {
+    opacity: 0.2;
+    pointer-events: none;
+  }
+
+  .pc-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .pc-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background: var(--ink-2);
+    opacity: 0.35;
+    cursor: pointer;
+    transition: opacity 0.3s ease, width 0.3s ease, background 0.3s ease;
+  }
+
+  .pc-dot:hover {
+    opacity: 0.7;
+  }
+
+  .pc-dot.is-on {
+    opacity: 1;
+    width: 18px;
+    background: var(--accent-1);
+  }
 }
 
 @keyframes drift {
@@ -238,5 +369,9 @@
 
   .ambient-blob {
     animation: none;
+  }
+
+  .pc-slide {
+    transition: none;
   }
 }
