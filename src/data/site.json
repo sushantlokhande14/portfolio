@@ -40,10 +40,12 @@
   ],
   "research": [
     {
+      "tag": "Paper · under review",
       "title": "Image-Based Techniques and Ensemble Soft Voting for Malware Classification",
-      "detail": "S. Lokhande, F. Di Troia, M. Stamp — under review, 2026"
+      "detail": "S. Lokhande, F. Di Troia, M. Stamp · 2026"
     },
     {
+      "tag": "Conference",
       "title": "Comprehensive Big Data Analytics Dashboard on Chats",
       "detail": "Presented at ICICN 2023, Mumbai, India"
     }
