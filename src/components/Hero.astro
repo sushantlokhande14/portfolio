@@ -4,19 +4,18 @@ import site from '../data/site.json';
 
 <section class="relative flex min-h-screen flex-col justify-center overflow-hidden pt-14">
   <div class="mx-auto w-full max-w-5xl px-6">
-    <p class="reveal font-mono text-sm text-accent">
-      {site.kicker}<span class="ml-1 inline-block h-4 w-2 translate-y-0.5 bg-accent animate-blink"></span>
-    </p>
     <h1
-      class="text-gradient reveal mt-6 max-w-4xl text-6xl font-semibold leading-[1.02] tracking-tight sm:text-8xl"
-      style="--delay: 100ms"
+      class="text-gradient reveal max-w-4xl text-6xl font-semibold leading-[1.02] tracking-tight sm:text-8xl"
     >
       {site.name}
     </h1>
-    <p class="reveal mt-8 max-w-xl text-xl leading-relaxed text-muted" style="--delay: 200ms">
+    <p class="reveal mt-8 max-w-2xl text-xl leading-relaxed text-muted" style="--delay: 120ms">
       {site.tagline}
     </p>
-    <div class="reveal mt-10 flex flex-wrap items-center gap-3" style="--delay: 300ms">
+    <p class="reveal mt-5 max-w-xl text-base leading-relaxed text-ink/80" style="--delay: 200ms">
+      {site.cta}
+    </p>
+    <div class="reveal mt-10 flex flex-wrap items-center gap-3" style="--delay: 280ms">
       <a
         href="/#projects"
         class="btn-primary rounded-full px-5 py-2.5 text-sm font-medium transition-opacity hover:opacity-85"

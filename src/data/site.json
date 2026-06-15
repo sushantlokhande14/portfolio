@@ -1,7 +1,7 @@
 {
   "name": "Sushant Lokhande",
-  "kicker": "// ml/ai + backend engineer",
-  "tagline": "I build ML systems and the backends that serve them. Lately a malware classifier, a vector search engine in C++, and an LLM gateway that runs on it.",
+  "tagline": "I'm a software engineer. I build full stack systems, end to end ML pipelines, and the backends that serve them. Lately I published a malware classification pipeline, wrote a vector search engine from scratch in C++, and an LLM gateway that runs on it.",
+  "cta": "DM me to see what I'm working on now. Let's build something together.",
   "email": "lokhandesushant094@gmail.com",
   "github": "https://github.com/sushantlokhande14",
   "linkedin": "https://www.linkedin.com/in/sushantlokhande14",
