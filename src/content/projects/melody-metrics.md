@@ -1,6 +1,7 @@
 ---
 title: "Melody Metrics"
-summary: "A distributed data pipeline: C++ MapReduce on a Linux Hadoop cluster crunching 1M+ records with fuzzy joins, feeding an 84%-accurate XGBoost model."
+summary: "A million messy music records that shared no common keys. I joined them with C++ MapReduce on a Hadoop cluster, then asked the clean data what actually makes a song popular."
+cover: "/covers/melody.svg"
 tech: ["C++", "Python", "Hadoop", "MapReduce", "Hive", "XGBoost"]
 featured: false
 order: 5

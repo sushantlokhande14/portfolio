@@ -1,6 +1,7 @@
 ---
 title: "Proxima"
-summary: "A vector search engine from scratch in C++17: HNSW with int8 graph traversal and exact float re-ranking — 1.8× hnswlib and 2.5× FAISS at 0.999 recall, single-threaded."
+summary: "Everyone imports a vector search library. I wrote my own in C++ and made it win. It answers nearest neighbor queries 1.8 times faster than hnswlib and 2.5 times faster than FAISS, at 0.999 recall, on a single thread."
+cover: "/covers/proxima.svg"
 tech: ["C++17", "SIMD/AVX2", "pybind11", "CMake", "Python", "NumPy"]
 featured: true
 order: 1

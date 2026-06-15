@@ -1,6 +1,7 @@
 ---
 title: "Relay"
-summary: "A local LLM gateway with a semantic prompt cache, provider failover, and rate limiting — a 78% hit rate cuts p50 latency 17× and provider spend 76%. The cache runs on Proxima."
+summary: "A gateway that remembers what your model already said. It matches prompts by meaning, not exact text, so 78 percent of requests skip the model entirely and the typical answer comes back in 44 milliseconds. The memory runs on Proxima."
+cover: "/covers/relay.svg"
 tech: ["Python", "FastAPI", "asyncio", "SQLite", "Proxima (C++)", "SSE"]
 featured: true
 order: 1.5

@@ -1,17 +1,17 @@
 {
   "name": "Sushant Lokhande",
-  "kicker": "// software engineer — ml/ai + backend",
-  "tagline": "MS CS new grad from San José State building ML systems and production backends — malware-classification research, RAG platforms, and microservices on AWS.",
+  "kicker": "// ml/ai + backend engineer",
+  "tagline": "I build ML systems and the backends that serve them. Lately a malware classifier, a vector search engine in C++, and an LLM gateway that runs on it.",
   "email": "lokhandesushant094@gmail.com",
   "github": "https://github.com/sushantlokhande14",
   "linkedin": "https://www.linkedin.com/in/sushantlokhande14",
   "resume": "/resume.pdf",
-  "avatar": "/profile.svg",
+  "avatar": "/profile.jpg",
   "repo": "https://github.com/sushantlokhande14/portfolio",
   "about": [
-    "I'm a recent MS Computer Science graduate from San José State University (May 2026, GPA 3.8), where my thesis research on image-based malware classification became a co-authored paper now under review.",
-    "I like building across the stack: PyTorch training pipelines on CUDA, FastAPI microservices on AWS, and LLM-powered products grounded with RAG. Before grad school, I shipped production Python microservices at an edtech platform serving ~70K users.",
-    "I work AI-native — Cursor and Claude Code are part of my daily loop — and I ship something small every day. Currently looking for full-time SWE and ML roles in the Bay Area."
+    "I build software that feels fast and gets out of your way.",
+    "I just finished my Master's in Computer Science at San José State, where my thesis on spotting malware by turning it into images grew into a published paper. Lately I have been writing my own vector search engine in C++, building an LLM gateway on top of it, and shipping something small almost every day.",
+    "Before grad school I wrote Python microservices for an edtech platform used by around 70 thousand people. The part of engineering I love most is where a hard systems problem meets a clean, simple interface. Right now I am looking for full time software and ML roles in the Bay Area."
   ],
   "education": [
     {

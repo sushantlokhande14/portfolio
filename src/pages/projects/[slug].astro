@@ -34,6 +34,13 @@ const { Content } = await render(project);
         <a href={project.data.live} class="text-accent hover:underline">live ↗</a>
       )}
     </div>
+    {project.data.cover && (
+      <img
+        src={project.data.cover}
+        alt=""
+        class="mt-10 aspect-[16/7] w-full rounded-2xl border border-line object-cover"
+      />
+    )}
     <hr class="my-12 border-line" />
     <div
       class="prose dark:prose-invert prose-headings:tracking-tight prose-a:text-accent max-w-none prose-p:text-muted"

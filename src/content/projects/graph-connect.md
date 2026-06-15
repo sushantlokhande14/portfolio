@@ -1,6 +1,7 @@
 ---
-title: "Graph Connect"
-summary: "A multi-datastore social platform: FastAPI microservices over Neo4j and MongoDB with JWT auth, full-text search, and 50K+ graph relationships."
+title: "Six Degrees"
+summary: "A social platform that thinks in relationships. It keeps 50 thousand connections in a graph database and answers who knows who in two hops, with profiles and content living in their own store alongside."
+cover: "/covers/graph.svg"
 tech: ["Python", "FastAPI", "TypeScript", "Neo4j", "MongoDB", "Docker", "AWS"]
 featured: true
 order: 3

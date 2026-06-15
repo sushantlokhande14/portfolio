@@ -1,6 +1,7 @@
 ---
-title: "AI Learning Aggregator"
-summary: "A RAG knowledge assistant: async FastAPI backend with ingestion, vector retrieval, and citation-grounded LLM answers with hallucination guardrails."
+title: "Cited, Not Guessed"
+summary: "A study assistant that refuses to make things up. Every answer is pulled from real source material and arrives with citations, and it stays quiet when it genuinely does not know."
+cover: "/covers/rag.svg"
 tech: ["Python", "FastAPI", "OpenAI", "Vector embeddings", "Docker", "AWS EC2"]
 featured: false
 order: 4

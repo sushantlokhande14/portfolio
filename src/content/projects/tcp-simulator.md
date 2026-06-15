@@ -1,6 +1,7 @@
 ---
-title: "TCP Sliding Window Simulator"
-summary: "TCP from scratch over raw sockets — three-way handshake, adaptive windowing, retransmission — with a real-time telemetry dashboard."
+title: "TCP, from Scratch"
+summary: "I rebuilt TCP by hand over raw sockets. The handshake, the sliding window, the retransmissions when packets vanish, all of it, with a live dashboard watching every packet move."
+cover: "/covers/tcp.svg"
 tech: ["Python", "Sockets", "TCP"]
 featured: false
 order: 8

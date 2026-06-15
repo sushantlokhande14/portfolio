@@ -1,6 +1,7 @@
 ---
-title: "Multimodal Palmprint Authentication"
-summary: "Contactless biometric verification with a four-way deep learning ensemble — 99.75% AUC via late-fusion soft voting."
+title: "Show of Hands"
+summary: "Contactless identity from the palm of your hand. Four models study every scan and vote on the verdict, and together they reach 99.75 percent AUC."
+cover: "/covers/palmprint.svg"
 tech: ["Python", "PyTorch", "OpenCV", "FastAPI", "Docker", "CUDA"]
 featured: false
 order: 6

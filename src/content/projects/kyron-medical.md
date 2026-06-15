@@ -1,6 +1,7 @@
 ---
-title: "Kyron Medical"
-summary: "An AI-powered patient service app — LLM chat with voice handoff — shipped end-to-end in under a week with an AI-native workflow."
+title: "Kyron"
+summary: "An AI patient assistant that talks back, in text and in voice. I took it from an empty folder to a shipped product in under a week, working entirely AI native."
+cover: "/covers/kyron.svg"
 tech: ["Python", "FastAPI", "React", "TypeScript", "OpenAI", "Vapi", "AWS EC2"]
 featured: false
 order: 7
