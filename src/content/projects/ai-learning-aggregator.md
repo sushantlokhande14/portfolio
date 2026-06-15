@@ -2,7 +2,7 @@
 title: "AI Learning Aggregator"
 summary: "A RAG knowledge assistant: async FastAPI backend with ingestion, vector retrieval, and citation-grounded LLM answers with hallucination guardrails."
 tech: ["Python", "FastAPI", "OpenAI", "Vector embeddings", "Docker", "AWS EC2"]
-featured: true
+featured: false
 order: 4
 github: "https://github.com/sushantlokhande14/AILearningHub"
 ---

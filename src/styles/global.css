@@ -22,8 +22,8 @@
   --glass-highlight: rgba(255, 255, 255, 0.75);
   --glass-shadow: rgba(0, 0, 0, 0.06);
 
-  --blob-1: rgba(0, 113, 227, 0.09);
-  --blob-2: rgba(139, 92, 246, 0.07);
+  --card-shadow: rgba(0, 0, 0, 0.07);
+  --bg-tint: rgba(255, 255, 255, 0.7);
 }
 
 .dark {
@@ -40,8 +40,8 @@
   --glass-highlight: rgba(255, 255, 255, 0.09);
   --glass-shadow: rgba(0, 0, 0, 0.35);
 
-  --blob-1: rgba(94, 158, 255, 0.1);
-  --blob-2: rgba(167, 139, 250, 0.08);
+  --card-shadow: rgba(0, 0, 0, 0.5);
+  --bg-tint: rgba(255, 255, 255, 0.04);
 }
 
 @theme inline {
@@ -85,15 +85,11 @@
 }
 
 @layer components {
-  /* frosted glass surface — needs the ambient backdrop behind it to refract */
-  .glass {
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px) saturate(150%);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
-    border: 1px solid var(--glass-border);
-    box-shadow:
-      inset 0 1px 0 var(--glass-highlight),
-      0 8px 32px var(--glass-shadow);
+  /* solid card surface */
+  .card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--line-1);
+    box-shadow: 0 4px 24px var(--card-shadow);
   }
 
   /* gradient headline, theme-aware */
@@ -110,50 +106,13 @@
     color: var(--bg-base);
   }
 
-  /* hero backdrop: faint grid fading out radially + soft accent glow */
-  .hero-grid {
-    background-image:
-      linear-gradient(var(--line-1) 1px, transparent 1px),
-      linear-gradient(90deg, var(--line-1) 1px, transparent 1px);
-    background-size: 56px 56px;
-    mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, black 25%, transparent 75%);
-    -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, black 25%, transparent 75%);
-  }
-
-  .hero-glow {
-    background: var(--glow);
-  }
-
-  /* page-wide ambient color, sits behind everything; gives glass something to blur */
-  .ambient {
+  /* page backdrop: solid base + one soft radial lift at the top (Apple-like) */
+  .page-bg {
     position: fixed;
     inset: 0;
     z-index: -20;
-    overflow: hidden;
     pointer-events: none;
-  }
-
-  .ambient-blob {
-    position: absolute;
-    width: 44rem;
-    height: 44rem;
-    border-radius: 9999px;
-    filter: blur(120px);
-    animation: drift 36s ease-in-out infinite alternate;
-  }
-
-  .ambient-blob:nth-child(1) {
-    top: -10%;
-    left: -10%;
-    background: var(--blob-1);
-  }
-
-  .ambient-blob:nth-child(2) {
-    bottom: -15%;
-    right: -12%;
-    background: var(--blob-2);
-    animation-duration: 44s;
-    animation-delay: -12s;
+    background: radial-gradient(ellipse 90% 55% at 50% -5%, var(--bg-tint), transparent 60%);
   }
 
   /* nav gains glass material once the page scrolls */
@@ -226,10 +185,8 @@
   }
 
   .pc-slide.is-active .pc-card {
-    border-color: color-mix(in srgb, var(--accent-1) 35%, var(--glass-border));
-    box-shadow:
-      inset 0 1px 0 var(--glass-highlight),
-      0 24px 64px var(--glass-shadow);
+    border-color: color-mix(in srgb, var(--accent-1) 40%, var(--line-1));
+    box-shadow: 0 24px 64px var(--card-shadow);
   }
 
   .pc-tick {
@@ -261,6 +218,9 @@
     height: 2.75rem;
     transform: translateY(-50%);
     border-radius: 9999px;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--line-1);
+    box-shadow: 0 2px 10px var(--card-shadow);
     color: var(--ink-1);
     transition: opacity 0.3s ease, border-color 0.3s ease, color 0.3s ease;
   }
@@ -310,15 +270,6 @@
   }
 }
 
-@keyframes drift {
-  from {
-    transform: translate(0, 0) scale(1);
-  }
-  to {
-    transform: translate(6rem, -4rem) scale(1.15);
-  }
-}
-
 @keyframes scroll-pulse {
   0%, 100% { opacity: 0.2; }
   50% { opacity: 1; }
@@ -365,10 +316,6 @@
     transition: none;
     opacity: 1;
     transform: none;
-  }
-
-  .ambient-blob {
-    animation: none;
   }
 
   .pc-slide {

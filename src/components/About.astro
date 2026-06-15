@@ -5,7 +5,17 @@ import SectionHeading from './SectionHeading.astro';
 
 <section id="about" class="mx-auto max-w-5xl scroll-mt-14 px-6 py-32">
   <SectionHeading index="05" label="about" title="A little about me" />
-  <div class="max-w-2xl space-y-4 text-lg leading-relaxed text-muted" data-reveal>
-    {site.about.map((paragraph) => <p>{paragraph}</p>)}
+  <div class="flex flex-col gap-10 sm:flex-row sm:items-start" data-reveal>
+    <img
+      src={site.avatar}
+      alt={site.name}
+      width="160"
+      height="160"
+      loading="lazy"
+      class="size-32 shrink-0 rounded-full border border-line object-cover shadow-lg sm:size-40"
+    />
+    <div class="max-w-2xl space-y-4 text-lg leading-relaxed text-muted">
+      {site.about.map((paragraph) => <p>{paragraph}</p>)}
+    </div>
   </div>
 </section>

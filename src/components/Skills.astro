@@ -8,7 +8,7 @@ import SectionHeading from './SectionHeading.astro';
   <div class="grid grid-cols-2 gap-5 md:grid-cols-4">
     {
       site.skills.map((group, i) => (
-        <div class="glass rounded-2xl p-6" data-reveal style={`--reveal-delay: ${i * 80}ms`}>
+        <div class="card rounded-2xl p-6" data-reveal style={`--reveal-delay: ${i * 80}ms`}>
           <h3 class="font-mono text-xs uppercase tracking-[0.2em] text-muted">{group.group}</h3>
           <ul class="mt-4 space-y-2 text-sm text-ink/80">
             {group.items.map((item) => (
