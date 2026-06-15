@@ -1,8 +1,8 @@
 ---
-role: "Software Engineer Intern"
+role: "Software Engineer"
 org: "Turito"
 start: "Jun 2022"
-end: "Oct 2022"
+end: "Oct 2023"
 order: 2
 tech: ["Python", "PostgreSQL", "AWS EC2", "CI/CD"]
 ---
