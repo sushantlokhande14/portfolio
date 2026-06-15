@@ -19,9 +19,9 @@ const {
     <meta charset="utf-8" />
     <script is:inline>
       // set theme before first paint to avoid a flash of the wrong theme
+      // defaults to light unless the visitor has explicitly chosen dark
       const stored = localStorage.getItem('theme');
-      const dark = stored ? stored === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
-      document.documentElement.classList.toggle('dark', dark);
+      document.documentElement.classList.toggle('dark', stored === 'dark');
     </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
