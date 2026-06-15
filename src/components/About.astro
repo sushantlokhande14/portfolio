@@ -9,11 +9,11 @@ import SectionHeading from './SectionHeading.astro';
     <img
       src={site.avatar}
       alt={site.name}
-      width="160"
-      height="160"
+      width="400"
+      height="600"
       loading="lazy"
       onerror="this.onerror=null;this.src='/profile.svg'"
-      class="size-32 shrink-0 rounded-full border border-line object-cover shadow-lg sm:size-40"
+      class="aspect-[2/3] w-52 shrink-0 rounded-2xl border border-line object-cover shadow-xl sm:w-60"
     />
     <div class="max-w-2xl space-y-4 text-lg leading-relaxed text-muted">
       {site.about.map((paragraph) => <p>{paragraph}</p>)}
