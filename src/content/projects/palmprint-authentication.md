@@ -1,5 +1,6 @@
 ---
-title: "Show of Hands"
+title: "Multimodal Palmprint Authentication"
+subtitle: "Show of Hands"
 summary: "Contactless identity from the palm of your hand. Four models study every scan and vote on the verdict, and together they reach 99.75 percent AUC."
 cover: "/covers/palmprint.svg"
 tech: ["Python", "PyTorch", "OpenCV", "FastAPI", "Docker", "CUDA"]

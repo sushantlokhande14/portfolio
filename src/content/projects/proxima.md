@@ -1,5 +1,6 @@
 ---
 title: "Proxima"
+subtitle: "The index that beats the libraries"
 summary: "Everyone imports a vector search library. I wrote my own in C++ and made it win. It answers nearest neighbor queries 1.8 times faster than hnswlib and 2.5 times faster than FAISS, at 0.999 recall, on a single thread."
 cover: "/covers/proxima.svg"
 tech: ["C++17", "SIMD/AVX2", "pybind11", "CMake", "Python", "NumPy"]

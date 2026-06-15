@@ -1,5 +1,6 @@
 ---
 title: "Melody Metrics"
+subtitle: "What makes a song a hit"
 summary: "A million messy music records that shared no common keys. I joined them with C++ MapReduce on a Hadoop cluster, then asked the clean data what actually makes a song popular."
 cover: "/covers/melody.svg"
 tech: ["C++", "Python", "Hadoop", "MapReduce", "Hive", "XGBoost"]

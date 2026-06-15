@@ -1,5 +1,6 @@
 ---
-title: "Cited, Not Guessed"
+title: "AI Learning Aggregator"
+subtitle: "Cited, Not Guessed"
 summary: "A study assistant that refuses to make things up. Every answer is pulled from real source material and arrives with citations, and it stays quiet when it genuinely does not know."
 cover: "/covers/rag.svg"
 tech: ["Python", "FastAPI", "OpenAI", "Vector embeddings", "Docker", "AWS EC2"]
