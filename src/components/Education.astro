@@ -11,7 +11,11 @@ import SectionHeading from './SectionHeading.astro';
         <div class="card rounded-2xl p-7" data-reveal style={`--reveal-delay: ${i * 80}ms`}>
           <div class="flex items-start justify-between gap-4">
             <h3 class="text-lg font-medium text-ink">{edu.school}</h3>
-            <span class="whitespace-nowrap font-mono text-xs text-accent">{edu.gpa}</span>
+            <span
+              class="shrink-0 whitespace-nowrap rounded-full border border-accent/30 bg-accent/10 px-3 py-1 font-mono text-sm font-medium text-accent"
+            >
+              GPA {edu.gpa}
+            </span>
           </div>
           <p class="mt-1 text-sm text-muted">{edu.degree}</p>
           <p class="mt-1 font-mono text-xs text-muted">{edu.dates}</p>

@@ -20,9 +20,10 @@
       "dates": "Aug 2024 — May 2026",
       "gpa": "3.8 / 4.0",
       "notes": [
-        "ML/AI coursework track",
-        "Spartan Scholar — top 3% of class",
-        "CS298 thesis: image-based malware classification"
+        "Machine Learning, Artificial Intelligence, Advanced Algorithms",
+        "Computer Communication Systems, Database Systems, NoSQL, Biometric Security with AI",
+        "CS298 thesis on image-based malware classification",
+        "Awarded the Spartan Scholar Scholarship for academic excellence"
       ]
     },
     {
@@ -31,8 +32,9 @@
       "dates": "Aug 2019 — May 2023",
       "gpa": "3.9 / 4.0",
       "notes": [
-        "Data structures & algorithms, operating systems",
-        "Computer networks, computer architecture, DBMS"
+        "Data Structures, Algorithms, Operating Systems, DBMS",
+        "Computer Networks, Computer Architecture, Compilers, Distributed Computing",
+        "Machine Learning, Artificial Intelligence, Cryptography & System Security"
       ]
     }
   ],
