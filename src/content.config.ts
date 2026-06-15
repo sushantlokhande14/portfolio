@@ -21,6 +21,7 @@ const experience = defineCollection({
   schema: z.object({
     role: z.string(),
     org: z.string(),
+    subtitle: z.string().optional(),
     start: z.string(),
     end: z.string().default('Present'),
     order: z.number().default(99),
