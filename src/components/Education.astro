@@ -8,25 +8,40 @@ import SectionHeading from './SectionHeading.astro';
   <div class="grid gap-5 sm:grid-cols-2">
     {
       site.education.map((edu, i) => (
-        <div class="card rounded-2xl p-7" data-reveal style={`--reveal-delay: ${i * 80}ms`}>
-          <div class="flex items-start justify-between gap-4">
-            <h3 class="text-lg font-medium text-ink">{edu.school}</h3>
-            <span
-              class="shrink-0 whitespace-nowrap rounded-full border border-accent/30 bg-accent/10 px-3 py-1 font-mono text-sm font-medium text-accent"
-            >
-              GPA {edu.gpa}
-            </span>
+        <div
+          class="card flex flex-col overflow-hidden rounded-2xl"
+          data-reveal
+          style={`--reveal-delay: ${i * 80}ms`}
+        >
+          {edu.image && (
+            <img
+              src={edu.image}
+              alt={edu.school}
+              loading="lazy"
+              onerror="this.style.display='none'"
+              class="h-36 w-full object-cover"
+            />
+          )}
+          <div class="flex flex-1 flex-col p-7">
+            <div class="flex items-start justify-between gap-4">
+              <h3 class="text-lg font-medium text-ink">{edu.school}</h3>
+              <span
+                class="shrink-0 whitespace-nowrap rounded-full border border-accent/30 bg-accent/10 px-3 py-1 font-mono text-sm font-medium text-accent"
+              >
+                GPA {edu.gpa}
+              </span>
+            </div>
+            <p class="mt-1 text-sm text-muted">{edu.degree}</p>
+            <p class="mt-1 font-mono text-xs text-muted">{edu.dates}</p>
+            <ul class="mt-5 space-y-1.5 text-sm text-muted">
+              {edu.notes.map((note) => (
+                <li class="flex gap-2">
+                  <span class="text-accent">·</span>
+                  {note}
+                </li>
+              ))}
+            </ul>
           </div>
-          <p class="mt-1 text-sm text-muted">{edu.degree}</p>
-          <p class="mt-1 font-mono text-xs text-muted">{edu.dates}</p>
-          <ul class="mt-5 space-y-1.5 text-sm text-muted">
-            {edu.notes.map((note) => (
-              <li class="flex gap-2">
-                <span class="text-accent">·</span>
-                {note}
-              </li>
-            ))}
-          </ul>
         </div>
       ))
     }

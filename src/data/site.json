@@ -16,6 +16,7 @@
   "education": [
     {
       "school": "San José State University",
+      "image": "/schools/sjsu.jpg",
       "degree": "MS, Computer Science",
       "dates": "Aug 2024 — May 2026",
       "gpa": "3.8 / 4.0",
@@ -28,6 +29,7 @@
     },
     {
       "school": "University of Mumbai",
+      "image": "/schools/mumbai.jpg",
       "degree": "BE, Computer Engineering",
       "dates": "Aug 2019 — May 2023",
       "gpa": "3.9 / 4.0",
