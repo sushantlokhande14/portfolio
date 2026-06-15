@@ -9,9 +9,11 @@
   "avatar": "/profile.jpg",
   "repo": "https://github.com/sushantlokhande14/portfolio",
   "about": [
-    "I build software that feels fast and gets out of your way.",
-    "I just finished my Master's in Computer Science at San José State, where my thesis on spotting malware by turning it into images grew into a published paper. Lately I have been writing my own vector search engine in C++, building an LLM gateway on top of it, and shipping something small almost every day.",
-    "Before grad school I wrote Python microservices for an edtech platform used by around 70 thousand people. The part of engineering I love most is where a hard systems problem meets a clean, simple interface. Right now I am looking for full time software and ML roles in the Bay Area."
+    "I'm fascinated by the gap between a great idea and a system that actually holds up at scale. That gap is where I like to work, building software where performance, reliability, and intelligence meet.",
+    "I recently finished my Master's in Computer Science at San José State University. My research on image-based malware classification became a co-authored paper, now under review, and somewhere in that work I fell for building intelligent systems that survive the real world, not just the lab.",
+    "Before grad school I was a Software Engineer on an EdTech platform serving 70K+ users, building Python microservices, chasing down latency, and shipping features that thousands of learners actually used. The problems I enjoy most sit right where tough engineering constraints meet a simple, intuitive experience.",
+    "Outside of work I like taking systems apart to really understand them. Lately that meant writing a vector search engine from scratch in C++ and an LLM gateway that runs on top of it, just to learn how modern AI infrastructure works under the hood. I ship something small almost every day; building is how I learn.",
+    "I'm looking for full-time Software, Machine Learning, and AI Engineering roles where I can build scalable systems that solve real problems. Based in the San Francisco Bay Area and open to relocation."
   ],
   "education": [
     {
