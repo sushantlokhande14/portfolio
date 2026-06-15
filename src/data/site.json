@@ -57,19 +57,27 @@
   "skills": [
     {
       "group": "Languages",
-      "items": ["Python", "TypeScript", "C++", "SQL", "Java"]
+      "items": ["Python", "C++ (SIMD/AVX2)", "TypeScript", "SQL", "Java", "C"]
     },
     {
-      "group": "ML & AI",
-      "items": ["PyTorch", "scikit-learn", "OpenCV", "RAG & embeddings", "OpenAI API", "CUDA (PyTorch)"]
+      "group": "Machine Learning",
+      "items": ["PyTorch", "scikit-learn", "OpenCV", "NumPy & Pandas", "XGBoost", "CNNs & ViT", "CUDA (PyTorch)"]
     },
     {
-      "group": "Backend & Data",
-      "items": ["FastAPI", "Flask", "Node.js", "PostgreSQL", "MongoDB", "Neo4j", "Hadoop & Hive"]
+      "group": "LLM & GenAI",
+      "items": ["RAG", "Vector embeddings", "OpenAI & Anthropic APIs", "Semantic caching", "Prompt engineering", "Hugging Face"]
     },
     {
-      "group": "Infra & Tools",
-      "items": ["AWS EC2", "Docker", "CI/CD", "pytest", "Linux", "Cursor & Claude Code"]
+      "group": "Backend & APIs",
+      "items": ["FastAPI", "Flask", "Node.js", "REST & webhooks", "asyncio", "JWT auth", "SSE streaming"]
+    },
+    {
+      "group": "Data & Storage",
+      "items": ["PostgreSQL", "MongoDB", "Neo4j", "Redis", "SQLite", "Hadoop & Hive"]
+    },
+    {
+      "group": "Systems & Tooling",
+      "items": ["Docker", "AWS (EC2)", "CI/CD", "Linux", "pybind11 & CMake", "Profiling & observability", "pytest", "Cursor & Claude Code"]
     }
   ]
 }
