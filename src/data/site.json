@@ -61,7 +61,7 @@
     },
     {
       "group": "Machine Learning",
-      "items": ["PyTorch", "scikit-learn", "OpenCV", "NumPy & Pandas", "XGBoost", "CNNs & ViT", "CUDA (PyTorch)"]
+      "items": ["PyTorch", "scikit-learn", "OpenCV", "NumPy & Pandas", "CNNs", "Ensemble learning", "CUDA (PyTorch)"]
     },
     {
       "group": "LLM & GenAI",
@@ -73,11 +73,11 @@
     },
     {
       "group": "Data & Storage",
-      "items": ["PostgreSQL", "MongoDB", "Neo4j", "Redis", "SQLite", "Hadoop & Hive"]
+      "items": ["PostgreSQL", "MongoDB", "Neo4j", "Redis", "SQLite", "Hadoop, Hive & HBase"]
     },
     {
       "group": "Systems & Tooling",
-      "items": ["Docker", "AWS (EC2)", "CI/CD", "Linux", "pybind11 & CMake", "Profiling & observability", "pytest", "Cursor & Claude Code"]
+      "items": ["Docker", "Kubernetes", "AWS (EC2)", "CI/CD", "Linux", "pybind11 & CMake", "pytest", "Cursor & Claude Code"]
     }
   ]
 }
