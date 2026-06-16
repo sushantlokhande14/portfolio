@@ -57,7 +57,7 @@
   "skills": [
     {
       "group": "Languages",
-      "items": ["Python", "C++ (SIMD/AVX2)", "TypeScript", "SQL", "Java", "C"]
+      "items": ["Python", "C++", "TypeScript", "JavaScript", "SQL", "Java", "C", "Swift"]
     },
     {
       "group": "Machine Learning",
@@ -68,8 +68,8 @@
       "items": ["RAG", "Vector embeddings", "OpenAI & Anthropic APIs", "Semantic caching", "Prompt engineering", "Hugging Face"]
     },
     {
-      "group": "Backend & APIs",
-      "items": ["FastAPI", "Flask", "Django", "Node.js", "REST & webhooks", "asyncio", "JWT auth", "SSE streaming"]
+      "group": "Web & APIs",
+      "items": ["React", "FastAPI", "Flask", "Django", "Node.js", "REST & webhooks", "asyncio", "JWT auth", "SSE streaming"]
     },
     {
       "group": "Data & Storage",
