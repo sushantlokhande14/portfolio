@@ -69,11 +69,11 @@
     },
     {
       "group": "Backend & APIs",
-      "items": ["FastAPI", "Flask", "Node.js", "REST & webhooks", "asyncio", "JWT auth", "SSE streaming"]
+      "items": ["FastAPI", "Flask", "Django", "Node.js", "REST & webhooks", "asyncio", "JWT auth", "SSE streaming"]
     },
     {
       "group": "Data & Storage",
-      "items": ["PostgreSQL", "MongoDB", "Neo4j", "Redis", "SQLite", "Hadoop, Hive & HBase"]
+      "items": ["PostgreSQL", "PL/SQL", "DBA", "MongoDB", "Neo4j", "Redis", "SQLite", "Hadoop, Hive & HBase"]
     },
     {
       "group": "Systems & Tooling",

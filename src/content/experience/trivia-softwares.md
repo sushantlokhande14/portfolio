@@ -5,7 +5,7 @@ subtitle: "B2B SaaS Platform"
 start: "Nov 2021"
 end: "Jan 2022"
 order: 3
-tech: ["Python", "Flask", "PostgreSQL", "Pandas", "pytest"]
+tech: ["Python", "Django", "Flask", "PostgreSQL", "PL/SQL", "DBA", "Pandas", "pytest"]
 ---
 
 - Designed a secure multi-tenant SaaS architecture with PostgreSQL row-level security, keeping each customer's data isolated across shared backend services.
