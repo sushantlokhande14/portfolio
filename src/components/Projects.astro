@@ -2,9 +2,11 @@
 import { getCollection } from 'astro:content';
 import SectionHeading from './SectionHeading.astro';
 
-const projects = (await getCollection('projects', ({ data }) => data.featured)).sort(
-  (a, b) => a.data.order - b.data.order
-);
+// show every project; featured ones lead, then the rest, each by order
+const projects = (await getCollection('projects')).sort((a, b) => {
+  if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
+  return a.data.order - b.data.order;
+});
 ---
 
 <section id="projects" class="scroll-mt-14 overflow-x-clip py-32">
