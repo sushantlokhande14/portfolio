@@ -1,8 +1,8 @@
 ---
-title: "Kyron Medical"
+title: "Kairo"
 subtitle: "Zero to shipped in a week"
 summary: "An AI patient assistant that talks back, in text and in voice. I took it from an empty folder to a shipped product in under a week, working entirely AI native."
-cover: "/covers/kyron.svg"
+cover: "/covers/kairo.svg"
 tech: ["Python", "FastAPI", "React", "TypeScript", "OpenAI", "Vapi", "AWS EC2"]
 featured: false
 order: 7
