@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#15110a"/><stop offset="1" stop-color="#070a10"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="42%" cy="46%" r="58%">
+      <stop offset="0" stop-color="#f5b301" stop-opacity="0.20"/><stop offset="1" stop-color="#f5b301" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <rect width="800" height="450" fill="url(#glow)"/>
+
+  <!-- embedding space: the embedded query, with nearest neighbours linked (ANN retrieval) -->
+  <g stroke="#f5b301" stroke-width="1.5" opacity="0.6">
+    <line x1="290" y1="225" x2="190" y2="150"/>
+    <line x1="290" y1="225" x2="215" y2="315"/>
+    <line x1="290" y1="225" x2="360" y2="140"/>
+    <line x1="290" y1="225" x2="380" y2="300"/>
+  </g>
+  <!-- ambient movie points -->
+  <g fill="#caa657" opacity="0.5">
+    <circle cx="150" cy="100" r="4"/><circle cx="115" cy="250" r="3"/>
+    <circle cx="175" cy="360" r="3"/><circle cx="255" cy="85" r="3"/>
+    <circle cx="320" cy="365" r="3"/><circle cx="120" cy="180" r="3"/>
+    <circle cx="245" cy="195" r="3"/><circle cx="350" cy="365" r="3"/>
+  </g>
+  <!-- nearest neighbours -->
+  <g fill="#f5b301">
+    <circle cx="190" cy="150" r="6"/><circle cx="215" cy="315" r="6"/>
+    <circle cx="360" cy="140" r="6"/><circle cx="380" cy="300" r="6"/>
+  </g>
+  <!-- the query node (an embedded vibe) -->
+  <circle cx="290" cy="225" r="11" fill="#ffffff"/>
+  <circle cx="290" cy="225" r="22" stroke="#ffffff" stroke-opacity="0.4" stroke-width="1.5"/>
+
+  <!-- flow to the ranked results -->
+  <path d="M455 225 H540" stroke="#f5b301" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+  <path d="M540 225 l-13 -7 v14 z" fill="#f5b301" opacity="0.75"/>
+
+  <!-- ranked movie posters (the recommendation) -->
+  <g fill="#1c1509" stroke="#f5b301">
+    <rect x="612" y="118" width="138" height="200" rx="16" stroke-width="1.4" opacity="0.45"/>
+    <rect x="596" y="128" width="138" height="200" rx="16" stroke-width="1.7" opacity="0.7"/>
+  </g>
+  <rect x="580" y="138" width="138" height="200" rx="16" fill="#221908" stroke="#f5b301" stroke-width="2.4"/>
+  <!-- front poster: a play glyph and title bars -->
+  <path d="M634 206 l30 17 l-30 17 z" fill="#ffd98a"/>
+  <g fill="#f5b301" opacity="0.7">
+    <rect x="606" y="278" width="86" height="9" rx="4.5"/>
+    <rect x="606" y="296" width="58" height="9" rx="4.5"/>
+  </g>
+</svg>

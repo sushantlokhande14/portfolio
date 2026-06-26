@@ -2,6 +2,7 @@
 title: "reelrank"
 subtitle: "Describe a vibe, get movies"
 summary: "A two-stage hybrid movie recommender, built the way production systems are. A two-tower neural model retrieves candidates through Proxima, my own C++ vector search engine; a neural ranker reorders them. It answers free-text requests like 'a slow-burn sci-fi like Arrival but funnier' and includes movies in theaters this week."
+cover: "/covers/reelrank.svg"
 tech: ["PyTorch", "FastAPI", "React", "TypeScript", "Proxima (C++ HNSW)", "sentence-transformers", "TMDB API", "Docker"]
 featured: true
 order: 2
