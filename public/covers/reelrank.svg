@@ -1,53 +1,73 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450" fill="none">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#15110a"/><stop offset="1" stop-color="#070a10"/>
+      <stop offset="0" stop-color="#08171c"/><stop offset="1" stop-color="#070a10"/>
     </linearGradient>
-    <radialGradient id="glow" cx="42%" cy="46%" r="58%">
-      <stop offset="0" stop-color="#f5b301" stop-opacity="0.20"/><stop offset="1" stop-color="#f5b301" stop-opacity="0"/>
+    <radialGradient id="glow" cx="50%" cy="48%" r="55%">
+      <stop offset="0" stop-color="#22d3ee" stop-opacity="0.22"/><stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
     </radialGradient>
+    <radialGradient id="play" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#e0fbff"/><stop offset="0.5" stop-color="#7dd3fc"/><stop offset="1" stop-color="#22d3ee"/>
+    </radialGradient>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
   </defs>
 
   <rect width="800" height="450" fill="url(#bg)"/>
   <rect width="800" height="450" fill="url(#glow)"/>
 
-  <!-- embedding space: the embedded query, with nearest neighbours linked (ANN retrieval) -->
-  <g stroke="#f5b301" stroke-width="1.5" opacity="0.6">
-    <line x1="290" y1="225" x2="190" y2="150"/>
-    <line x1="290" y1="225" x2="215" y2="315"/>
-    <line x1="290" y1="225" x2="360" y2="140"/>
-    <line x1="290" y1="225" x2="380" y2="300"/>
+  <!-- recommendation links from the picked film to its nearest matches -->
+  <g stroke="#22d3ee" stroke-width="2" opacity="0.4" stroke-linecap="round">
+    <path d="M400 225 L160 135"/>
+    <path d="M400 225 L640 135"/>
+    <path d="M400 225 L150 330"/>
+    <path d="M400 225 L650 330"/>
   </g>
-  <!-- ambient movie points -->
-  <g fill="#caa657" opacity="0.5">
-    <circle cx="150" cy="100" r="4"/><circle cx="115" cy="250" r="3"/>
-    <circle cx="175" cy="360" r="3"/><circle cx="255" cy="85" r="3"/>
-    <circle cx="320" cy="365" r="3"/><circle cx="120" cy="180" r="3"/>
-    <circle cx="245" cy="195" r="3"/><circle cx="350" cy="365" r="3"/>
-  </g>
-  <!-- nearest neighbours -->
-  <g fill="#f5b301">
-    <circle cx="190" cy="150" r="6"/><circle cx="215" cy="315" r="6"/>
-    <circle cx="360" cy="140" r="6"/><circle cx="380" cy="300" r="6"/>
-  </g>
-  <!-- the query node (an embedded vibe) -->
-  <circle cx="290" cy="225" r="11" fill="#ffffff"/>
-  <circle cx="290" cy="225" r="22" stroke="#ffffff" stroke-opacity="0.4" stroke-width="1.5"/>
 
-  <!-- flow to the ranked results -->
-  <path d="M455 225 H540" stroke="#f5b301" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
-  <path d="M540 225 l-13 -7 v14 z" fill="#f5b301" opacity="0.75"/>
-
-  <!-- ranked movie posters (the recommendation) -->
-  <g fill="#1c1509" stroke="#f5b301">
-    <rect x="612" y="118" width="138" height="200" rx="16" stroke-width="1.4" opacity="0.45"/>
-    <rect x="596" y="128" width="138" height="200" rx="16" stroke-width="1.7" opacity="0.7"/>
+  <!-- nearby movie cards (the recommendations) -->
+  <g stroke="#22d3ee" stroke-width="2" fill="#0b2a33">
+    <g>
+      <rect x="117" y="107" width="86" height="56" rx="10"/>
+      <path d="M153 121 L153 149 L177 135 Z" fill="#7dd3fc" stroke="none"/>
+    </g>
+    <g>
+      <rect x="597" y="107" width="86" height="56" rx="10"/>
+      <path d="M633 121 L633 149 L657 135 Z" fill="#7dd3fc" stroke="none"/>
+    </g>
+    <g>
+      <rect x="107" y="302" width="86" height="56" rx="10"/>
+      <path d="M143 316 L143 344 L167 330 Z" fill="#7dd3fc" stroke="none"/>
+    </g>
+    <g>
+      <rect x="607" y="302" width="86" height="56" rx="10"/>
+      <path d="M643 316 L643 344 L667 330 Z" fill="#7dd3fc" stroke="none"/>
+    </g>
   </g>
-  <rect x="580" y="138" width="138" height="200" rx="16" fill="#221908" stroke="#f5b301" stroke-width="2.4"/>
-  <!-- front poster: a play glyph and title bars -->
-  <path d="M634 206 l30 17 l-30 17 z" fill="#ffd98a"/>
-  <g fill="#f5b301" opacity="0.7">
-    <rect x="606" y="278" width="86" height="9" rx="4.5"/>
-    <rect x="606" y="296" width="58" height="9" rx="4.5"/>
+
+  <!-- the picked film frame -->
+  <rect x="322" y="168" width="156" height="114" rx="14" fill="#0b2a33" stroke="#22d3ee" stroke-width="2.5"/>
+  <g fill="#061b22" stroke="#22d3ee" stroke-width="1" opacity="0.65">
+    <rect x="334" y="173" width="12" height="9" rx="2"/>
+    <rect x="358" y="173" width="12" height="9" rx="2"/>
+    <rect x="382" y="173" width="12" height="9" rx="2"/>
+    <rect x="406" y="173" width="12" height="9" rx="2"/>
+    <rect x="430" y="173" width="12" height="9" rx="2"/>
+    <rect x="454" y="173" width="12" height="9" rx="2"/>
+    <rect x="334" y="270" width="12" height="9" rx="2"/>
+    <rect x="358" y="270" width="12" height="9" rx="2"/>
+    <rect x="382" y="270" width="12" height="9" rx="2"/>
+    <rect x="406" y="270" width="12" height="9" rx="2"/>
+    <rect x="430" y="270" width="12" height="9" rx="2"/>
+    <rect x="454" y="270" width="12" height="9" rx="2"/>
+  </g>
+  <path d="M386 206 L386 244 L420 225 Z" fill="url(#play)" filter="url(#soft)"/>
+
+  <!-- rating sparkles -->
+  <g fill="#7dd3fc" opacity="0.7">
+    <path d="M400 92 C400 100 404 104 412 104 C404 104 400 108 400 116 C400 108 396 104 388 104 C396 104 400 100 400 92 Z"/>
+    <path d="M250 250 C250 256 253 259 259 259 C253 259 250 262 250 268 C250 262 247 259 241 259 C247 259 250 256 250 250 Z"/>
+    <path d="M550 200 C550 206 553 209 559 209 C553 209 550 212 550 218 C550 212 547 209 541 209 C547 209 550 206 550 200 Z"/>
   </g>
 </svg>
