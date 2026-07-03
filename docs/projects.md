@@ -31,7 +31,20 @@ An OpenAI-compatible LLM gateway that caches responses at the meaning level, not
 
 ---
 
-## 3. Reel Rank
+## 3. Autograde AI
+**Subtitle:** The TA that never sleeps
+**Stack:** Python, pytest, Java, LLMs
+**GitHub:** private / no public repo
+
+The grading automation built during the SJSU Graduate Assistant role. A test harness runs every student submission against instructor test suites (pytest for Python, unit suites for Java), each in an isolated run with a timeout so one crashing or infinite-looping program cannot stall the batch. The rubric is encoded once and applied identically to every submission, with scores and failing cases rolled into a gradebook-ready report. An LLM drafts first-pass written feedback from each failure pattern, and a human reviews every comment before it reaches a student.
+
+**Key numbers:** 400+ Java and Python submissions in a cycle at peak, across 3 courses. Manual evaluation effort down 35%. The freed hours went into mentoring 250+ students.
+
+**Why it matters:** Real tooling with real users (the whole grading team), tied directly to the Graduate Assistant experience entry. Shows pragmatic automation and a disciplined use of LLMs (the model drafts, a human decides) rather than blind AI grading.
+
+---
+
+## 4. Reel Rank
 **Subtitle:** Describe a vibe, get movies
 **Stack:** PyTorch, FastAPI, React, TypeScript, Proxima, sentence-transformers, TMDB API, Docker
 **GitHub:** github.com/sushantlokhande14/reelrank
@@ -44,7 +57,7 @@ Collaborative signal comes from MovieLens. Content embeddings of title, genres, 
 
 ---
 
-## 4. Image-Based Malware Classification
+## 5. Image-Based Malware Classification
 **Subtitle:** Malware Mugshots
 **Stack:** Python, PyTorch, OpenCV, ViT, Docker, CUDA
 **GitHub:** github.com/sushantlokhande14/Soft_Voting_Ensembled_Malware_Images_Classification
@@ -58,7 +71,7 @@ The CS298 thesis project. Instead of scanning for known byte signatures, the pip
 
 ---
 
-## 5. Graph Connect
+## 6. Graph Connect
 **Subtitle:** Six Degrees
 **Stack:** Python, FastAPI, TypeScript, Neo4j, MongoDB, Docker, AWS
 **GitHub:** github.com/sushantlokhande14/neo4j-social-network-graph-app
@@ -71,7 +84,7 @@ A social platform where the connections between people are the database, not jus
 
 ---
 
-## 6. AI Learning Aggregator
+## 7. AI Learning Aggregator
 **Subtitle:** Cited, Not Guessed
 **Stack:** Python, FastAPI, OpenAI, vector embeddings, Docker, AWS EC2
 **GitHub:** github.com/sushantlokhande14/AILearningHub
@@ -82,7 +95,7 @@ A study assistant built on RAG (retrieval-augmented generation). It refuses to a
 
 ---
 
-## 7. Melody Metrics
+## 8. Melody Metrics
 **Subtitle:** What makes a song a hit
 **Stack:** C++, Python, Hadoop, MapReduce, Hive, XGBoost
 **GitHub:** github.com/sushantlokhande14/Predicting-Song-Popularity-Using-Lyrics
@@ -93,7 +106,7 @@ A big-data pipeline and popularity prediction model over a million-row music dat
 
 ---
 
-## 8. Multimodal Palmprint Authentication
+## 9. Multimodal Palmprint Authentication
 **Subtitle:** Show of Hands
 **Stack:** Python, PyTorch, OpenCV, FastAPI, Docker, CUDA
 **GitHub:** github.com/sushantlokhande14/Multimodal-contactless-palmprint-verification-using-dual-networks-and-ensemble-scoring
@@ -106,7 +119,7 @@ A contactless biometric verification system. Four models examine the same palm s
 
 ---
 
-## 9. Kairo
+## 10. Kairo
 **Subtitle:** Zero to shipped in a week
 **Stack:** Python, FastAPI, React, TypeScript, OpenAI, Vapi, AWS EC2
 **GitHub:** github.com/sushantlokhande14/kyron-medicalapp
@@ -117,7 +130,7 @@ An AI-powered patient intake assistant that handles both text and voice. Patient
 
 ---
 
-## 10. TCP Sliding Window Simulator
+## 11. TCP Sliding Window Simulator
 **Subtitle:** TCP, from Scratch
 **Stack:** Python, raw sockets
 **GitHub:** private / no public repo
