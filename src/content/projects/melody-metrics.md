@@ -1,9 +1,9 @@
 ---
 title: "Melody Metrics"
 subtitle: "What makes a song a hit"
-summary: "A million messy music records that shared no common keys. I joined them with C++ MapReduce on a Hadoop cluster, then asked the clean data what actually makes a song popular."
+summary: "A million Spotify tracks and a pile of scraped Genius lyrics that shared no keys. I merged them into 139 thousand clean records, engineered features from both the audio and the words, and trained XGBoost to call a hit at 84 percent."
 cover: "/covers/melody.svg"
-tech: ["C++", "Python", "Hadoop", "MapReduce", "Hive", "XGBoost"]
+tech: ["Python", "Pandas", "scikit-learn", "XGBoost", "NLP", "Jupyter"]
 featured: false
 order: 5
 github: "https://github.com/sushantlokhande14/Predicting-Song-Popularity-Using-Lyrics"
@@ -11,15 +11,28 @@ github: "https://github.com/sushantlokhande14/Predicting-Song-Popularity-Using-L
 
 ## Problem
 
-Music metadata lives in messy, heterogeneous sources that don't share clean keys. Joining a million-plus records across them — and doing it fast enough to iterate — is a distributed-systems problem before it's an ML problem.
+Does a song's popularity live in the sound or in the words? Answering that needs both halves in one table — and they arrive from different worlds. Spotify's audio features (a million-plus tracks from Kaggle) and lyrics scraped from Genius share no IDs, inconsistent artist spellings, and different notions of what a "track" even is.
 
 ## Approach
 
-- **C++ MapReduce jobs** running on a Linux Hadoop cluster process 1M+ records.
-- **Fuzzy joins** reconcile entities across heterogeneous sources that lack shared identifiers, producing a clean 140K-row analytical dataset.
-- **Hive** sits on top for SQL-style exploration; orchestration is Bash, with a Flask layer for serving results.
-- Downstream, **XGBoost** predicts song popularity and **K-means** clusters tracks by audio/lyric features.
+![Melody Metrics architecture](/diagrams/melody-arch.svg)
+
+- **The merge is the hard part.** Artist and track names were normalized on both sides and joined, turning two incompatible datasets into 139,433 clean records with 39 columns each.
+- **Features from both halves of a song.** Audio: danceability, energy, tempo, valence. Lyrical: unique word counts, sentiment polarity, and Genius page views as a popularity prior.
+- **A model ladder, not a lucky pick.** Random Forest set the baseline; Logistic Regression, KNN, SVM, and an MLP were compared against it; XGBoost won.
+- **Class imbalance handled honestly.** On the raw imbalanced multiclass problem XGBoost reached 74.28%. Rebalancing the classes and reframing the question as binary — hit or not — pushed it to 84.42%.
+
+## The stack
+
+| Piece | Choice | Why |
+| :-- | :-- | :-- |
+| Data | Spotify 1M+ tracks (Kaggle) + scraped Genius lyrics | the sound and the words, together |
+| Join | normalized artist/track merge (Pandas) | 139,433 records from two keyless datasets |
+| Features | audio (danceability, energy, tempo, valence) + lyric sentiment | both halves of every song |
+| Models | RF, LR, KNN, SVM, MLP, then XGBoost | a ladder, so the winner earned it |
+| Imbalance | class balancing + binary reframing | 74.28% → 84.42%, honestly |
+| Workbench | Python, scikit-learn, Jupyter | every step explorable end to end |
 
 ## Result
 
-An end-to-end pipeline from raw heterogeneous data to model predictions: 1M+ records in, 140K curated rows out, **84% downstream model accuracy** — and hands-on experience with the unglamorous reality of distributed data engineering in C++.
+**84.42% accuracy calling hit-or-not**, up from 74.28% on the naive framing — and the feature importances answer the original question: the sound matters most, but the words move the needle.

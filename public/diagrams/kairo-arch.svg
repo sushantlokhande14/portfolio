@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="900" height="520" fill="none" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+  <defs>
+    <linearGradient id="kbg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#260f12"/><stop offset="1" stop-color="#0c0708"/>
+    </linearGradient>
+    <radialGradient id="kglow" cx="50%" cy="45%" r="60%">
+      <stop offset="0" stop-color="#fb7185" stop-opacity="0.16"/><stop offset="1" stop-color="#fb7185" stop-opacity="0"/>
+    </radialGradient>
+    <marker id="karr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#fb7185"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="520" rx="18" fill="url(#kbg)"/>
+  <rect width="900" height="520" rx="18" fill="url(#kglow)"/>
+
+  <g stroke="#fb7185" stroke-width="2">
+    <rect x="36" y="150" width="130" height="96" rx="14" fill="#1c0c0f"/>
+    <rect x="206" y="70" width="190" height="80" rx="14" fill="#1c0c0f"/>
+    <rect x="206" y="280" width="190" height="80" rx="14" fill="#1c0c0f"/>
+    <rect x="456" y="150" width="210" height="96" rx="14" fill="#1c0c0f" stroke-width="2.5"/>
+    <rect x="706" y="150" width="158" height="96" rx="14" fill="#1c0c0f"/>
+  </g>
+
+  <text x="101" y="188" text-anchor="middle" font-size="16" font-weight="600" fill="#ffe4e6">patient</text>
+  <text x="101" y="210" text-anchor="middle" font-size="12" fill="#fda4af" opacity="0.85">types or calls</text>
+
+  <text x="301" y="102" text-anchor="middle" font-size="14" font-weight="600" fill="#ffe4e6">web chat</text>
+  <text x="301" y="124" text-anchor="middle" font-size="11.5" fill="#fda4af" opacity="0.75">React + Vite + TypeScript</text>
+
+  <text x="301" y="312" text-anchor="middle" font-size="14" font-weight="600" fill="#ffe4e6">voice call</text>
+  <text x="301" y="334" text-anchor="middle" font-size="11.5" fill="#fda4af" opacity="0.75">Vapi handles the phone</text>
+
+  <text x="561" y="184" text-anchor="middle" font-size="16" font-weight="600" fill="#ffe4e6">FastAPI orchestrator</text>
+  <text x="561" y="206" text-anchor="middle" font-size="12" fill="#fda4af" opacity="0.85">conversation state, intake flow</text>
+  <text x="561" y="224" text-anchor="middle" font-size="12" fill="#fda4af" opacity="0.6">one backend for both channels</text>
+
+  <text x="785" y="188" text-anchor="middle" font-size="16" font-weight="600" fill="#ffe4e6">OpenAI</text>
+  <text x="785" y="210" text-anchor="middle" font-size="12" fill="#fda4af" opacity="0.85">the conversational layer</text>
+
+  <g stroke="#fb7185" stroke-width="2" opacity="0.7" fill="none">
+    <path d="M166 180 H186 V110 H198" marker-end="url(#karr)"/>
+    <path d="M166 216 H186 V320 H198" marker-end="url(#karr)"/>
+    <path d="M396 110 H426 V182 H448" marker-end="url(#karr)"/>
+    <path d="M396 320 H426 V214 H448" marker-end="url(#karr)"/>
+    <path d="M666 198 H698" marker-end="url(#karr)"/>
+  </g>
+
+  <rect x="36" y="430" width="828" height="52" rx="14" fill="#1c0c0f" fill-opacity="0.55" stroke="#fb7185" stroke-width="1.6" stroke-dasharray="6 6" stroke-opacity="0.7"/>
+  <text x="450" y="462" text-anchor="middle" font-size="12.5" fill="#ffe4e6">deployed on AWS EC2 · empty folder → shipped product in under a week, built AI-native with Cursor and Claude Code</text>
+</svg>

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="900" height="560" fill="none" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+  <defs>
+    <linearGradient id="tbg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a1626"/><stop offset="1" stop-color="#070a10"/>
+    </linearGradient>
+    <radialGradient id="tglow" cx="50%" cy="45%" r="60%">
+      <stop offset="0" stop-color="#60a5fa" stop-opacity="0.16"/><stop offset="1" stop-color="#60a5fa" stop-opacity="0"/>
+    </radialGradient>
+    <marker id="tarr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#60a5fa"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="560" rx="18" fill="url(#tbg)"/>
+  <rect width="900" height="560" rx="18" fill="url(#tglow)"/>
+
+  <g stroke="#60a5fa" stroke-width="2">
+    <rect x="60" y="100" width="230" height="330" rx="16" fill="#0e2036"/>
+    <rect x="610" y="100" width="230" height="330" rx="16" fill="#0e2036"/>
+  </g>
+
+  <text x="175" y="140" text-anchor="middle" font-size="17" font-weight="600" fill="#dbeafe">sender</text>
+  <text x="175" y="162" text-anchor="middle" font-size="12" fill="#93c5fd" opacity="0.85">sliding window over raw sockets</text>
+
+  <text x="725" y="140" text-anchor="middle" font-size="17" font-weight="600" fill="#dbeafe">receiver</text>
+  <text x="725" y="162" text-anchor="middle" font-size="12" fill="#93c5fd" opacity="0.85">acknowledges cumulatively</text>
+
+  <rect x="85" y="330" width="180" height="72" rx="12" fill="#0a1626" stroke="#60a5fa" stroke-width="1.6" stroke-opacity="0.8"/>
+  <text x="175" y="360" text-anchor="middle" font-size="13" font-weight="600" fill="#dbeafe">retransmit timer</text>
+  <text x="175" y="382" text-anchor="middle" font-size="11.5" fill="#93c5fd" opacity="0.75">timeout → send it again</text>
+
+  <text x="450" y="186" text-anchor="middle" font-size="11.5" fill="#93c5fd" opacity="0.8">SYN</text>
+  <path d="M300 196 H600" stroke="#60a5fa" stroke-width="1.8" opacity="0.6" marker-end="url(#tarr)"/>
+  <text x="450" y="226" text-anchor="middle" font-size="11.5" fill="#93c5fd" opacity="0.8">SYN-ACK</text>
+  <path d="M600 236 H310" stroke="#60a5fa" stroke-width="1.8" opacity="0.6" marker-end="url(#tarr)"/>
+  <text x="450" y="266" text-anchor="middle" font-size="11.5" fill="#93c5fd" opacity="0.8">ACK · connection up</text>
+  <path d="M300 276 H600" stroke="#60a5fa" stroke-width="1.8" opacity="0.6" marker-end="url(#tarr)"/>
+
+  <text x="450" y="316" text-anchor="middle" font-size="12" fill="#dbeafe">DATA · a window of segments in flight</text>
+  <path d="M300 328 H600" stroke="#60a5fa" stroke-width="3" opacity="0.9" marker-end="url(#tarr)"/>
+  <text x="450" y="366" text-anchor="middle" font-size="12" fill="#dbeafe">cumulative ACK · window slides forward</text>
+  <path d="M600 378 H310" stroke="#60a5fa" stroke-width="3" opacity="0.9" marker-end="url(#tarr)"/>
+
+  <rect x="60" y="470" width="780" height="52" rx="14" fill="#0e2036" fill-opacity="0.55" stroke="#60a5fa" stroke-width="1.6" stroke-dasharray="6 6" stroke-opacity="0.7"/>
+  <text x="450" y="502" text-anchor="middle" font-size="12.5" fill="#dbeafe">live dashboard: window size, throughput, drops, and resends charted as the protocol runs</text>
+</svg>
