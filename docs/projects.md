@@ -33,10 +33,10 @@ An OpenAI-compatible LLM gateway that caches responses at the meaning level, not
 
 ## 3. Autograde AI
 **Subtitle:** The TA that never sleeps
-**Stack:** Python, pytest, Java, LLMs
-**GitHub:** private / no public repo
+**Stack:** Python, pytest, Java (JUnit), Ollama, FastAPI, Redis, Prometheus, Grafana
+**GitHub:** github.com/sushantlokhande14/autograde-ai (repo pending push)
 
-The grading automation built during the SJSU Graduate Assistant role. A test harness runs every student submission against instructor test suites (pytest for Python, unit suites for Java), each in an isolated run with a timeout so one crashing or infinite-looping program cannot stall the batch. The rubric is encoded once and applied identically to every submission, with scores and failing cases rolled into a gradebook-ready report. An LLM drafts first-pass written feedback from each failure pattern, and a human reviews every comment before it reaches a student.
+The grading automation built during the SJSU Graduate Assistant role. A test harness runs every student submission against instructor test suites (pytest for Python, JUnit for Java), each in an isolated run with a timeout so one crashing or infinite-looping program cannot stall the batch. The rubric is encoded once and applied identically to every submission, with scores and failing cases rolled into a gradebook-ready report. A local LLM served through Ollama drafts first-pass written feedback from each failure pattern (student code never leaves the machine), and a human reviews every comment before it reaches a student. Results are served through a FastAPI layer with Redis caching, and Prometheus + Grafana watch batch health, run latency, and cache hit rate.
 
 **Key numbers:** 400+ Java and Python submissions in a cycle at peak, across 3 courses. Manual evaluation effort down 35%. The freed hours went into mentoring 250+ students.
 
@@ -73,49 +73,51 @@ The CS298 thesis project. Instead of scanning for known byte signatures, the pip
 
 ## 6. Graph Connect
 **Subtitle:** Six Degrees
-**Stack:** Python, FastAPI, TypeScript, Neo4j, MongoDB, Docker, AWS
+**Stack:** Python, FastAPI, React, TypeScript, Tailwind, Neo4j (Aura), Cypher, Clerk
 **GitHub:** github.com/sushantlokhande14/neo4j-social-network-graph-app
 
-A social platform where the connections between people are the database, not just columns in a table. Friendships, follows, and mutual connections are stored as edges in a Neo4j graph. A Cypher query finds who knows who in two hops. Profiles and posts live in MongoDB alongside the graph. The API is a FastAPI service with JWT authentication; the frontend is TypeScript.
+A social platform where the connections between people are the database, not just columns in a table. Users and posts are nodes in Neo4j; FOLLOWS and POSTED are directed edges. Cypher traversals answer "people you may know" (2-hop) and mutual connections in a single query, full-text indexing powers search, and follower counts drive popularity ranking. The API is FastAPI with Clerk handling auth; the frontend is React + TypeScript + Tailwind and makes up most of the codebase. The graph is seeded from a real Stanford SNAP Twitter slice.
 
-**Key numbers:** 50,000 connections in the graph.
+**Key numbers:** ~1,200 users, nearly 50K FOLLOWS edges of real network topology.
 
-**Why it matters:** Shows graph database thinking (Neo4j, Cypher, shortest path) which most portfolios skip entirely. Also covers polyglot persistence (graph plus document store in one system).
+**Why it matters:** Shows graph database thinking (Neo4j, Cypher, multi-hop traversal) which most portfolios skip entirely, running against genuine network structure instead of synthetic fixtures.
 
 ---
 
 ## 7. AI Learning Aggregator
-**Subtitle:** Cited, Not Guessed
-**Stack:** Python, FastAPI, OpenAI, vector embeddings, Docker, AWS EC2
+**Subtitle:** The field, in one feed
+**Stack:** Python, Flask, SQLAlchemy, SQLite, OpenAI, BeautifulSoup, Bootstrap 4
 **GitHub:** github.com/sushantlokhande14/AILearningHub
 
-A study assistant built on RAG (retrieval-augmented generation). It refuses to answer from the model's training memory alone. Instead it retrieves the relevant chunks from a real knowledge base, passes them to the LLM as grounded context, and returns citations alongside every answer. If the knowledge base does not contain a clear answer, it says so rather than hallucinating one.
+A content hub that pulls fresh ML papers, repos, and research into one searchable feed. Source connectors cover arXiv (feedparser), the GitHub API, the Papers with Code API, and Google Scholar (scholarly), with BeautifulSoup scraping where no API exists. Everything normalizes into SQLite through SQLAlchemy (Users, SavedItems, PeerArticles). Flask-Login handles accounts and roles, users keep saved lists, community submissions pass an approval workflow, and an OpenAI chatbot answers questions on top.
 
-**Why it matters:** Practical GenAI engineering (RAG, embeddings, retrieval). Addresses the hallucination problem directly, which signals maturity about LLM limitations.
+**Why it matters:** Real multi-source data integration (four APIs plus scraping), a complete auth/roles/approval product loop, and an LLM feature grounded in an actual application.
 
 ---
 
 ## 8. Melody Metrics
 **Subtitle:** What makes a song a hit
-**Stack:** C++, Python, Hadoop, MapReduce, Hive, XGBoost
+**Stack:** Python, Pandas, scikit-learn, XGBoost, Jupyter
 **GitHub:** github.com/sushantlokhande14/Predicting-Song-Popularity-Using-Lyrics
 
-A big-data pipeline and popularity prediction model over a million-row music dataset. The raw data came from multiple sources with no common keys. C++ MapReduce jobs running on a Linux Hadoop cluster joined and aggregated the records. The clean data was queried in Hive, then an XGBoost model was trained to predict song popularity from audio features and lyrics.
+Does popularity live in the sound or the words? Spotify's million-plus track dataset (Kaggle) and lyrics scraped from Genius share no keys, so the first job was the merge: normalized artist/track names joining the two into 139,433 clean records with 39 columns. Features come from both halves (danceability, energy, tempo, valence + lyric sentiment and unique word counts). A model ladder — Random Forest baseline, then LR/KNN/SVM/MLP — ends at XGBoost.
 
-**Why it matters:** Covers distributed computing (Hadoop, MapReduce) and the full cycle from messy raw data to a trained model. C++ MapReduce is unusual and stands out.
+**Key numbers:** 74.28% on the imbalanced multiclass problem; 84.42% after class balancing and a binary hit-or-not framing.
+
+**Why it matters:** The unglamorous reality of data work (merging keyless datasets) plus honest handling of class imbalance — both great interview stories.
 
 ---
 
 ## 9. Multimodal Palmprint Authentication
 **Subtitle:** Show of Hands
-**Stack:** Python, PyTorch, OpenCV, FastAPI, Docker, CUDA
+**Stack:** Python, PyTorch, OpenCV, EfficientNet-B4, ResNet-152, ViT-B/16, triplet loss
 **GitHub:** github.com/sushantlokhande14/Multimodal-contactless-palmprint-verification-using-dual-networks-and-ensemble-scoring
 
-A contactless biometric verification system. Four models examine the same palm scan from different angles: deep learning embeddings, LBP texture features, Gabor frequency-domain features, and a cross-channel comparison between near-infrared and visible light. Their scores are merged by ensemble voting to reach a verification decision. The pipeline runs behind a FastAPI service in a Docker container.
+A contactless biometric verification system. Preprocessing (Gaussian smoothing, Otsu ROI extraction, CLAHE) feeds three complementary feature tracks: deep embeddings (EfficientNet-B4, ResNet-152, ViT-B/16), handcrafted texture (LBP, KAZE), and frequency-domain structure (Gabor, DWT, DCT). The fused features train a Siamese dual-network with triplet loss into a 256-dimensional embedding, and a four-stage ensemble (cohort normalization, multi-template fusion, adaptive matcher fusion, quality filtering) scores the final match.
 
-**Key numbers:** 99.75% AUC on the verification benchmark.
+**Key numbers:** 99.75% AUC on verification.
 
-**Why it matters:** Computer vision in a high-stakes domain (biometrics). Shows multimodal fusion and understanding of precision-recall tradeoffs where false negatives have real costs.
+**Why it matters:** Serious metric learning (Siamese, triplet loss) plus multimodal fusion in a high-stakes domain where a confident wrong answer is the worst failure.
 
 ---
 
