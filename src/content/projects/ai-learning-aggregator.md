@@ -1,9 +1,9 @@
 ---
 title: "AI Learning Aggregator"
-subtitle: "Cited, Not Guessed"
-summary: "A study assistant that refuses to make things up. Every answer is pulled from real source material and arrives with citations, and it stays quiet when it genuinely does not know."
+subtitle: "The field, in one feed"
+summary: "Keeping up with ML means checking five sites before breakfast. This hub pulls fresh papers, repos, and research from arXiv, GitHub, Papers with Code, and Google Scholar into one searchable feed, with saved lists, peer submissions, and a chatbot that answers from the hub."
 cover: "/covers/rag.svg"
-tech: ["Python", "FastAPI", "OpenAI", "Vector embeddings", "Docker", "AWS EC2"]
+tech: ["Python", "Flask", "SQLAlchemy", "SQLite", "OpenAI", "BeautifulSoup", "Bootstrap"]
 featured: false
 order: 4
 github: "https://github.com/sushantlokhande14/AILearningHub"
@@ -11,19 +11,30 @@ github: "https://github.com/sushantlokhande14/AILearningHub"
 
 ## Problem
 
-LLMs answer confidently whether or not they know the material. For a learning assistant that aggregates course content, wrong-but-confident is worse than useless — every answer needs to be traceable to a source.
+The ML field moves daily and lives everywhere: new papers on arXiv, trending implementations on GitHub, benchmarks on Papers with Code, citations on Google Scholar. Keeping up means a morning ritual of five tabs, each with its own format, and no way to save what matters in one place.
 
 ## Approach
 
-Full retrieval-augmented generation pipeline, built as an async (asyncio) FastAPI service:
+![AI Learning Aggregator architecture](/diagrams/aggregator-arch.svg)
 
-- **Ingestion** chunks and embeds source material into a vector store.
-- **Semantic retrieval** pulls the most relevant chunks per query.
-- **Grounded generation** feeds retrieved context to the LLM through prompt templates with explicit context-window management.
-- **Citations + guardrails:** every answer cites its source chunks, and guardrails reject responses unsupported by retrieved context rather than letting the model improvise.
+- **Source connectors do the rounds so you don't.** The arXiv feed comes in through feedparser, repositories through the GitHub API, benchmarks through the Papers with Code API, and scholarly metadata through the `scholarly` library, with BeautifulSoup scraping where no API exists.
+- **One schema for five formats.** Everything is normalized and stored in SQLite through SQLAlchemy — three core tables: Users, SavedItems, and PeerArticles.
+- **Accounts that do something.** Flask-Login handles authentication and roles; signed-in users keep saved lists of papers, repos, and courses.
+- **A community layer with a gate.** Anyone can submit an article; peer submissions pass through an approval workflow before they publish, so the feed stays useful.
+- **An OpenAI-powered chatbot** sits on top, so you can ask the hub a question instead of paging through the feed.
 
-Deployed with Docker on AWS EC2.
+## The stack
+
+| Piece | Choice | Why |
+| :-- | :-- | :-- |
+| App | Flask + Jinja templates | server-rendered and simple |
+| Data | SQLite via SQLAlchemy | Users, SavedItems, PeerArticles in one file |
+| Sources | arXiv, GitHub API, Papers with Code, Google Scholar | the field, first-hand |
+| Collection | feedparser, `scholarly`, BeautifulSoup | APIs where they exist, scraping where they don't |
+| Auth | Flask-Login with roles | saved lists per user, gated submissions |
+| Assistant | OpenAI chatbot | ask the hub, not a search bar |
+| UI | Bootstrap 4 | responsive without a build step |
 
 ## Result
 
-A working end-to-end RAG product covering the parts that actually matter in production LLM apps: retrieval quality, grounding, citation, and refusing to hallucinate.
+One place to track a fast-moving field: fresh content from four sources on every visit, personal saved lists worth coming back for, and a peer-review gate that keeps community submissions from turning into noise.
