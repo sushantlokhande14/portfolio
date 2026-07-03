@@ -85,7 +85,7 @@
 
   <!-- cross-cutting observability -->
   <rect x="36" y="500" width="828" height="112" rx="14" fill="#2a0d18" fill-opacity="0.55" stroke="#fb7185" stroke-width="1.6" stroke-dasharray="6 6" stroke-opacity="0.7"/>
-  <text x="450" y="540" text-anchor="middle" font-size="15" font-weight="600" fill="#ffe4e6">observability</text>
-  <text x="450" y="564" text-anchor="middle" font-size="12.5" fill="#fda4af" opacity="0.85">Prometheus scrapes the runner and the API · Grafana dashboards</text>
-  <text x="450" y="584" text-anchor="middle" font-size="12.5" fill="#fda4af" opacity="0.6">batch health, run latency, cache hit rate, one glance</text>
+  <text x="450" y="538" text-anchor="middle" font-size="15" font-weight="600" fill="#ffe4e6">observability + packaging</text>
+  <text x="450" y="562" text-anchor="middle" font-size="12.5" fill="#fda4af" opacity="0.85">Prometheus scrapes the runner and the API · Grafana: batch health, run latency, cache hit rate</text>
+  <text x="450" y="582" text-anchor="middle" font-size="12.5" fill="#fda4af" opacity="0.6">the whole stack ships as containers: one Docker Compose command brings up API, Redis, Ollama, Prometheus, Grafana</text>
 </svg>

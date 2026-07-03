@@ -33,7 +33,7 @@ An OpenAI-compatible LLM gateway that caches responses at the meaning level, not
 
 ## 3. Autograde AI
 **Subtitle:** The TA that never sleeps
-**Stack:** Python, pytest, Java (JUnit), Ollama, FastAPI, Redis, Prometheus, Grafana
+**Stack:** Python, pytest, Java (JUnit), Ollama, FastAPI (Uvicorn), Redis, SQLite, Docker + Compose, Prometheus, Grafana
 **GitHub:** github.com/sushantlokhande14/autograde-ai (repo pending push)
 
 The grading automation built during the SJSU Graduate Assistant role. A test harness runs every student submission against instructor test suites (pytest for Python, JUnit for Java), each in an isolated run with a timeout so one crashing or infinite-looping program cannot stall the batch. The rubric is encoded once and applied identically to every submission, with scores and failing cases rolled into a gradebook-ready report. A local LLM served through Ollama drafts first-pass written feedback from each failure pattern (student code never leaves the machine), and a human reviews every comment before it reaches a student. Results are served through a FastAPI layer with Redis caching, and Prometheus + Grafana watch batch health, run latency, and cache hit rate.

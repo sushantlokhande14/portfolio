@@ -3,7 +3,7 @@ title: "Autograde AI"
 subtitle: "The TA that never sleeps"
 summary: "The grading tool I built when 400+ Java and Python submissions landed on my desk. It runs every submission against real test suites, applies one rubric with zero drift, and drafts first pass feedback with a local LLM. Manual grading effort fell 35% and students got answers while the assignment was still fresh."
 cover: "/covers/autograde.svg"
-tech: ["Python", "pytest", "Java", "Ollama", "Redis", "FastAPI", "Prometheus & Grafana"]
+tech: ["Python", "FastAPI", "Redis", "Ollama", "Docker", "pytest", "Java", "Prometheus & Grafana"]
 featured: true
 order: 1.75
 github: "https://github.com/sushantlokhande14/autograde-ai"
@@ -28,6 +28,7 @@ A batch pipeline with one rule at each stage:
 - **Draft feedback, do not decide.** An LLM running locally through Ollama turns each submission's failure pattern into a first pass written comment, pointing at the failing test and the likely cause. Local models matter here for a simple reason: student code never leaves the machine. A TA reviews and edits every comment before a student sees it. The model saves the typing; the human owns the grade.
 - **Serve.** Results go out through a small FastAPI layer with Redis caching in front, so the gradebook CSV and per-student breakdowns are one fast request away, and the hot lookups right after grades post never touch the disk.
 - **Watch.** Prometheus scrapes the runner and the API, and Grafana dashboards show batch health, run latency, and cache hit rate at a glance, so a stuck batch announces itself instead of being discovered at midnight.
+- **Ship.** The whole stack is containerized: the API, Redis, Ollama, Prometheus, and Grafana come up together with one Docker Compose command, so the tool runs the same on a lab machine as on a laptop.
 
 ## The stack
 
@@ -36,12 +37,15 @@ A batch pipeline with one rule at each stage:
 | Orchestration | Python CLI | one command grades an entire batch |
 | Python tests | pytest | instructor suites run unmodified |
 | Java tests | JUnit | the same idea on the Java side |
-| Isolation | child process, hard timeout, output caps | one bad submission cannot stall 399 others |
-| Parallelism | worker pool | batches finish in minutes, not hours |
+| Isolation | child processes, hard timeouts, output caps | one bad submission cannot stall 399 others |
+| Parallelism | worker pool (`concurrent.futures`) | batches finish in minutes, not hours |
+| Run records | SQLite store + CSV export | re-score history without re-running code |
 | Feedback LLM | local models via Ollama | drafts never leave the machine, student code stays private |
-| API layer | FastAPI + Redis cache | results served fast, hot lookups skip the disk |
-| Records | structured per-run results, CSV export | re-score history without re-running code |
-| Observability | Prometheus + Grafana | batch health and latency on one dashboard |
+| API layer | FastAPI on Uvicorn | gradebook and per-student results, one request away |
+| Cache | Redis | hot lookups right after grades post skip the disk |
+| Metrics | Prometheus | scrapes the runner and the API |
+| Dashboards | Grafana | batch health, run latency, cache hit rate at a glance |
+| Packaging | Docker + Docker Compose | API, Redis, Ollama, Prometheus, Grafana up in one command |
 
 ## Result
 
