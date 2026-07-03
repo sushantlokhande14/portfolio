@@ -33,10 +33,10 @@ An OpenAI-compatible LLM gateway that caches responses at the meaning level, not
 
 ## 3. Autograde AI
 **Subtitle:** The TA that never sleeps
-**Stack:** Python, pytest, Java (JUnit), Ollama, FastAPI (Uvicorn), Redis, SQLite, Docker + Compose, Prometheus, Grafana
-**GitHub:** github.com/sushantlokhande14/autograde-ai (repo pending push)
+**Stack:** Python, FastAPI + GraphQL (Apollo), gRPC, Kafka, Temporal, Postgres 16 (RLS), Redis, Qdrant, MinIO, Docker + gVisor, Ollama/vLLM (Qwen 2.5 32B), Next.js 15, OpenTelemetry, Prometheus, Grafana
+**GitHub:** github.com/sushantlokhande14/grademesh (repo pending push; plan in PROJECT_PLAN.md)
 
-The grading automation built during the SJSU Graduate Assistant role. A test harness runs every student submission against instructor test suites (pytest for Python, JUnit for Java), each in an isolated run with a timeout so one crashing or infinite-looping program cannot stall the batch. The rubric is encoded once and applied identically to every submission, with scores and failing cases rolled into a gradebook-ready report. A local LLM served through Ollama drafts first-pass written feedback from each failure pattern (student code never leaves the machine), and a human reviews every comment before it reaches a student. Results are served through a FastAPI layer with Redis caching, and Prometheus + Grafana watch batch health, run latency, and cache hit rate.
+The multi-agent grading platform (internal name GradeMesh) that grew out of the SJSU Graduate Assistant role. A parser pool normalizes seven file formats into a canonical artifact stream, an LLM-assisted QuestionMapper assigns artifacts to rubric questions (gated on confidence), and a Kafka + Temporal backbone dispatches six specialized grading agents in parallel: theory (RAG over Qdrant), sandboxed code execution (Docker + gVisor), code style, derivation, figure, and plagiarism — plus a CrossChecker and FeedbackSynthesizer. Every grade carries calibrated confidence; high auto-approves, low lands in a review queue with a three-click audit to the exact prompt, retrieval, and sandbox run. Local-first: Qwen 2.5 32B via Ollama/vLLM, hashed student IDs, identity behind Postgres row-level security. Evaluated against a hand-graded 100-submission gold set with a zero-shot baseline.
 
 **Key numbers:** 400+ Java and Python submissions in a cycle at peak, across 3 courses. Manual evaluation effort down 35%. The freed hours went into mentoring 250+ students.
 
