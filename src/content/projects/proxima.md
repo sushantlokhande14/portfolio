@@ -15,11 +15,26 @@ Approximate nearest-neighbor search powers every vector database and RAG system,
 
 ## Approach
 
+![Proxima architecture](/diagrams/proxima-arch.svg)
+
 - **Full HNSW from the paper** (Malkov & Yashunin, TPAMI 2018): probabilistic layer assignment, beam search, and the diversity-preserving neighbor-selection heuristic — implemented, not wrapped, in header-only C++17.
 - **The thesis: graph ANN is memory-bandwidth-bound, not compute-bound.** Every hop drags 512 bytes of float32 through the cache hierarchy for one distance.
 - **SQ8 fast lane:** traversal runs entirely on int8 codes with AVX2 integer kernels (`vpmaddwd`), cutting bytes-per-hop 4× — then the candidate pool is re-ranked with exact float32 distances, so returned results are exact. Quantization steers the walk; floats judge the answer.
 - **Cache-aware relabeling:** `index.reorder()` renumbers nodes in BFS order so graph neighbors share cache lines — a pure permutation, bit-identical results.
 - **pybind11 bindings** (zero-copy NumPy, GIL released, threaded batch queries), versioned binary serialization, pytest + native test suites, and a 5-way single-threaded benchmark harness with exact ground truth.
+
+## The stack
+
+| Piece | Choice | Why |
+| :-- | :-- | :-- |
+| Core | header-only C++17 | zero dependencies, drops into any build |
+| Traversal | SQ8 int8 codes + AVX2 (`vpmaddwd`, int16 accumulators) | 4× fewer bytes per hop; the search is memory-bound, not compute-bound |
+| Accuracy | exact float32 re-rank of the shortlist | reaches the 0.9996 recall ceiling instead of the 0.902 quantized wall |
+| Memory layout | `reorder()` BFS renumbering, fixed-stride layer 0 | graph neighbors share cache lines |
+| Bookkeeping | epoch-based visited tracking | O(1) reset between queries, no array clearing |
+| Bindings | pybind11, zero-copy NumPy, GIL released | Python-friendly without paying Python's price |
+| Build | CMake + scikit-build-core | `pip install` just works |
+| Proof | 5-way benchmark harness with exact ground truth | the numbers are reproducible, not vibes |
 
 ## Result
 

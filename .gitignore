@@ -26,3 +26,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# never publish transcripts or other personal documents
+public/schools/*.pdf

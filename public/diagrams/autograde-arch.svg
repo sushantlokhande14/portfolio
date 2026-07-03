@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" width="900" height="500" fill="none" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 660" width="900" height="660" fill="none" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
   <defs>
     <linearGradient id="dbg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#1a0912"/><stop offset="1" stop-color="#0d0609"/>
     </linearGradient>
-    <radialGradient id="dglow" cx="50%" cy="45%" r="60%">
+    <radialGradient id="dglow" cx="50%" cy="40%" r="60%">
       <stop offset="0" stop-color="#fb7185" stop-opacity="0.16"/><stop offset="1" stop-color="#fb7185" stop-opacity="0"/>
     </radialGradient>
     <filter id="dsoft" x="-40%" y="-40%" width="180%" height="180%">
@@ -15,8 +15,8 @@
     </marker>
   </defs>
 
-  <rect width="900" height="500" rx="18" fill="url(#dbg)"/>
-  <rect width="900" height="500" rx="18" fill="url(#dglow)"/>
+  <rect width="900" height="660" rx="18" fill="url(#dbg)"/>
+  <rect width="900" height="660" rx="18" fill="url(#dglow)"/>
 
   <!-- instructor test suites feed the runner -->
   <rect x="250" y="34" width="188" height="58" rx="12" fill="#2a0d18" stroke="#fb7185" stroke-width="1.6" stroke-opacity="0.65"/>
@@ -54,25 +54,38 @@
     <path d="M654 188 H686" marker-end="url(#arr)"/>
   </g>
 
-  <!-- feedback loop -->
-  <path d="M568 236 V296 H515 V332" stroke="#fb7185" stroke-width="2" opacity="0.6" fill="none" marker-end="url(#arr)"/>
+  <!-- rubric failures feed the drafter -->
+  <path d="M568 236 V296 H146 V332" stroke="#fb7185" stroke-width="2" opacity="0.6" fill="none" marker-end="url(#arr)"/>
   <text x="588" y="280" font-size="11.5" fill="#fda4af" opacity="0.7">failure patterns</text>
 
-  <rect x="420" y="340" width="190" height="92" rx="14" fill="#2a0d18" stroke="#fb7185" stroke-width="2"/>
-  <text x="515" y="376" text-anchor="middle" font-size="16" font-weight="600" fill="#ffe4e6">LLM drafter</text>
-  <text x="515" y="398" text-anchor="middle" font-size="12" fill="#fda4af" opacity="0.85">failing test, likely cause,</text>
-  <text x="515" y="416" text-anchor="middle" font-size="12" fill="#fda4af" opacity="0.6">a draft comment</text>
-  <!-- AI sparkle -->
-  <path d="M612 330 C612 339 616 343 625 343 C616 343 612 347 612 356 C612 347 608 343 599 343 C608 343 612 339 612 330 Z" fill="#ffe4e6" filter="url(#dsoft)"/>
+  <!-- feedback row: drafter -> review -> reports; API on the right -->
+  <rect x="36" y="340" width="220" height="96" rx="14" fill="#2a0d18" stroke="#fb7185" stroke-width="2"/>
+  <text x="146" y="374" text-anchor="middle" font-size="16" font-weight="600" fill="#ffe4e6">LLM drafter</text>
+  <text x="146" y="396" text-anchor="middle" font-size="12" fill="#fda4af" opacity="0.85">local models via Ollama</text>
+  <text x="146" y="414" text-anchor="middle" font-size="12" fill="#fda4af" opacity="0.6">student code never leaves</text>
+  <path d="M253 330 C253 339 257 343 266 343 C257 343 253 347 253 356 C253 347 249 343 240 343 C249 343 253 339 253 330 Z" fill="#ffe4e6" filter="url(#dsoft)"/>
 
-  <path d="M610 386 H652" stroke="#fb7185" stroke-width="2" opacity="0.8" marker-end="url(#arr)"/>
-  <text x="631" y="374" text-anchor="middle" font-size="11.5" fill="#fda4af" opacity="0.7">draft</text>
+  <path d="M256 388 H292 " stroke="#fb7185" stroke-width="2" opacity="0.8" marker-end="url(#arr)"/>
+  <text x="274" y="376" text-anchor="middle" font-size="11.5" fill="#fda4af" opacity="0.7">draft</text>
 
-  <rect x="660" y="340" width="200" height="92" rx="14" fill="#2a0d18" stroke="#fb7185" stroke-width="2"/>
-  <text x="760" y="376" text-anchor="middle" font-size="16" font-weight="600" fill="#ffe4e6">human review</text>
-  <text x="760" y="398" text-anchor="middle" font-size="12" fill="#fda4af" opacity="0.85">the TA edits and approves</text>
-  <text x="760" y="416" text-anchor="middle" font-size="12" fill="#fda4af" opacity="0.6">the model never decides</text>
+  <rect x="300" y="340" width="220" height="96" rx="14" fill="#2a0d18" stroke="#fb7185" stroke-width="2"/>
+  <text x="410" y="374" text-anchor="middle" font-size="16" font-weight="600" fill="#ffe4e6">human review</text>
+  <text x="410" y="396" text-anchor="middle" font-size="12" fill="#fda4af" opacity="0.85">the TA edits and approves</text>
+  <text x="410" y="414" text-anchor="middle" font-size="12" fill="#fda4af" opacity="0.6">the model never decides</text>
 
-  <path d="M779 340 V244" stroke="#fb7185" stroke-width="2" opacity="0.6" marker-end="url(#arr)"/>
-  <text x="770" y="296" text-anchor="end" font-size="11.5" fill="#fda4af" opacity="0.7">approved feedback</text>
+  <path d="M470 340 V304 H740 V244" stroke="#fb7185" stroke-width="2" opacity="0.6" fill="none" marker-end="url(#arr)"/>
+  <text x="726" y="296" text-anchor="end" font-size="11.5" fill="#fda4af" opacity="0.7">approved feedback</text>
+
+  <path d="M800 236 V332" stroke="#fb7185" stroke-width="2" opacity="0.6" marker-end="url(#arr)"/>
+
+  <rect x="660" y="340" width="204" height="96" rx="14" fill="#2a0d18" stroke="#fb7185" stroke-width="2"/>
+  <text x="762" y="374" text-anchor="middle" font-size="16" font-weight="600" fill="#ffe4e6">results API</text>
+  <text x="762" y="396" text-anchor="middle" font-size="12" fill="#fda4af" opacity="0.85">FastAPI · Redis cache</text>
+  <text x="762" y="414" text-anchor="middle" font-size="12" fill="#fda4af" opacity="0.6">hot lookups skip the disk</text>
+
+  <!-- cross-cutting observability -->
+  <rect x="36" y="500" width="828" height="112" rx="14" fill="#2a0d18" fill-opacity="0.55" stroke="#fb7185" stroke-width="1.6" stroke-dasharray="6 6" stroke-opacity="0.7"/>
+  <text x="450" y="540" text-anchor="middle" font-size="15" font-weight="600" fill="#ffe4e6">observability</text>
+  <text x="450" y="564" text-anchor="middle" font-size="12.5" fill="#fda4af" opacity="0.85">Prometheus scrapes the runner and the API · Grafana dashboards</text>
+  <text x="450" y="584" text-anchor="middle" font-size="12.5" fill="#fda4af" opacity="0.6">batch health, run latency, cache hit rate, one glance</text>
 </svg>

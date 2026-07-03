@@ -1,11 +1,12 @@
 ---
 title: "Autograde AI"
 subtitle: "The TA that never sleeps"
-summary: "The grading tool I built when 400+ Java and Python submissions landed on my desk. It runs every submission against real test suites, applies one rubric with zero drift, and drafts first pass feedback for review. Manual grading effort fell 35% and students got answers while the assignment was still fresh."
+summary: "The grading tool I built when 400+ Java and Python submissions landed on my desk. It runs every submission against real test suites, applies one rubric with zero drift, and drafts first pass feedback with a local LLM. Manual grading effort fell 35% and students got answers while the assignment was still fresh."
 cover: "/covers/autograde.svg"
-tech: ["Python", "pytest", "Java", "LLMs"]
+tech: ["Python", "pytest", "Java", "Ollama", "Redis", "FastAPI", "Prometheus & Grafana"]
 featured: true
 order: 1.75
+github: "https://github.com/sushantlokhande14/autograde-ai"
 ---
 
 ## Problem
@@ -24,8 +25,9 @@ A batch pipeline with one rule at each stage:
 - **Run.** Every submission executes in its own child process against the instructor's real test suites, pytest for Python and JUnit for Java. Each run gets a hard timeout and a cap on captured output, so a crash, an infinite loop, or a print storm costs that one submission its points, never the batch. A worker pool runs submissions in parallel, and a full batch finishes over a coffee instead of an afternoon.
 - **Score.** The rubric lives in a config file that maps test outcomes to points, including partial credit. Encoding it once means it is applied identically to student 1 and student 400, and a rubric argument becomes a one-line diff instead of a re-grade meeting.
 - **Record.** Every run leaves a structured result: scores, failed cases, and the captured error output. That record is the quiet superpower, because when a rubric needs fixing mid-cycle, every submission can be re-scored from stored results without re-running a single line of student code.
-- **Report.** Results roll up two ways, a gradebook-ready CSV for the course staff and a per-student breakdown showing exactly which tests failed and how.
-- **Draft feedback, do not decide.** An LLM turns each submission's failure pattern into a first pass written comment, pointing at the failing test and the likely cause. A TA reviews and edits every comment before a student sees it. The model saves the typing; the human owns the grade.
+- **Draft feedback, do not decide.** An LLM running locally through Ollama turns each submission's failure pattern into a first pass written comment, pointing at the failing test and the likely cause. Local models matter here for a simple reason: student code never leaves the machine. A TA reviews and edits every comment before a student sees it. The model saves the typing; the human owns the grade.
+- **Serve.** Results go out through a small FastAPI layer with Redis caching in front, so the gradebook CSV and per-student breakdowns are one fast request away, and the hot lookups right after grades post never touch the disk.
+- **Watch.** Prometheus scrapes the runner and the API, and Grafana dashboards show batch health, run latency, and cache hit rate at a glance, so a stuck batch announces itself instead of being discovered at midnight.
 
 ## The stack
 
@@ -36,8 +38,10 @@ A batch pipeline with one rule at each stage:
 | Java tests | JUnit | the same idea on the Java side |
 | Isolation | child process, hard timeout, output caps | one bad submission cannot stall 399 others |
 | Parallelism | worker pool | batches finish in minutes, not hours |
+| Feedback LLM | local models via Ollama | drafts never leave the machine, student code stays private |
+| API layer | FastAPI + Redis cache | results served fast, hot lookups skip the disk |
 | Records | structured per-run results, CSV export | re-score history without re-running code |
-| Feedback | LLM draft behind a human review gate | speed without handing grades to a model |
+| Observability | Prometheus + Grafana | batch health and latency on one dashboard |
 
 ## Result
 
