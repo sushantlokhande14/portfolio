@@ -15,26 +15,12 @@ Calling an LLM provider directly is one function call. Putting that call in fron
 
 ## Approach
 
-![Relay architecture](/diagrams/relay-arch.svg)
-
 Relay is an OpenAI-compatible gateway (`POST /v1/chat/completions`, streaming SSE or not) that adds the layer a raw provider call doesn't give you:
 
 - **Two-tier cache.** An exact cache (sha256 of the normalized prompt + the params that change an answer) is checked first; a **semantic cache** second — it embeds the prompt (MiniLM, 384-d), finds the nearest prompt it has already answered, and serves the stored response if cosine similarity clears the route's threshold.
 - **Proxima under the hood.** The nearest-neighbor search runs on Proxima, the HNSW index I wrote in C++. SQLite is the source of truth (prompts, embeddings, responses, tokens); Proxima is a rebuildable index over those embeddings, keyed by SQLite row id. Eviction works around HNSW's no-delete limitation by marking LRU rows dead and rebuilding from the survivors — and because embeddings live in SQLite, a rebuild never re-calls the embedding model.
 - **Failover** across OpenAI, Anthropic, and a local mock behind one async `stream()` interface; the chain advances on error or stall, but only before the first token streams (an honest limitation, documented).
 - **Token-bucket rate limiting** per API key and route, plus a live metrics page: hit rate, p50/p95 latency, tokens, and modeled cost saved.
-
-## The stack
-
-| Piece | Choice | Why |
-| :-- | :-- | :-- |
-| Surface | OpenAI-compatible `/v1/chat/completions`, SSE streaming | drop-in for existing clients |
-| Exact cache | sha256 of normalized prompt + the params that change an answer | free wins on repeats |
-| Semantic cache | MiniLM 384-d embeddings + Proxima ANN, 0.90 cosine gate | paraphrases hit too, novel prompts never collide |
-| Source of truth | SQLite: prompts, embeddings, responses, tokens | the index is rebuildable and never re-embeds |
-| Providers | OpenAI, Anthropic, mock behind one async `stream()` | failover advances only before the first token |
-| Limits | token bucket per API key and route | runaway clients get capped, not the platform |
-| Metrics | live dashboard | hit rate, p50/p95, tokens, modeled cost saved |
 
 ## Result
 

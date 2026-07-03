@@ -73,51 +73,49 @@ The CS298 thesis project. Instead of scanning for known byte signatures, the pip
 
 ## 6. Graph Connect
 **Subtitle:** Six Degrees
-**Stack:** Python, FastAPI, React, TypeScript, Tailwind, Neo4j (Aura), Cypher, Clerk
+**Stack:** Python, FastAPI, TypeScript, Neo4j, MongoDB, Docker, AWS
 **GitHub:** github.com/sushantlokhande14/neo4j-social-network-graph-app
 
-A social platform where the connections between people are the database, not just columns in a table. Users and posts are nodes in Neo4j; FOLLOWS and POSTED are directed edges. Cypher traversals answer "people you may know" (2-hop) and mutual connections in a single query, full-text indexing powers search, and follower counts drive popularity ranking. The API is FastAPI with Clerk handling auth; the frontend is React + TypeScript + Tailwind and makes up most of the codebase. The graph is seeded from a real Stanford SNAP Twitter slice.
+A social platform where the connections between people are the database, not just columns in a table. Friendships, follows, and mutual connections are stored as edges in a Neo4j graph. A Cypher query finds who knows who in two hops. Profiles and posts live in MongoDB alongside the graph. The API is a FastAPI service with JWT authentication; the frontend is TypeScript.
 
-**Key numbers:** ~1,200 users, nearly 50K FOLLOWS edges of real network topology.
+**Key numbers:** 50,000 connections in the graph.
 
-**Why it matters:** Shows graph database thinking (Neo4j, Cypher, multi-hop traversal) which most portfolios skip entirely, running against genuine network structure instead of synthetic fixtures.
+**Why it matters:** Shows graph database thinking (Neo4j, Cypher, shortest path) which most portfolios skip entirely. Also covers polyglot persistence (graph plus document store in one system).
 
 ---
 
 ## 7. AI Learning Aggregator
-**Subtitle:** The field, in one feed
-**Stack:** Python, Flask, SQLAlchemy, SQLite, OpenAI, BeautifulSoup, Bootstrap 4
+**Subtitle:** Cited, Not Guessed
+**Stack:** Python, FastAPI, OpenAI, vector embeddings, Docker, AWS EC2
 **GitHub:** github.com/sushantlokhande14/AILearningHub
 
-A content hub that pulls fresh ML papers, repos, and research into one searchable feed. Source connectors cover arXiv (feedparser), the GitHub API, the Papers with Code API, and Google Scholar (scholarly), with BeautifulSoup scraping where no API exists. Everything normalizes into SQLite through SQLAlchemy (Users, SavedItems, PeerArticles). Flask-Login handles accounts and roles, users keep saved lists, community submissions pass an approval workflow, and an OpenAI chatbot answers questions on top.
+A study assistant built on RAG (retrieval-augmented generation). It refuses to answer from the model's training memory alone. Instead it retrieves the relevant chunks from a real knowledge base, passes them to the LLM as grounded context, and returns citations alongside every answer. If the knowledge base does not contain a clear answer, it says so rather than hallucinating one.
 
-**Why it matters:** Real multi-source data integration (four APIs plus scraping), a complete auth/roles/approval product loop, and an LLM feature grounded in an actual application.
+**Why it matters:** Practical GenAI engineering (RAG, embeddings, retrieval). Addresses the hallucination problem directly, which signals maturity about LLM limitations.
 
 ---
 
 ## 8. Melody Metrics
 **Subtitle:** What makes a song a hit
-**Stack:** Python, Pandas, scikit-learn, XGBoost, Jupyter
+**Stack:** C++, Python, Hadoop, MapReduce, Hive, XGBoost
 **GitHub:** github.com/sushantlokhande14/Predicting-Song-Popularity-Using-Lyrics
 
-Does popularity live in the sound or the words? Spotify's million-plus track dataset (Kaggle) and lyrics scraped from Genius share no keys, so the first job was the merge: normalized artist/track names joining the two into 139,433 clean records with 39 columns. Features come from both halves (danceability, energy, tempo, valence + lyric sentiment and unique word counts). A model ladder — Random Forest baseline, then LR/KNN/SVM/MLP — ends at XGBoost.
+A big-data pipeline and popularity prediction model over a million-row music dataset. The raw data came from multiple sources with no common keys. C++ MapReduce jobs running on a Linux Hadoop cluster joined and aggregated the records. The clean data was queried in Hive, then an XGBoost model was trained to predict song popularity from audio features and lyrics.
 
-**Key numbers:** 74.28% on the imbalanced multiclass problem; 84.42% after class balancing and a binary hit-or-not framing.
-
-**Why it matters:** The unglamorous reality of data work (merging keyless datasets) plus honest handling of class imbalance — both great interview stories.
+**Why it matters:** Covers distributed computing (Hadoop, MapReduce) and the full cycle from messy raw data to a trained model. C++ MapReduce is unusual and stands out.
 
 ---
 
 ## 9. Multimodal Palmprint Authentication
 **Subtitle:** Show of Hands
-**Stack:** Python, PyTorch, OpenCV, EfficientNet-B4, ResNet-152, ViT-B/16, triplet loss
+**Stack:** Python, PyTorch, OpenCV, FastAPI, Docker, CUDA
 **GitHub:** github.com/sushantlokhande14/Multimodal-contactless-palmprint-verification-using-dual-networks-and-ensemble-scoring
 
-A contactless biometric verification system. Preprocessing (Gaussian smoothing, Otsu ROI extraction, CLAHE) feeds three complementary feature tracks: deep embeddings (EfficientNet-B4, ResNet-152, ViT-B/16), handcrafted texture (LBP, KAZE), and frequency-domain structure (Gabor, DWT, DCT). The fused features train a Siamese dual-network with triplet loss into a 256-dimensional embedding, and a four-stage ensemble (cohort normalization, multi-template fusion, adaptive matcher fusion, quality filtering) scores the final match.
+A contactless biometric verification system. Four models examine the same palm scan from different angles: deep learning embeddings, LBP texture features, Gabor frequency-domain features, and a cross-channel comparison between near-infrared and visible light. Their scores are merged by ensemble voting to reach a verification decision. The pipeline runs behind a FastAPI service in a Docker container.
 
-**Key numbers:** 99.75% AUC on verification.
+**Key numbers:** 99.75% AUC on the verification benchmark.
 
-**Why it matters:** Serious metric learning (Siamese, triplet loss) plus multimodal fusion in a high-stakes domain where a confident wrong answer is the worst failure.
+**Why it matters:** Computer vision in a high-stakes domain (biometrics). Shows multimodal fusion and understanding of precision-recall tradeoffs where false negatives have real costs.
 
 ---
 

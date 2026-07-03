@@ -16,36 +16,12 @@ Most recommender demos are a content-similarity cosine over a frozen dataset. I 
 
 ## Approach
 
-![Reel Rank architecture](/diagrams/reelrank-arch.svg)
-
 - **Two stages.** Stage one is a two-tower neural model with separate user and item encoders, trained with in-batch-negative sampled softmax. At serving time the user (or a text query) is embedded and the top few hundred candidates are pulled by approximate nearest-neighbor search. The index is Proxima, my own C++ HNSW engine, running its int8 SQ8 mode to keep the serving memory small. Stage two is a neural ranker that re-scores those candidates.
 - **Hybrid signals and cold start.** Collaborative signal comes from MovieLens; content embeddings of title, genres, tags, and the TMDB plot, cast, and director come from a sentence-transformer. A content-aware item tower means a brand-new movie with zero ratings still gets a usable embedding.
 - **Live and current.** A daily job pulls trending and now-playing titles from the TMDB API and folds them into the index, so recommendations include movies released after the dataset froze.
 - **Natural-language search.** A free-text request is embedded into the same item space and used as the retrieval query, so the system answers vibes, not just ids.
 - **Honest evaluation.** A leakage-free temporal split, with Recall, NDCG, and MAP reported against a popularity baseline and a content-similarity baseline.
 
-## The stack
-
-| Piece | Choice | Why |
-| :-- | :-- | :-- |
-| Retrieval | two-tower, in-batch sampled softmax (PyTorch) | users and movies share one embedding space |
-| Index | Proxima, SQ8 int8 mode | my own C++ engine; serving memory stays small |
-| Ranking | MLP re-scorer over tower, content, and popularity signals | orders the shortlist properly |
-| Cold start | sentence-transformer content embeddings, hybrid item tower | a zero-rating movie is recommendable day one |
-| Freshness | daily TMDB job (trending, now playing) | the catalog does not freeze with the dataset |
-| NL search | free text embedded straight into the item space | "a slow-burn sci-fi like Arrival but funnier" |
-| Evaluation | temporal split; Recall, NDCG, MAP vs two baselines | no leakage, honest comparisons |
-| Serving | FastAPI backend, React + TypeScript front, Docker | deployable on a small always-on host |
-
 ## Result
 
-On the held-out temporal split, the hybrid two-tower beats both baselines on every metric:
-
-| model | Recall@10 | NDCG@10 | MAP@10 | Recall@100 |
-| :-- | :-- | :-- | :-- | :-- |
-| popularity | 0.0410 | 0.0367 | 0.0192 | 0.2311 |
-| content similarity | 0.0349 | 0.0261 | 0.0132 | 0.1799 |
-| two-tower (collab only) | 0.0570 | 0.0450 | 0.0219 | 0.3465 |
-| **two-tower + content (hybrid)** | **0.0598** | **0.0499** | **0.0246** | **0.3673** |
-
-On items withheld from training entirely it recovers roughly ten times the recall of a collaborative-only system, which is the cold-start mechanism doing its job. The whole thing serves behind a FastAPI backend and a React frontend, Dockerized for a small always-on host, with a "pick a few you like" onboarding so a first-time visitor gets good results immediately. The ranker taught the most: the usual hard-negative advice quietly sabotages a re-ranker on sparse implicit feedback, because the retrieved negatives contain the user's own held-out future positives, so it learns to bury exactly what the eval rewards.
+The hybrid two-tower beats both baselines on the held-out split. On items withheld from training entirely it recovers roughly ten times the recall of a collaborative-only system, which is the cold-start mechanism doing its job. The whole thing serves behind a FastAPI backend and a React frontend, Dockerized for a small always-on host, with a "pick a few you like" onboarding so a first-time visitor gets good results immediately. The ranker taught the most: the usual hard-negative advice quietly sabotages a re-ranker on sparse implicit feedback, because the retrieved negatives contain the user's own held-out future positives, so it learns to bury exactly what the eval rewards.

@@ -15,23 +15,10 @@ Patient-facing healthcare tools are usually slow to build and clunky to use. The
 
 ## Approach
 
-![Kairo architecture](/diagrams/kairo-arch.svg)
-
 - **FastAPI backend** orchestrating OpenAI for the conversational layer, with **Vapi** handling voice-call handoff.
 - **React + Vite + TypeScript** frontend.
 - Deployed on AWS EC2.
 - Built AI-native: Cursor and Claude Code drove the development loop, which is how a one-person team ships a full-stack LLM product in days.
-
-## The stack
-
-| Piece | Choice | Why |
-| :-- | :-- | :-- |
-| Frontend | React + Vite + TypeScript | a chat UI patients can actually use |
-| Voice | Vapi | phone-call handoff without telephony plumbing |
-| Backend | FastAPI | one orchestrator for both channels |
-| LLM | OpenAI | the conversational layer |
-| Deploy | AWS EC2 | live, not localhost |
-| Workflow | AI-native (Cursor, Claude Code) | how one engineer ships in days |
 
 ## Result
 
