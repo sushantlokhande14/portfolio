@@ -65,19 +65,19 @@
     },
     {
       "group": "LLM & GenAI",
-      "items": ["RAG", "Vector embeddings", "OpenAI & Anthropic APIs", "Semantic caching", "Prompt engineering", "Hugging Face"]
+      "items": ["RAG", "Vector embeddings", "Multi-agent orchestration", "OpenAI & Anthropic APIs", "Ollama & vLLM", "Semantic caching", "Prompt engineering", "Hugging Face"]
     },
     {
       "group": "Web, Mobile & APIs",
-      "items": ["React", "React Native", "FastAPI", "Flask", "Django", "Node.js", "REST & webhooks", "asyncio", "JWT auth", "SSE streaming"]
+      "items": ["React", "React Native", "Next.js", "FastAPI", "Flask", "Django", "Node.js", "REST & webhooks", "GraphQL", "gRPC", "asyncio", "JWT auth", "SSE streaming"]
     },
     {
       "group": "Data & Storage",
-      "items": ["PostgreSQL", "PL/SQL", "DBA", "MongoDB", "Neo4j", "Redis", "SQLite", "Hadoop, Hive & HBase"]
+      "items": ["PostgreSQL", "PL/SQL", "DBA", "MongoDB", "Neo4j", "Qdrant", "Redis", "SQLite", "MinIO (S3)", "Hadoop, Hive & HBase"]
     },
     {
       "group": "Systems & Tooling",
-      "items": ["Docker", "Kubernetes", "AWS (EC2)", "CI/CD", "Linux", "pybind11 & CMake", "pytest", "Cursor & Claude Code"]
+      "items": ["Docker", "Kubernetes", "Kafka", "Temporal", "AWS (EC2)", "CI/CD", "Linux", "OpenTelemetry", "Prometheus & Grafana", "pybind11 & CMake", "pytest", "Cursor & Claude Code"]
     }
   ]
 }

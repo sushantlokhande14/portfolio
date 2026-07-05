@@ -13,4 +13,5 @@ tech: ["Python", "PyTorch", "CUDA", "Docker", "pytest"]
 - Built reproducible benchmarking workflows with automated preprocessing, experiment validation, and documentation to support research and publication.
 - Co-authored a paper on malware-classification methods and created reusable evaluation frameworks for future experiments.
 - Developed automated grading systems for 400+ Java and Python submissions across 3 courses, cutting manual evaluation effort by 35% and speeding up feedback.
+- That grading workload became Autograde AI: a local-first multi-agent grading platform designed around six specialized grader agents, Temporal workflows over a Kafka event bus, confidence-gated human review, and local LLMs served through Ollama — run against synthetic coursework only, never live student data.
 - Mentored 250+ students through debugging sessions, code reviews, and structured technical guidance.
