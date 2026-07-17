@@ -65,7 +65,7 @@ Collaborative signal comes from MovieLens. Content embeddings of title, genres, 
 The CS298 thesis project. Instead of scanning for known byte signatures, the pipeline converts each executable into an image using eight visualization techniques (including Hilbert curve and byteclass color encodings). Three tracks study the image: handcrafted texture features (HOG, Haralick), fine-tuned deep CNNs (VGG16 and ResNet50), and a fine-tuned Vision Transformer. At inference time all three vote and their probability distributions are merged by soft voting. Training ran on GPU with Bayesian hyperparameter sweeps and Dockerized reproducible environments.
 
 **Key numbers:** 94% accuracy across 17 malware families on 50,000+ image samples.
-**Publication:** co-authored paper (S. Lokhande, F. Di Troia, M. Stamp), currently under review.
+**Publication:** co-authored paper (S. Lokhande, F. Di Troia, M. Juracek, M. Stamp), currently under review.
 
 **Why it matters:** Real research output with a published result (under review). Covers computer vision, ensemble learning, CUDA training, and experiment-tracking discipline.
 

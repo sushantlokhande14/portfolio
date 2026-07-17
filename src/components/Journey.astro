@@ -1,0 +1,34 @@
+---
+import site from '../data/site.json';
+import SectionHeading from './SectionHeading.astro';
+---
+
+<section id="experience" class="mx-auto max-w-5xl scroll-mt-14 px-6 py-32">
+  <SectionHeading index="02" label="journey" title="Where I've been" />
+  <ol class="relative ml-7 border-l border-line">
+    {
+      site.timeline.map((item, i) => (
+        <li
+          class="relative pb-14 pl-14 last:pb-0"
+          data-reveal
+          style={`--reveal-delay: ${i * 80}ms`}
+        >
+          <img
+            src={item.logo}
+            alt={item.org}
+            width="48"
+            height="48"
+            loading="lazy"
+            class="absolute -left-6 top-0 size-12 rounded-xl border border-line object-cover shadow-md"
+          />
+          <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">{item.type}</p>
+          <h3 class="mt-1.5 text-lg font-medium leading-snug text-ink">{item.title}</h3>
+          <p class="mt-0.5 text-sm text-muted">{item.org}</p>
+          <p class="mt-1.5 font-mono text-xs text-muted">
+            {item.start} — {item.end}
+          </p>
+        </li>
+      ))
+    }
+  </ol>
+</section>

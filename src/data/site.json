@@ -42,16 +42,63 @@
       ]
     }
   ],
+  "timeline": [
+    {
+      "type": "work",
+      "title": "Graduate Assistant",
+      "org": "San José State University",
+      "start": "Aug 2025",
+      "end": "May 2026",
+      "logo": "/logos/sjsu.svg"
+    },
+    {
+      "type": "education",
+      "title": "MS, Computer Science",
+      "org": "San José State University",
+      "start": "Aug 2024",
+      "end": "May 2026",
+      "logo": "/logos/sjsu.svg"
+    },
+    {
+      "type": "work",
+      "title": "Software Engineer",
+      "org": "Turito",
+      "start": "Jun 2022",
+      "end": "Oct 2023",
+      "logo": "/logos/turito.svg"
+    },
+    {
+      "type": "work",
+      "title": "Software Engineer Intern",
+      "org": "Trivia Softwares",
+      "start": "Nov 2021",
+      "end": "Jan 2022",
+      "logo": "/logos/trivia.svg"
+    },
+    {
+      "type": "education",
+      "title": "BE, Computer Engineering",
+      "org": "University of Mumbai",
+      "start": "Aug 2019",
+      "end": "May 2023",
+      "logo": "/logos/mumbai.svg"
+    }
+  ],
   "research": [
     {
       "tag": "Paper · under review",
       "title": "Image-Based Techniques and Ensemble Soft Voting for Malware Classification",
-      "detail": "S. Lokhande, F. Di Troia, M. Stamp · 2026"
+      "detail": "S. Lokhande, F. Di Troia, M. Juracek, M. Stamp · 2026"
     },
     {
       "tag": "Conference",
       "title": "Comprehensive Big Data Analytics Dashboard on Chats",
       "detail": "Presented at ICICN 2023, Mumbai, India"
+    },
+    {
+      "tag": "Scholarship",
+      "title": "Spartan Scholar",
+      "detail": "San José State University · awarded for academic excellence"
     }
   ],
   "skills": [
