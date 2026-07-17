@@ -24,9 +24,7 @@
       "gpa": "3.8 / 4.0",
       "notes": [
         "Machine Learning, Artificial Intelligence, Advanced Algorithms",
-        "Computer Communication Systems, Database Systems, NoSQL, Biometric Security with AI",
-        "Thesis on image-based malware classification",
-        "Awarded the Spartan Scholar Scholarship for academic excellence"
+        "Computer Communication Systems, Database Systems, NoSQL, Biometric Security with AI"
       ]
     },
     {
@@ -99,6 +97,11 @@
       "tag": "Scholarship",
       "title": "Spartan Scholar",
       "detail": "San José State University · awarded for academic excellence"
+    },
+    {
+      "tag": "Felicitation",
+      "title": "Consistent High Rank",
+      "detail": "University of Mumbai · felicitated for holding a top rank across 7 straight semesters"
     }
   ],
   "skills": [
