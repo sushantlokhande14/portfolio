@@ -6,7 +6,7 @@ cover: "/covers/autograde.svg"
 tech: ["Python", "FastAPI", "Temporal", "Kafka", "gRPC", "Postgres", "Redis", "Qdrant", "Ollama", "Next.js", "Docker"]
 featured: true
 order: 1.75
-github: "https://github.com/sushantlokhande14/grademesh"
+github: "https://github.com/sushantlokhande14/autograde-ai"
 ---
 
 ## Problem

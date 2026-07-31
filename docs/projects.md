@@ -34,7 +34,7 @@ An OpenAI-compatible LLM gateway that caches responses at the meaning level, not
 ## 3. Autograde AI
 **Subtitle:** The TA that never sleeps
 **Stack:** Python, FastAPI + GraphQL (Apollo), gRPC, Kafka, Temporal, Postgres 16 (RLS), Redis, Qdrant, MinIO, Docker + gVisor, Ollama/vLLM (Qwen 2.5 32B), Next.js 15, OpenTelemetry, Prometheus, Grafana
-**GitHub:** github.com/sushantlokhande14/grademesh (repo pending push; plan in PROJECT_PLAN.md)
+**GitHub:** github.com/sushantlokhande14/autograde-ai
 
 The multi-agent grading platform (internal name GradeMesh) that grew out of the SJSU Graduate Assistant role. A parser pool normalizes seven file formats into a canonical artifact stream, an LLM-assisted QuestionMapper assigns artifacts to rubric questions (gated on confidence), and a Kafka + Temporal backbone dispatches six specialized grading agents in parallel: theory (RAG over Qdrant), sandboxed code execution (Docker + gVisor), code style, derivation, figure, and plagiarism — plus a CrossChecker and FeedbackSynthesizer. Every grade carries calibrated confidence; high auto-approves, low lands in a review queue with a three-click audit to the exact prompt, retrieval, and sandbox run. Local-first: Qwen 2.5 32B via Ollama/vLLM, hashed student IDs, identity behind Postgres row-level security. Evaluated against a hand-graded 100-submission gold set with a zero-shot baseline.
 
