@@ -57,7 +57,21 @@ Collaborative signal comes from MovieLens. Content embeddings of title, genres, 
 
 ---
 
-## 5. Image-Based Malware Classification
+## 5. HNSW Lab
+**Subtitle:** Watch the search walk
+**Stack:** TypeScript, Canvas, ES modules, zero dependencies
+**GitHub:** github.com/sushantlokhande14/hnsw-lab
+**Live:** https://sushantlokhande14.github.io/hnsw-lab/
+
+An interactive visualizer for HNSW, the algorithm behind almost every vector database. It runs the real index (geometric level assignment, diversity heuristic, degree pruning) on 2-D points you can see, then replays the query hop by hop: layers drawn as stacked isometric planes, the current node in white, computed distances in green, returned neighbors in amber, and a dashed line tracing the descent from each layer's exit to the next layer's entry. Click to move the query; sliders control points, M, ef, and k. Recall is scored against brute force on every query.
+
+**Key numbers:** a query on 400 points computes ~70 distances, skipping 83% of brute-force work at 100% recall@5.
+
+**Why it matters:** it is the live demo the portfolio otherwise lacks, and it is the visual explainer for Proxima — it shows *why* the C++ engine is fast, which no static diagram does. Drop M to 3 or ef to 4 and you can watch the speed/accuracy tradeoff break in real time.
+
+---
+
+## 6. Image-Based Malware Classification
 **Subtitle:** Malware Mugshots
 **Stack:** Python, PyTorch, OpenCV, ViT, Docker, CUDA
 **GitHub:** github.com/sushantlokhande14/Soft_Voting_Ensembled_Malware_Images_Classification
@@ -71,7 +85,7 @@ The CS298 thesis project. Instead of scanning for known byte signatures, the pip
 
 ---
 
-## 6. Graph Connect
+## 7. Graph Connect
 **Subtitle:** Six Degrees
 **Stack:** Python, FastAPI, TypeScript, Neo4j, MongoDB, Docker, AWS
 **GitHub:** github.com/sushantlokhande14/neo4j-social-network-graph-app
@@ -84,7 +98,7 @@ A social platform where the connections between people are the database, not jus
 
 ---
 
-## 7. AI Learning Aggregator
+## 8. AI Learning Aggregator
 **Subtitle:** Cited, Not Guessed
 **Stack:** Python, FastAPI, OpenAI, vector embeddings, Docker, AWS EC2
 **GitHub:** github.com/sushantlokhande14/AILearningHub
@@ -95,7 +109,7 @@ A study assistant built on RAG (retrieval-augmented generation). It refuses to a
 
 ---
 
-## 8. Melody Metrics
+## 9. Melody Metrics
 **Subtitle:** What makes a song a hit
 **Stack:** C++, Python, Hadoop, MapReduce, Hive, XGBoost
 **GitHub:** github.com/sushantlokhande14/Predicting-Song-Popularity-Using-Lyrics
@@ -106,7 +120,7 @@ A big-data pipeline and popularity prediction model over a million-row music dat
 
 ---
 
-## 9. Multimodal Palmprint Authentication
+## 10. Multimodal Palmprint Authentication
 **Subtitle:** Show of Hands
 **Stack:** Python, PyTorch, OpenCV, FastAPI, Docker, CUDA
 **GitHub:** github.com/sushantlokhande14/Multimodal-contactless-palmprint-verification-using-dual-networks-and-ensemble-scoring
@@ -119,7 +133,7 @@ A contactless biometric verification system. Four models examine the same palm s
 
 ---
 
-## 10. Kairo
+## 11. Kairo
 **Subtitle:** Zero to shipped in a week
 **Stack:** Python, FastAPI, React, TypeScript, OpenAI, Vapi, AWS EC2
 **GitHub:** github.com/sushantlokhande14/kyron-medicalapp
@@ -130,7 +144,7 @@ An AI-powered patient intake assistant that handles both text and voice. Patient
 
 ---
 
-## 11. TCP Sliding Window Simulator
+## 12. TCP Sliding Window Simulator
 **Subtitle:** TCP, from Scratch
 **Stack:** Python, raw sockets
 **GitHub:** private / no public repo
