@@ -1,0 +1,47 @@
+---
+// Reports one page view. Deliberately tiny and inline: an external script
+// named anything like "analytics" gets blocked by extensions, and a separate
+// request would cost more than the payload it sends.
+---
+
+<script is:inline>
+  (function () {
+    // Respect Do Not Track. It costs a few visits in the numbers and it is the
+    // right default for a site that claims to be privacy-first.
+    if (navigator.doNotTrack === '1' || window.doNotTrack === '1') return;
+
+    // Never count the author's own visits, toggled by localStorage so it
+    // survives across sessions on this machine:
+    //   localStorage.setItem('sl-no-track', '1')
+    try {
+      if (localStorage.getItem('sl-no-track')) return;
+    } catch {}
+
+    // Skip local development and preview deploys so real numbers stay clean.
+    var host = location.hostname;
+    if (host === 'localhost' || host === '127.0.0.1' || host.endsWith('.local')) return;
+
+    var body = JSON.stringify({
+      path: location.pathname,
+      referrer: document.referrer || null,
+    });
+
+    // sendBeacon survives the page being closed mid-request, which a plain
+    // fetch does not. Falling back to keepalive fetch where it is missing.
+    try {
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon('/api/collect', new Blob([body], { type: 'application/json' }));
+        return;
+      }
+    } catch {}
+
+    try {
+      fetch('/api/collect', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: body,
+        keepalive: true,
+      }).catch(function () {});
+    } catch {}
+  })();
+</script>
