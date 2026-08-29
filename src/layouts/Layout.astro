@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import Analytics from '@vercel/analytics/astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 
@@ -31,6 +32,7 @@ const {
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0a0a0a" />
     <title>{title}</title>
+    <Analytics />
   </head>
   <body>
     <div class="page-bg" aria-hidden="true"></div>
