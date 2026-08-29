@@ -1,4 +1,5 @@
 import { createHmac, timingSafeEqual, randomBytes } from 'node:crypto';
+import { env } from './env';
 
 const COOKIE = 'sl_dash';
 const MAX_AGE = 60 * 60 * 24 * 30; // 30 days
@@ -14,14 +15,14 @@ function safeEqual(a: string, b: string) {
 }
 
 export function checkPassword(input: string) {
-  const expected = process.env.ANALYTICS_PASSWORD;
+  const expected = env('ANALYTICS_PASSWORD');
   if (!expected) return false; // no password set means locked, not open
   return safeEqual(input, expected);
 }
 
 function secret() {
   // Falls back to the password so a working setup needs one secret, not two.
-  const s = process.env.ANALYTICS_SECRET ?? process.env.ANALYTICS_PASSWORD;
+  const s = env('ANALYTICS_SECRET') ?? env('ANALYTICS_PASSWORD');
   if (!s) throw new Error('ANALYTICS_SECRET is not set');
   return s;
 }

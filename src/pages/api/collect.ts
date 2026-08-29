@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { sql, ensureSchema, hasDatabase } from '../../lib/db';
 import { visitorHash, clientIp } from '../../lib/identity';
 import { isBot, deviceOf, browserOf, referrerHost, cleanPath } from '../../lib/agent';
+import { env } from '../../lib/env';
 
 export const prerender = false;
 
@@ -26,7 +27,7 @@ export const POST: APIRoute = async ({ request }) => {
     } | null;
     if (!body) return NO_CONTENT;
 
-    const salt = process.env.ANALYTICS_SALT;
+    const salt = env('ANALYTICS_SALT');
     if (!salt) return NO_CONTENT; // refuse to hash with a predictable salt
 
     const url = new URL(request.url);

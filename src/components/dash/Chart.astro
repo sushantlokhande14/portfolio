@@ -1,0 +1,75 @@
+---
+// A hand-drawn SVG area chart. A charting library would be ~50KB for one
+// chart; this is a path string.
+interface Props {
+  series: { day: string; views: number; visitors: number }[];
+}
+const { series } = Astro.props as Props;
+
+const W = 1000;
+const H = 220;
+const PAD = { t: 12, r: 4, b: 22, l: 4 };
+
+const max = Math.max(1, ...series.map((d) => d.views));
+const step = series.length > 1 ? (W - PAD.l - PAD.r) / (series.length - 1) : 0;
+const x = (i: number) => PAD.l + i * step;
+const y = (v: number) => PAD.t + (1 - v / max) * (H - PAD.t - PAD.b);
+
+const line = (key: 'views' | 'visitors') =>
+  series.map((d, i) => `${i === 0 ? 'M' : 'L'} ${x(i).toFixed(1)} ${y(d[key]).toFixed(1)}`).join(' ');
+
+const area = `${line('views')} L ${x(series.length - 1).toFixed(1)} ${H - PAD.b} L ${x(0).toFixed(1)} ${H - PAD.b} Z`;
+
+// Only a few date labels, otherwise they collide on a year view.
+const tickEvery = Math.max(1, Math.ceil(series.length / 7));
+const fmt = (iso: string) =>
+  new Date(iso + 'T00:00:00Z').toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
+---
+
+<div class="chart">
+  <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" role="img" aria-label="Views over time">
+    <defs>
+      <linearGradient id="fill" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="var(--accent-1)" stop-opacity="0.28" />
+        <stop offset="100%" stop-color="var(--accent-1)" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path d={area} fill="url(#fill)" />
+    <path d={line('views')} fill="none" stroke="var(--accent-1)" stroke-width="2"
+      vector-effect="non-scaling-stroke" stroke-linejoin="round" />
+    <path d={line('visitors')} fill="none" stroke="var(--ink-2)" stroke-width="1.5"
+      stroke-dasharray="4 4" vector-effect="non-scaling-stroke" stroke-linejoin="round" opacity="0.7" />
+    {series.map((d, i) => (
+      <circle cx={x(i)} cy={y(d.views)} r="7" fill="transparent" class="hit">
+        <title>{`${fmt(d.day)} — ${d.views} views, ${d.visitors} visitors`}</title>
+      </circle>
+    ))}
+  </svg>
+  <div class="ticks">
+    {series.map((d, i) => (i % tickEvery === 0 ? <span>{fmt(d.day)}</span> : null))}
+  </div>
+</div>
+
+<style>
+  .chart svg {
+    width: 100%;
+    height: 220px;
+    display: block;
+    overflow: visible;
+  }
+  .ticks {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    color: var(--ink-2);
+  }
+  .hit:hover {
+    fill: var(--accent-1);
+  }
+</style>

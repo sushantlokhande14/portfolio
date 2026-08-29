@@ -1,0 +1,207 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Chart from '../components/dash/Chart.astro';
+import Bars from '../components/dash/Bars.astro';
+import { isAuthed } from '../lib/auth';
+import { hasDatabase } from '../lib/db';
+import { getStats, parseRange } from '../lib/stats';
+
+// Rendered per request: it reads a cookie and live data, so it can never be
+// prerendered or cached.
+export const prerender = false;
+
+const authed = isAuthed(Astro.cookies);
+const failed = Astro.url.searchParams.get('e') === '1';
+const range = parseRange(Astro.url.searchParams.get('range'));
+
+let stats = null;
+let error: string | null = null;
+if (authed) {
+  if (!hasDatabase()) {
+    error = 'DATABASE_URL is not set, so there is nothing to read yet.';
+  } else {
+    try {
+      stats = await getStats(range);
+    } catch (err) {
+      error = err instanceof Error ? err.message : 'Could not load stats.';
+    }
+  }
+}
+
+const pct = (now: number, prev: number) =>
+  prev === 0
+    ? now > 0
+      ? '+100%'
+      : '0%'
+    : `${now >= prev ? '+' : ''}${Math.round(((now - prev) / prev) * 100)}%`;
+
+const flag = (cc: string) =>
+  cc && cc.length === 2 && cc !== '??'
+    ? String.fromCodePoint(...[...cc.toUpperCase()].map((c) => 127397 + c.charCodeAt(0)))
+    : '🌐';
+
+const ranges = [7, 30, 90, 365] as const;
+---
+
+<Layout title="Dashboard — Sushant Lokhande" description="Private analytics dashboard.">
+  <section class="mx-auto max-w-5xl px-6 py-32">
+    {
+      !authed ? (
+        <div class="mx-auto max-w-sm">
+          <h1 class="text-3xl font-semibold tracking-tight text-ink">Dashboard</h1>
+          <p class="mt-3 text-sm text-muted">This one is just for me.</p>
+          <form method="POST" action="/api/login" class="mt-8 space-y-3">
+            <input
+              type="password"
+              name="password"
+              placeholder="password"
+              autocomplete="current-password"
+              required
+              autofocus
+              class="w-full rounded-xl border border-line bg-transparent px-4 py-3 text-ink outline-none focus:border-accent"
+            />
+            <button
+              type="submit"
+              class="btn-primary w-full rounded-xl px-4 py-3 text-sm font-medium transition-opacity hover:opacity-85"
+            >
+              Enter
+            </button>
+            {failed && <p class="text-sm text-red-500">Wrong password.</p>}
+          </form>
+        </div>
+      ) : (
+        <>
+          <div class="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p class="font-mono text-xs uppercase tracking-[0.2em] text-muted">
+                <span class="text-accent">·</span> analytics
+              </p>
+              <h1 class="text-gradient mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">
+                Who has been by.
+              </h1>
+            </div>
+            <div class="flex items-center gap-2">
+              {ranges.map((r) => (
+                <a
+                  href={`/dashboard?range=${r}`}
+                  class={`rounded-full border px-3.5 py-1.5 font-mono text-xs transition-colors ${
+                    r === range
+                      ? 'border-accent text-accent'
+                      : 'border-line text-muted hover:border-accent hover:text-accent'
+                  }`}
+                >
+                  {r === 365 ? '1y' : `${r}d`}
+                </a>
+              ))}
+              <form method="POST" action="/api/logout">
+                <button class="rounded-full border border-line px-3.5 py-1.5 font-mono text-xs text-muted transition-colors hover:border-accent hover:text-accent">
+                  sign out
+                </button>
+              </form>
+            </div>
+          </div>
+
+          {error ? (
+            <div class="card mt-10 rounded-2xl p-7">
+              <p class="text-sm text-muted">{error}</p>
+            </div>
+          ) : (
+            stats && (
+              <>
+                <div class="mt-10 grid gap-5 sm:grid-cols-2">
+                  <div class="card rounded-2xl p-7">
+                    <p class="font-mono text-xs uppercase tracking-[0.2em] text-muted">views</p>
+                    <p class="mt-3 text-4xl font-semibold text-ink">
+                      {stats.totals.views.toLocaleString()}
+                    </p>
+                    <p class="mt-1 font-mono text-xs text-muted">
+                      {pct(stats.totals.views, stats.totals.prevViews)} vs previous {range}d
+                    </p>
+                  </div>
+                  <div class="card rounded-2xl p-7">
+                    <p class="font-mono text-xs uppercase tracking-[0.2em] text-muted">visitors</p>
+                    <p class="mt-3 text-4xl font-semibold text-ink">
+                      {stats.totals.visitors.toLocaleString()}
+                    </p>
+                    <p class="mt-1 font-mono text-xs text-muted">
+                      {pct(stats.totals.visitors, stats.totals.prevVisitors)} vs previous {range}d
+                    </p>
+                  </div>
+                </div>
+
+                <div class="card mt-5 rounded-2xl p-7">
+                  <div class="flex items-center justify-between">
+                    <h3 class="font-mono text-xs uppercase tracking-[0.2em] text-muted">over time</h3>
+                    <p class="font-mono text-[11px] text-muted">
+                      <span class="text-accent">—</span> views
+                      <span class="ml-3">- - - visitors</span>
+                    </p>
+                  </div>
+                  <div class="mt-5">
+                    <Chart series={stats.series} />
+                  </div>
+                </div>
+
+                <div class="mt-5 grid gap-5 lg:grid-cols-2">
+                  <Bars
+                    title="most read"
+                    rows={stats.pages.map((p) => ({
+                      label: p.path,
+                      value: p.views,
+                      sub: `${p.visitors} vis`,
+                    }))}
+                  />
+                  <Bars
+                    title="where they came from"
+                    rows={stats.referrers.map((r) => ({ label: r.source, value: r.views }))}
+                  />
+                  <Bars
+                    title="countries"
+                    rows={stats.countries.map((c) => ({
+                      label: `${flag(c.country)}  ${c.country}`,
+                      value: c.views,
+                    }))}
+                  />
+                  <div class="grid gap-5">
+                    <Bars
+                      title="device"
+                      rows={stats.devices.map((d) => ({ label: d.device, value: d.views }))}
+                    />
+                    <Bars
+                      title="browser"
+                      rows={stats.browsers.map((b) => ({ label: b.browser, value: b.views }))}
+                    />
+                  </div>
+                </div>
+
+                <div class="card mt-5 rounded-2xl p-7">
+                  <h3 class="font-mono text-xs uppercase tracking-[0.2em] text-muted">latest</h3>
+                  {stats.recent.length === 0 ? (
+                    <p class="mt-4 text-sm text-muted">No views recorded yet.</p>
+                  ) : (
+                    <ul class="mt-4 divide-y divide-line font-mono text-xs">
+                      {stats.recent.map((r) => (
+                        <li class="flex flex-wrap items-center gap-x-4 gap-y-1 py-2.5">
+                          <span class="text-muted">{new Date(r.ts).toLocaleString()}</span>
+                          <span class="text-ink">{r.path}</span>
+                          <span class="text-muted">{flag(r.country ?? '??')}</span>
+                          {r.referrer && <span class="text-accent">via {r.referrer}</span>}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+
+                <p class="mt-8 max-w-2xl font-mono text-[11px] leading-relaxed text-muted">
+                  No cookies, no cross-day tracking, no raw IPs stored. A visitor is a hash of ip
+                  plus user agent plus the current date, so it rotates every midnight and one
+                  person visiting on three days counts three times.
+                </p>
+              </>
+            )
+          )}
+        </>
+      )
+    }
+  </section>
+</Layout>

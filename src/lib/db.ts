@@ -1,4 +1,5 @@
 import { neon } from '@neondatabase/serverless';
+import { env } from './env';
 
 // Neon's HTTP driver rather than a TCP pool: serverless functions are short
 // lived and can spin up hundreds of concurrent instances, which exhausts a
@@ -8,14 +9,14 @@ let _sql: ReturnType<typeof neon> | null = null;
 
 export function sql() {
   if (_sql) return _sql;
-  const url = process.env.DATABASE_URL;
+  const url = env('DATABASE_URL');
   if (!url) throw new Error('DATABASE_URL is not set');
   _sql = neon(url);
   return _sql;
 }
 
 export function hasDatabase() {
-  return Boolean(process.env.DATABASE_URL);
+  return Boolean(env('DATABASE_URL'));
 }
 
 // Schema lives in code and is applied on demand rather than through a
