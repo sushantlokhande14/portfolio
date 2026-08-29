@@ -21,6 +21,11 @@
     var host = location.hostname;
     if (host === 'localhost' || host === '127.0.0.1' || host.endsWith('.local')) return;
 
+    // The dashboard is for the author, so it stays out of its own numbers.
+    // The server enforces this too; this just avoids a pointless request.
+    var p = location.pathname;
+    if (p === '/dashboard' || p.indexOf('/dashboard/') === 0 || p.indexOf('/api/') === 0) return;
+
     var body = JSON.stringify({
       path: location.pathname,
       referrer: document.referrer || null,

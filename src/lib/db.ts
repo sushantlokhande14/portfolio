@@ -41,10 +41,16 @@ export function ensureSchema() {
         visitor     TEXT         NOT NULL
       )
     `;
+    // Added after the first deploy, so existing tables need it backfilled as
+    // nullable rather than recreated.
+    await q`ALTER TABLE events ADD COLUMN IF NOT EXISTS os TEXT`;
     // Time range is in every query; path and visitor carry the group-bys.
     await q`CREATE INDEX IF NOT EXISTS events_ts_idx ON events (ts DESC)`;
     await q`CREATE INDEX IF NOT EXISTS events_path_idx ON events (path)`;
     await q`CREATE INDEX IF NOT EXISTS events_visitor_idx ON events (visitor)`;
+    // The dedup check filters on all three at once, so a composite index is
+    // what actually serves it.
+    await q`CREATE INDEX IF NOT EXISTS events_dedup_idx ON events (visitor, path, ts DESC)`;
   })().catch((err) => {
     // Let the next request retry instead of caching a failed bootstrap.
     ready = null;

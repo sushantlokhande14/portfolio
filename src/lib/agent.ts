@@ -54,3 +54,20 @@ export function cleanPath(rawPath: string) {
   if (p.length > 1) p = p.replace(/\/+$/, '') || '/';
   return p.slice(0, 256);
 }
+
+export function osOf(userAgent: string) {
+  const ua = userAgent;
+  if (/windows nt/i.test(ua)) return 'Windows';
+  if (/iphone|ipad|ipod/i.test(ua)) return 'iOS';
+  if (/mac os x/i.test(ua)) return 'macOS';
+  if (/android/i.test(ua)) return 'Android';
+  if (/cros/i.test(ua)) return 'ChromeOS';
+  if (/linux/i.test(ua)) return 'Linux';
+  return 'Other';
+}
+
+// Paths that exist for the author, not the audience. Counting the dashboard in
+// its own numbers is circular and quietly inflates every total.
+export function isPrivatePath(path: string) {
+  return path === '/dashboard' || path.startsWith('/dashboard/') || path.startsWith('/api/');
+}
