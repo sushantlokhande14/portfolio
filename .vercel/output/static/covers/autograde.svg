@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1a0912"/><stop offset="1" stop-color="#0d0609"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="48%" r="55%">
+      <stop offset="0" stop-color="#fb7185" stop-opacity="0.2"/><stop offset="1" stop-color="#fb7185" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="spark" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#ffe4e6"/><stop offset="0.5" stop-color="#fda4af"/><stop offset="1" stop-color="#fb7185"/>
+    </radialGradient>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <rect width="800" height="450" fill="url(#glow)"/>
+
+  <!-- flow: submissions -> grader -> report -->
+  <g stroke="#fb7185" stroke-width="2" opacity="0.5" stroke-linecap="round">
+    <path d="M235 225 H330"/>
+    <path d="M470 225 H560"/>
+  </g>
+
+  <!-- stack of student submissions -->
+  <g>
+    <rect x="105" y="155" width="120" height="84" rx="10" fill="#2a0d18" stroke="#fb7185" stroke-width="2" opacity="0.45"/>
+    <rect x="97" y="166" width="120" height="84" rx="10" fill="#2a0d18" stroke="#fb7185" stroke-width="2" opacity="0.7"/>
+    <rect x="89" y="177" width="124" height="88" rx="10" fill="#2a0d18" stroke="#fb7185" stroke-width="2"/>
+    <g fill="#fda4af" opacity="0.85">
+      <rect x="103" y="193" width="70" height="7" rx="3.5"/>
+      <rect x="103" y="207" width="90" height="7" rx="3.5"/>
+      <rect x="103" y="221" width="56" height="7" rx="3.5"/>
+      <rect x="103" y="235" width="80" height="7" rx="3.5"/>
+    </g>
+  </g>
+
+  <!-- the grading node -->
+  <rect x="330" y="158" width="140" height="134" rx="28" fill="#2a0d18" stroke="#fb7185" stroke-width="2.5"/>
+  <path d="M362 230 l26 26 l52 -56" stroke="url(#spark)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" filter="url(#soft)"/>
+  <!-- AI sparkle on the node -->
+  <path d="M455 138 C455 147 459 151 468 151 C459 151 455 155 455 164 C455 155 451 151 442 151 C451 151 455 147 455 138 Z" fill="#ffe4e6" filter="url(#soft)"/>
+
+  <!-- graded report -->
+  <g>
+    <rect x="560" y="168" width="158" height="114" rx="14" fill="#2a0d18" stroke="#fb7185" stroke-width="2"/>
+    <g fill="#fda4af" opacity="0.85">
+      <rect x="576" y="188" width="72" height="8" rx="4"/>
+      <rect x="576" y="212" width="58" height="8" rx="4"/>
+      <rect x="576" y="236" width="84" height="8" rx="4"/>
+    </g>
+    <g stroke="#fda4af" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <circle cx="688" cy="192" r="9" stroke="#fb7185" stroke-width="2"/>
+      <path d="M684 192 l3 3 l6 -7"/>
+      <circle cx="688" cy="216" r="9" stroke="#fb7185" stroke-width="2"/>
+      <path d="M684 216 l3 3 l6 -7"/>
+      <circle cx="688" cy="240" r="9" stroke="#fb7185" stroke-width="2"/>
+      <path d="M684 236 l8 8 M692 236 l-8 8"/>
+    </g>
+    <rect x="576" y="258" width="100" height="10" rx="5" stroke="#fb7185" stroke-opacity="0.4" stroke-width="1.5"/>
+    <rect x="576" y="258" width="72" height="10" rx="5" fill="#fb7185" opacity="0.8"/>
+  </g>
+
+  <!-- ambient sparkles -->
+  <g fill="#fda4af" opacity="0.7">
+    <path d="M265 100 C265 108 269 112 277 112 C269 112 265 116 265 124 C265 116 261 112 253 112 C261 112 265 108 265 100 Z"/>
+    <path d="M540 345 C540 351 543 354 549 354 C543 354 540 357 540 363 C540 357 537 354 531 354 C537 354 540 351 540 345 Z"/>
+  </g>
+</svg>
