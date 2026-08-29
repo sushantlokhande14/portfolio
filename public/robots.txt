@@ -2,5 +2,3 @@ User-agent: *
 Allow: /
 Disallow: /dashboard
 Disallow: /api/
-
-Sitemap: https://sushantlokhande.me/sitemap-index.xml
