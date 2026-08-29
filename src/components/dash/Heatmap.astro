@@ -1,0 +1,88 @@
+---
+// When people actually read the site: weekday against hour of day. A total
+// tells you how many; this tells you who, roughly. A cluster on Tuesday
+// mornings reads very differently from one on Sunday night.
+interface Props {
+  cells: { dow: number; hour: number; views: number }[];
+}
+const { cells } = Astro.props as Props;
+
+const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const grid: number[][] = Array.from({ length: 7 }, () => Array(24).fill(0));
+for (const c of cells) {
+  if (c.dow >= 0 && c.dow < 7 && c.hour >= 0 && c.hour < 24) grid[c.dow][c.hour] = c.views;
+}
+const max = Math.max(1, ...cells.map((c) => c.views));
+const label = (h: number) => (h === 0 ? '12a' : h === 12 ? '12p' : h > 12 ? `${h - 12}p` : `${h}a`);
+---
+
+<div class="card rounded-2xl p-6">
+  <div class="flex flex-wrap items-baseline justify-between gap-2">
+    <h3 class="font-mono text-xs uppercase tracking-[0.2em] text-muted">when they read</h3>
+    <p class="font-mono text-[11px] text-muted">your local time</p>
+  </div>
+
+  <div class="mt-5 overflow-x-auto">
+    <div class="grid" style="grid-template-columns: 34px repeat(24, minmax(11px, 1fr)); gap: 3px;">
+      <div></div>
+      {Array.from({ length: 24 }, (_, h) => (
+        <div class="hlabel">{h % 6 === 0 ? label(h) : ''}</div>
+      ))}
+      {DAYS.map((d, dow) => (
+        <>
+          <div class="dlabel">{d}</div>
+          {Array.from({ length: 24 }, (_, h) => {
+            const v = grid[dow][h];
+            return (
+              <div
+                class="cell"
+                style={`--i:${v === 0 ? 0 : 0.12 + (v / max) * 0.88}`}
+                title={`${d} ${label(h)} — ${v} view${v === 1 ? '' : 's'}`}
+              />
+            );
+          })}
+        </>
+      ))}
+    </div>
+  </div>
+
+  <div class="mt-4 flex items-center justify-end gap-2">
+    <span class="font-mono text-[10px] text-muted">less</span>
+    {[0, 0.25, 0.5, 0.75, 1].map((i) => <div class="cell legend" style={`--i:${i}`} />)}
+    <span class="font-mono text-[10px] text-muted">more</span>
+  </div>
+</div>
+
+<style>
+  .cell {
+    aspect-ratio: 1;
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--accent-1) calc(var(--i) * 100%), transparent);
+    outline: 1px solid var(--line-1);
+    outline-offset: -1px;
+    transition: transform 0.12s ease;
+  }
+  .cell:hover {
+    transform: scale(1.35);
+  }
+  .cell.legend {
+    width: 11px;
+    aspect-ratio: 1;
+  }
+  .hlabel,
+  .dlabel {
+    font-family: ui-monospace, monospace;
+    font-size: 9.5px;
+    color: var(--ink-2);
+    line-height: 1;
+  }
+  .hlabel {
+    text-align: left;
+  }
+  .dlabel {
+    align-self: center;
+    text-align: right;
+    padding-right: 6px;
+    font-size: 10px;
+  }
+</style>

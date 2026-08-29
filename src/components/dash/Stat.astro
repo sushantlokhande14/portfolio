@@ -1,0 +1,54 @@
+---
+interface Props {
+  label: string;
+  value: string | number;
+  now?: number;
+  prev?: number;
+  note?: string;
+}
+const { label, value, now, prev, note } = Astro.props as Props;
+
+// Percentage change only means something when there is a baseline to compare
+// against. A jump from zero is not "+100%", it is the first data point, and
+// saying so is more honest than printing a number that looks like growth.
+let delta: { text: string; dir: 'up' | 'down' | 'flat' | 'new' } | null = null;
+if (now !== undefined && prev !== undefined) {
+  if (prev === 0 && now === 0) delta = { text: 'no data yet', dir: 'flat' };
+  else if (prev === 0) delta = { text: 'first period', dir: 'new' };
+  else {
+    const p = Math.round(((now - prev) / prev) * 100);
+    delta = {
+      text: `${p > 0 ? '+' : ''}${p}%`,
+      dir: p > 0 ? 'up' : p < 0 ? 'down' : 'flat',
+    };
+  }
+}
+---
+
+<div class="card rounded-2xl p-6">
+  <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">{label}</p>
+  <p class="mt-3 text-4xl font-semibold tracking-tight text-ink">{value}</p>
+  {(delta || note) && (
+    <p class="mt-2 flex items-center gap-2 font-mono text-[11px] text-muted">
+      {delta && (
+        <span class={`delta ${delta.dir}`}>
+          {delta.dir === 'up' ? '↑' : delta.dir === 'down' ? '↓' : ''} {delta.text}
+        </span>
+      )}
+      {note && <span>{note}</span>}
+    </p>
+  )}
+</div>
+
+<style>
+  .delta.up {
+    color: #22c55e;
+  }
+  .delta.down {
+    color: #ef4444;
+  }
+  .delta.flat,
+  .delta.new {
+    color: var(--ink-2);
+  }
+</style>

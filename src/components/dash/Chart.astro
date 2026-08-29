@@ -1,26 +1,36 @@
 ---
 // A hand-drawn SVG area chart. A charting library would be ~50KB for one
-// chart; this is a path string.
+// chart; this is a path string and a few gridlines.
 interface Props {
   series: { day: string; views: number; visitors: number }[];
 }
 const { series } = Astro.props as Props;
 
 const W = 1000;
-const H = 220;
-const PAD = { t: 12, r: 4, b: 22, l: 4 };
+const H = 240;
+const PAD = { t: 14, r: 2, b: 24, l: 2 };
 
-const max = Math.max(1, ...series.map((d) => d.views));
+const peak = Math.max(...series.map((d) => d.views), 0);
+// Round the top of the scale to something a human would pick, so the gridline
+// labels read 0/5/10 rather than 0/3.7/7.4.
+const nice = (n: number) => {
+  if (n <= 4) return 4;
+  const mag = 10 ** Math.floor(Math.log10(n));
+  return Math.ceil(n / mag) * mag;
+};
+const max = nice(peak);
+
 const step = series.length > 1 ? (W - PAD.l - PAD.r) / (series.length - 1) : 0;
 const x = (i: number) => PAD.l + i * step;
 const y = (v: number) => PAD.t + (1 - v / max) * (H - PAD.t - PAD.b);
 
-const line = (key: 'views' | 'visitors') =>
+const path = (key: 'views' | 'visitors') =>
   series.map((d, i) => `${i === 0 ? 'M' : 'L'} ${x(i).toFixed(1)} ${y(d[key]).toFixed(1)}`).join(' ');
 
-const area = `${line('views')} L ${x(series.length - 1).toFixed(1)} ${H - PAD.b} L ${x(0).toFixed(1)} ${H - PAD.b} Z`;
+const area = `${path('views')} L ${x(series.length - 1).toFixed(1)} ${H - PAD.b} L ${x(0).toFixed(1)} ${H - PAD.b} Z`;
 
-// Only a few date labels, otherwise they collide on a year view.
+const gridlines = [0, 0.5, 1].map((f) => ({ v: Math.round(max * f), y: y(max * f) }));
+
 const tickEvery = Math.max(1, Math.ceil(series.length / 7));
 const fmt = (iso: string) =>
   new Date(iso + 'T00:00:00Z').toLocaleDateString('en-US', {
@@ -28,45 +38,86 @@ const fmt = (iso: string) =>
     day: 'numeric',
     timeZone: 'UTC',
   });
+
+const peakIndex = series.reduce((b, d, i) => (d.views > series[b].views ? i : b), 0);
+const showPeak = peak > 0;
 ---
 
 <div class="chart">
-  <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" role="img" aria-label="Views over time">
-    <defs>
-      <linearGradient id="fill" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="var(--accent-1)" stop-opacity="0.28" />
-        <stop offset="100%" stop-color="var(--accent-1)" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d={area} fill="url(#fill)" />
-    <path d={line('views')} fill="none" stroke="var(--accent-1)" stroke-width="2"
-      vector-effect="non-scaling-stroke" stroke-linejoin="round" />
-    <path d={line('visitors')} fill="none" stroke="var(--ink-2)" stroke-width="1.5"
-      stroke-dasharray="4 4" vector-effect="non-scaling-stroke" stroke-linejoin="round" opacity="0.7" />
-    {series.map((d, i) => (
-      <circle cx={x(i)} cy={y(d.views)} r="7" fill="transparent" class="hit">
-        <title>{`${fmt(d.day)} — ${d.views} views, ${d.visitors} visitors`}</title>
-      </circle>
-    ))}
-  </svg>
+  <div class="plot">
+    <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" role="img" aria-label="Views over time">
+      <defs>
+        <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="var(--accent-1)" stop-opacity="0.3" />
+          <stop offset="100%" stop-color="var(--accent-1)" stop-opacity="0" />
+        </linearGradient>
+      </defs>
+
+      {gridlines.map((g) => (
+        <line x1="0" x2={W} y1={g.y} y2={g.y} stroke="var(--line-1)" stroke-width="1"
+          vector-effect="non-scaling-stroke" opacity="0.6" />
+      ))}
+
+      <path d={area} fill="url(#areaFill)" />
+      <path d={path('views')} fill="none" stroke="var(--accent-1)" stroke-width="2.5"
+        vector-effect="non-scaling-stroke" stroke-linejoin="round" stroke-linecap="round" />
+      <path d={path('visitors')} fill="none" stroke="var(--ink-2)" stroke-width="1.5"
+        stroke-dasharray="4 4" vector-effect="non-scaling-stroke" stroke-linejoin="round" opacity="0.65" />
+
+      {showPeak && (
+        <circle cx={x(peakIndex)} cy={y(series[peakIndex].views)} r="3.5"
+          fill="var(--accent-1)" vector-effect="non-scaling-stroke" />
+      )}
+
+      {series.map((d, i) => (
+        <circle cx={x(i)} cy={y(d.views)} r="8" fill="transparent" class="hit">
+          <title>{`${fmt(d.day)} — ${d.views} view${d.views === 1 ? '' : 's'}, ${d.visitors} visitor${d.visitors === 1 ? '' : 's'}`}</title>
+        </circle>
+      ))}
+    </svg>
+
+    <div class="yaxis">
+      {gridlines.slice().reverse().map((g) => <span>{g.v}</span>)}
+    </div>
+  </div>
+
   <div class="ticks">
     {series.map((d, i) => (i % tickEvery === 0 ? <span>{fmt(d.day)}</span> : null))}
   </div>
 </div>
 
 <style>
+  .plot {
+    position: relative;
+  }
   .chart svg {
     width: 100%;
-    height: 220px;
+    height: 240px;
     display: block;
     overflow: visible;
+  }
+  .yaxis {
+    position: absolute;
+    inset: 14px auto 24px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    pointer-events: none;
+    font-family: ui-monospace, monospace;
+    font-size: 10px;
+    color: var(--ink-2);
+  }
+  .yaxis span {
+    transform: translateY(-50%);
+    background: var(--bg-surface, transparent);
+    padding-right: 4px;
   }
   .ticks {
     display: flex;
     justify-content: space-between;
-    margin-top: 6px;
+    margin-top: 8px;
     font-family: ui-monospace, monospace;
-    font-size: 11px;
+    font-size: 10.5px;
     color: var(--ink-2);
   }
   .hit:hover {
