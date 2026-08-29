@@ -29,3 +29,6 @@ pnpm-debug.log*
 
 # never publish transcripts or other personal documents
 public/schools/*.pdf
+
+# Vercel adapter build output
+.vercel/
