@@ -120,6 +120,13 @@
       "url": "https://github.com/google/osv-scalibr/pulls?q=is%3Apr+author%3Asushantlokhande14"
     },
     {
+      "org": "Microsoft",
+      "repo": "markitdown",
+      "logo": "/logos/microsoft.png",
+      "accent": "#00a4ef",
+      "url": "https://github.com/microsoft/markitdown/pulls?q=is%3Apr+author%3Asushantlokhande14"
+    },
+    {
       "org": "Fission",
       "repo": "fission",
       "logo": "/logos/fission.png",
