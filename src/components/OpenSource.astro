@@ -65,7 +65,9 @@ const contributions = site.openSource;
     display: block;
     width: 4rem;
     height: 4rem;
-    border-radius: 9999px;
+    /* rounded square, matching the org logos in Journey; a circle crops the
+       corners off square brand marks such as the Microsoft squares */
+    border-radius: 1rem;
     object-fit: cover;
     background: var(--bg-surface);
     box-shadow: 0 0 0 1px var(--line-1);
