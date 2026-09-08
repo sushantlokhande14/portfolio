@@ -104,6 +104,43 @@
       "detail": "University of Mumbai · felicitated for holding a top rank across 7 straight semesters"
     }
   ],
+  "openSource": [
+    {
+      "org": "NVIDIA",
+      "repo": "garak",
+      "logo": "/logos/nvidia.png",
+      "accent": "#76b900",
+      "url": "https://github.com/NVIDIA/garak/pulls?q=is%3Apr+author%3Asushantlokhande14"
+    },
+    {
+      "org": "Google",
+      "repo": "osv-scalibr",
+      "logo": "/logos/google.png",
+      "accent": "#4285f4",
+      "url": "https://github.com/google/osv-scalibr/pulls?q=is%3Apr+author%3Asushantlokhande14"
+    },
+    {
+      "org": "Fission",
+      "repo": "fission",
+      "logo": "/logos/fission.png",
+      "accent": "#58a6ff",
+      "url": "https://github.com/fission/fission/pulls?q=is%3Apr+author%3Asushantlokhande14"
+    },
+    {
+      "org": "Corsair",
+      "repo": "corsair",
+      "logo": "/logos/corsair.png",
+      "accent": "#bc8cff",
+      "url": "https://github.com/corsairdev/corsair/pulls?q=is%3Apr+author%3Asushantlokhande14"
+    },
+    {
+      "org": "AutoGPT",
+      "repo": "AutoGPT",
+      "logo": "/logos/autogpt.png",
+      "accent": "#f0883e",
+      "url": "https://github.com/Significant-Gravitas/AutoGPT/pulls?q=is%3Apr+author%3Asushantlokhande14"
+    }
+  ],
   "skills": [
     {
       "group": "Languages",

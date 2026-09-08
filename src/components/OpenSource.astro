@@ -1,0 +1,137 @@
+---
+import site from '../data/site.json';
+import SectionHeading from './SectionHeading.astro';
+
+const contributions = site.openSource;
+---
+
+<section id="open-source" class="mx-auto max-w-5xl scroll-mt-14 px-6 py-32">
+  <SectionHeading index="01" label="open source" title="My open source contributions" />
+
+  <div class="card rounded-2xl px-6 py-12 sm:px-12">
+    <ul class="os-row">
+      {
+        contributions.map((c, i) => (
+          <li
+            class="os-item"
+            data-reveal
+            style={`--reveal-delay: ${i * 90}ms; --brand: ${c.accent}; --phase: ${(i * -1.4).toFixed(1)}s`}
+          >
+            <a
+              class="os-link"
+              href={c.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${c.org} ${c.repo}: my pull requests on GitHub`}
+            >
+              <span class="os-float">
+                <img class="os-logo" src={c.logo} alt="" width="200" height="200" loading="lazy" />
+              </span>
+              <span class="os-name">{c.org}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .os-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem 3.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .os-link {
+    display: grid;
+    justify-items: center;
+    text-decoration: none;
+    outline: none;
+  }
+
+  /* idle drift lives on the wrapper so the hover transform never fights it */
+  .os-float {
+    display: block;
+    animation: os-drift 7s ease-in-out infinite;
+    animation-delay: var(--phase, 0s);
+  }
+
+  .os-logo {
+    display: block;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 9999px;
+    object-fit: cover;
+    background: var(--bg-surface);
+    box-shadow: 0 0 0 1px var(--line-1);
+    transition:
+      transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .os-link:hover .os-logo,
+  .os-link:focus-visible .os-logo {
+    transform: scale(1.22);
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--brand) 55%, transparent),
+      0 14px 32px -12px color-mix(in srgb, var(--brand) 70%, transparent);
+  }
+
+  .os-link:focus-visible .os-logo {
+    box-shadow:
+      0 0 0 2px var(--bg-surface),
+      0 0 0 4px var(--accent-1);
+  }
+
+  .os-name {
+    margin-top: 0.85rem;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    transition:
+      opacity 0.45s ease,
+      transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      color 0.45s ease;
+  }
+
+  .os-link:hover .os-name,
+  .os-link:focus-visible .os-name {
+    opacity: 1;
+    transform: none;
+    color: var(--ink-1);
+  }
+
+  /* names stay hidden until hover only where hovering is possible */
+  @media (hover: hover) {
+    .os-name {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+  }
+
+  @keyframes os-drift {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .os-float {
+      animation: none;
+    }
+    .os-name {
+      transition: none;
+    }
+  }
+</style>
