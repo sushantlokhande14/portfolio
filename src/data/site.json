@@ -128,6 +128,13 @@
       "url": "https://github.com/microsoft/markitdown/pulls?q=is%3Apr+author%3Asushantlokhande14"
     },
     {
+      "org": "Uber",
+      "repo": "zap",
+      "logo": "/logos/uber.png",
+      "accent": "#e6edf3",
+      "url": "https://github.com/uber-go/zap/pulls?q=is%3Apr+author%3Asushantlokhande14"
+    },
+    {
       "org": "Fission",
       "repo": "fission",
       "logo": "/logos/fission.png",
