@@ -4,25 +4,33 @@ import SectionHeading from './SectionHeading.astro';
 
 const paper = site.publications[0];
 
-// The paper's input representation: a binary rendered as an image. Deterministic
-// so the build output is stable, and tinted in places to stand for the eight
-// different conversion strategies rather than one flat greyscale.
-const COLS = 12;
-const ROWS = 14;
-const cells = Array.from({ length: COLS * ROWS }, (_, i) => {
+// --- the byteplot -------------------------------------------------------
+// A malware binary drawn as an image does not look like noise: PE sections
+// band horizontally, so .text reads dense, padding reads sparse and resources
+// read bright. Deterministic values keep the build output stable.
+const COLS = 9;
+const ROWS = 16;
+// per-row character: 0 dense code, 1 mixed data, 2 bright resource, 3 sparse padding
+const bands = [0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 3, 3, 1, 3, 3];
+const plot = Array.from({ length: COLS * ROWS }, (_, i) => {
   const x = i % COLS;
   const y = Math.floor(i / COLS);
-  const n = ((x * 53 + y * 97 + ((x * y) % 17) * 29) % 100) / 100;
-  const band = (y * 7 + x * 3) % 23;
-  return { x, y, v: n, tinted: band < 5 };
+  const n = ((x * 61 + y * 89 + ((x + y) % 11) * 31) % 100) / 100;
+  const band = bands[y];
+  const base = band === 0 ? 0.55 : band === 1 ? 0.3 : band === 2 ? 0.45 : 0.08;
+  const spread = band === 3 ? 0.14 : 0.42;
+  return { x, y, o: base + n * spread, accent: band === 2 };
 });
 
-// the three feature tracks, converging on the voting shield
-const tracks = [
-  { y: 44, d: 'M128 44 C 170 44, 176 92, 214 104' },
-  { y: 104, d: 'M128 104 C 170 104, 178 104, 214 110' },
-  { y: 164, d: 'M128 164 C 170 164, 176 120, 214 116' },
-];
+// --- soft voting over 17 families --------------------------------------
+const FAMILIES = 17;
+const WINNER = 6;
+const votes = Array.from({ length: FAMILIES }, (_, i) => {
+  if (i === WINNER) return 1;
+  const n = ((i * 47 + 13) % 29) / 29;
+  return 0.08 + n * 0.3;
+});
+const VOTERS = 15;
 ---
 
 <section id="publications" class="mx-auto max-w-5xl scroll-mt-14 px-6 py-32">
@@ -31,90 +39,164 @@ const tracks = [
   <article class="card pub-card rounded-2xl" data-reveal>
     <div class="pub-grid">
       <div class="pub-figure" aria-hidden="true">
-        <svg viewBox="0 0 300 208" class="pub-svg" preserveAspectRatio="xMidYMid meet">
+        <svg viewBox="0 0 320 200" class="pub-svg" preserveAspectRatio="xMidYMid meet">
           <defs>
-            <radialGradient id="pub-glow" cx="50%" cy="50%" r="50%">
-              <stop offset="0" stop-color="var(--accent-1)" stop-opacity="0.45" />
-              <stop offset="1" stop-color="var(--accent-1)" stop-opacity="0" />
-            </radialGradient>
-            <linearGradient id="pub-shield-fill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="var(--accent-1)" stop-opacity="0.55" />
-              <stop offset="1" stop-color="var(--accent-1)" stop-opacity="0.06" />
-            </linearGradient>
             <linearGradient id="pub-sweep-fill" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0" stop-color="var(--accent-1)" stop-opacity="0" />
-              <stop offset="0.5" stop-color="var(--accent-1)" stop-opacity="0.55" />
+              <stop offset="0.5" stop-color="var(--accent-1)" stop-opacity="0.6" />
               <stop offset="1" stop-color="var(--accent-1)" stop-opacity="0" />
             </linearGradient>
+            <linearGradient id="pub-bar-win" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0" stop-color="var(--accent-1)" stop-opacity="0.55" />
+              <stop offset="1" stop-color="var(--accent-1)" stop-opacity="1" />
+            </linearGradient>
             <clipPath id="pub-clip">
-              <rect x="26" y="30" width="96" height="148" rx="7" />
+              <rect x="16" y="26" width="72" height="144" rx="4" />
             </clipPath>
           </defs>
 
-          <circle cx="238" cy="110" r="74" fill="url(#pub-glow)" class="pub-halo" />
-
+          <!-- 1. the binary, drawn as an image: sections band horizontally -->
           <g clip-path="url(#pub-clip)">
             {
-              cells.map((c) => (
+              plot.map((c) => (
                 <rect
-                  x={26 + c.x * 8}
-                  y={30 + c.y * 10.6}
-                  width="7"
-                  height="9.6"
-                  rx="1"
-                  fill={c.tinted ? 'var(--accent-1)' : 'var(--ink-1)'}
-                  opacity={(c.tinted ? 0.3 : 0.08) + c.v * 0.5}
+                  x={16 + c.x * 8}
+                  y={26 + c.y * 9}
+                  width="8"
+                  height="9"
+                  fill={c.accent ? 'var(--accent-1)' : 'var(--ink-1)'}
+                  opacity={c.o}
                 />
               ))
             }
-            <rect class="pub-scan" x="26" y="18" width="96" height="26" fill="url(#pub-sweep-fill)" />
+            <rect class="pub-scan" x="16" y="12" width="72" height="22" fill="url(#pub-sweep-fill)" />
           </g>
-          <rect
-            x="26"
-            y="30"
-            width="96"
-            height="148"
-            rx="7"
-            fill="none"
-            stroke="var(--accent-1)"
-            stroke-opacity="0.35"
-          />
+          <rect x="16" y="26" width="72" height="144" rx="4" fill="none" stroke="var(--line-1)" />
+          <text x="52" y="184" text-anchor="middle" class="pub-cap">byteplot</text>
 
+          <!-- 2. three complementary feature tracks, each drawn as itself -->
+          <g stroke="var(--accent-1)" stroke-opacity="0.28" fill="none" stroke-width="1">
+            <path d="M88 60 H 112" />
+            <path d="M88 98 H 112" />
+            <path d="M88 136 H 112" />
+          </g>
+
+          <!-- HOG: oriented gradient rosette -->
+          <g transform="translate(128 60)" class="pub-glyph">
+            <circle r="15" fill="none" stroke="var(--line-1)" />
+            {
+              Array.from({ length: 8 }, (_, k) => {
+                const a = (k * Math.PI) / 4;
+                const len = 5 + ((k * 3) % 7);
+                return (
+                  <line
+                    x1={Math.cos(a) * 2}
+                    y1={Math.sin(a) * 2}
+                    x2={Math.cos(a) * (len + 3)}
+                    y2={Math.sin(a) * (len + 3)}
+                    stroke="var(--accent-1)"
+                    stroke-opacity="0.85"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                  />
+                );
+              })
+            }
+          </g>
+
+          <!-- frozen pretrained backbones: stacked layers, held fixed -->
+          <g transform="translate(128 98)" class="pub-glyph">
+            {
+              [-9, -3, 3].map((dy, k) => (
+                <rect
+                  x="-15"
+                  y={dy}
+                  width="30"
+                  height="5"
+                  rx="1.5"
+                  fill="var(--accent-1)"
+                  opacity={0.35 + k * 0.2}
+                />
+              ))
+            }
+            <g stroke="var(--ink-1)" stroke-opacity="0.75" stroke-width="1.3" stroke-linecap="round">
+              <path d="M0 11 v8" />
+              <path d="M-3.5 13 L0 15.5 L3.5 13" />
+              <path d="M-3.5 17.5 L0 15.5 L3.5 17.5" />
+            </g>
+          </g>
+
+          <!-- custom CNN: a learned kernel sliding the image -->
+          <g transform="translate(128 136)" class="pub-glyph">
+            {
+              Array.from({ length: 9 }, (_, k) => (
+                <rect
+                  x={-15 + (k % 3) * 10}
+                  y={-15 + Math.floor(k / 3) * 10}
+                  width="9"
+                  height="9"
+                  rx="1"
+                  fill="var(--accent-1)"
+                  opacity={k === 4 ? 0.95 : 0.2 + ((k * 7) % 5) * 0.1}
+                />
+              ))
+            }
+          </g>
+          <text x="128" y="184" text-anchor="middle" class="pub-cap">3 tracks</text>
+
+          <!-- 3. soft voting: 15 voters, a probability over 17 families -->
+          <g stroke="var(--accent-1)" stroke-opacity="0.22" fill="none" stroke-width="1">
+            <path class="pub-wire" d="M146 60 C 172 60, 176 96, 196 112" />
+            <path class="pub-wire" d="M146 98 C 172 98, 178 108, 196 116" />
+            <path class="pub-wire" d="M146 136 C 172 136, 178 126, 196 120" />
+          </g>
           {
-            tracks.map((t) => (
-              <path d={t.d} fill="none" stroke="var(--accent-1)" stroke-opacity="0.22" stroke-width="1.25" />
-            ))
-          }
-          {
-            tracks.map((t, i) => (
+            [0, 1, 2].map((i) => (
               <circle
                 class="pub-pip"
-                style={`offset-path: path('${t.d}'); --pip-delay: ${i * 0.9}s`}
-                r="2.6"
+                style={`offset-path: path('${['M146 60 C 172 60, 176 96, 196 112', 'M146 98 C 172 98, 178 108, 196 116', 'M146 136 C 172 136, 178 126, 196 120'][i]}'); --pip-delay: ${i * 0.85}s`}
+                r="2.4"
                 fill="var(--accent-1)"
               />
             ))
           }
-          {tracks.map((t) => <circle cx="128" cy={t.y} r="3.2" fill="var(--accent-1)" />)}
 
-          <path
-            class="pub-shield"
-            d="M238 62 L272 76 V108 C272 134, 256 150, 238 158 C220 150, 204 134, 204 108 V76 Z"
-            fill="url(#pub-shield-fill)"
-            stroke="var(--accent-1)"
-            stroke-width="1.5"
-          />
-          <path
-            d="M226 110 L235 120 L252 97"
-            fill="none"
-            stroke="var(--bg-surface)"
-            stroke-width="3.2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
+          <!-- the 15 voters -->
+          {
+            Array.from({ length: VOTERS }, (_, k) => (
+              <circle
+                class="pub-voter"
+                style={`--voter-delay: ${k * 0.12}s`}
+                cx={210 + k * 6.6}
+                cy="34"
+                r="1.9"
+                fill="var(--accent-1)"
+              />
+            ))
+          }
+          <text x="258" y="24" text-anchor="middle" class="pub-cap">15 voters</text>
 
-          <text x="74" y="196" text-anchor="middle" class="pub-cap">binary as image</text>
-          <text x="238" y="182" text-anchor="middle" class="pub-cap">soft voting</text>
+          <!-- the resulting distribution over 17 families -->
+          {
+            votes.map((v, k) => {
+              const h = 6 + v * 76;
+              const isWin = k === WINNER;
+              return (
+                <rect
+                  class={isWin ? 'pub-bar pub-bar-win' : 'pub-bar'}
+                  x={200 + k * 6.4}
+                  y={162 - h}
+                  width="4.4"
+                  height={h}
+                  rx="1"
+                  fill={isWin ? 'url(#pub-bar-win)' : 'var(--ink-1)'}
+                  opacity={isWin ? 1 : 0.22}
+                />
+              );
+            })
+          }
+          <path d="M198 164 H 310" stroke="var(--line-1)" />
+          <text x="254" y="184" text-anchor="middle" class="pub-cap">17 families</text>
         </svg>
       </div>
 
@@ -173,21 +255,20 @@ const tracks = [
 
   @media (min-width: 880px) {
     .pub-grid {
-      grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 336px) minmax(0, 1fr);
       align-items: stretch;
     }
   }
 
-  /* full-bleed panel: the figure is the anchor, not a boxed thumbnail */
   .pub-figure {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1rem 0.5rem;
+    padding: 1rem 0.75rem;
     background:
-      radial-gradient(120% 90% at 78% 50%, color-mix(in srgb, var(--accent-1) 14%, transparent), transparent 70%),
-      linear-gradient(135deg, color-mix(in srgb, var(--accent-1) 7%, transparent), transparent 60%);
+      radial-gradient(110% 80% at 80% 45%, color-mix(in srgb, var(--accent-1) 13%, transparent), transparent 70%),
+      linear-gradient(140deg, color-mix(in srgb, var(--accent-1) 6%, transparent), transparent 55%);
     border-bottom: 1px solid var(--line-1);
   }
 
@@ -201,14 +282,14 @@ const tracks = [
   .pub-svg {
     width: 100%;
     height: auto;
-    max-height: 250px;
+    max-height: 244px;
   }
 
   .pub-cap {
     fill: var(--ink-2);
     font-family: var(--font-mono);
-    font-size: 8px;
-    letter-spacing: 0.1em;
+    font-size: 7.5px;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
   }
 
@@ -249,23 +330,37 @@ const tracks = [
     border-color: color-mix(in srgb, var(--accent-1) 50%, transparent);
   }
 
-  /* signal travelling each track, a sweep reading the sample, a breathing halo */
+  /* the sweep reads the byteplot, pips carry each track's features to the
+     ensemble, voters light up in turn and the winning family settles */
+  .pub-scan {
+    animation: pub-sweep 6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+
   .pub-pip {
     offset-distance: 0%;
-    animation: pub-travel 3.4s cubic-bezier(0.55, 0, 0.45, 1) infinite;
+    animation: pub-travel 3.6s cubic-bezier(0.55, 0, 0.45, 1) infinite;
     animation-delay: var(--pip-delay, 0s);
   }
 
-  .pub-scan {
-    animation: pub-sweep 5.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  .pub-voter {
+    animation: pub-vote 3.6s ease-in-out infinite;
+    animation-delay: var(--voter-delay, 0s);
   }
 
-  .pub-halo {
-    animation: pub-breathe 5.5s ease-in-out infinite;
+  .pub-bar-win {
+    transform-box: fill-box;
+    transform-origin: bottom;
+    animation: pub-settle 3.6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
   }
 
-  .pub-shield {
-    animation: pub-lift 5.5s ease-in-out infinite;
+  @keyframes pub-sweep {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(150px);
+    }
   }
 
   @keyframes pub-travel {
@@ -276,7 +371,7 @@ const tracks = [
     12% {
       opacity: 1;
     }
-    82% {
+    80% {
       opacity: 1;
     }
     100% {
@@ -285,45 +380,39 @@ const tracks = [
     }
   }
 
-  @keyframes pub-sweep {
+  @keyframes pub-vote {
     0%,
+    60%,
     100% {
-      transform: translateY(0);
+      opacity: 0.25;
     }
-    50% {
-      transform: translateY(152px);
-    }
-  }
-
-  @keyframes pub-breathe {
-    0%,
-    100% {
-      opacity: 0.5;
-    }
-    50% {
+    30% {
       opacity: 1;
     }
   }
 
-  @keyframes pub-lift {
+  @keyframes pub-settle {
     0%,
     100% {
-      stroke-opacity: 0.65;
+      transform: scaleY(0.82);
     }
-    50% {
-      stroke-opacity: 1;
+    55% {
+      transform: scaleY(1);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .pub-pip,
     .pub-scan,
-    .pub-halo,
-    .pub-shield {
+    .pub-pip,
+    .pub-voter,
+    .pub-bar-win {
       animation: none;
     }
     .pub-pip {
-      offset-distance: 60%;
+      offset-distance: 65%;
+    }
+    .pub-voter {
+      opacity: 0.8;
     }
   }
 </style>
