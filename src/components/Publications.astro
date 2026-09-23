@@ -1,0 +1,294 @@
+---
+import site from '../data/site.json';
+import SectionHeading from './SectionHeading.astro';
+
+const paper = site.publications[0];
+
+// A deterministic "malware as image" grid: the paper's own input representation.
+// Fixed values rather than Math.random so the build output is stable.
+const GRID = 8;
+const cells = Array.from({ length: GRID * GRID }, (_, i) => {
+  const x = i % GRID;
+  const y = Math.floor(i / GRID);
+  // cheap reproducible hash, biased into bands so it reads as a binary texture
+  const n = (x * 37 + y * 101 + ((x * y) % 13) * 17) % 100;
+  return { x, y, v: n / 100 };
+});
+
+// the three feature tracks the paper ensembles
+const tracks = [
+  { y: 62, d: 'M150 62 C 196 62, 208 104, 244 118', label: 'handcrafted' },
+  { y: 118, d: 'M150 118 C 196 118, 208 118, 244 124', label: 'pretrained' },
+  { y: 174, d: 'M150 174 C 196 174, 208 132, 244 130', label: 'custom CNN' },
+];
+---
+
+<section id="publications" class="mx-auto max-w-5xl scroll-mt-14 px-6 py-32">
+  <SectionHeading index="03" label="publications" title="My publications" />
+
+  <article class="card pub-card rounded-2xl" data-reveal>
+    <div class="pub-grid">
+      <!-- figure: malware image -> three feature tracks -> soft voting shield -->
+      <div class="pub-figure" aria-hidden="true">
+        <svg viewBox="0 0 320 236" role="img" class="pub-svg">
+          <defs>
+            <clipPath id="pub-grid-clip">
+              <rect x="28" y="46" width="112" height="144" rx="6" />
+            </clipPath>
+            <linearGradient id="pub-shield" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="var(--accent-1)" stop-opacity="0.28" />
+              <stop offset="1" stop-color="var(--accent-1)" stop-opacity="0.04" />
+            </linearGradient>
+          </defs>
+
+          <!-- the binary, rendered as an image -->
+          <g clip-path="url(#pub-grid-clip)">
+            {
+              cells.map((c) => (
+                <rect
+                  x={28 + c.x * 14}
+                  y={46 + c.y * 18}
+                  width="13"
+                  height="17"
+                  fill="var(--ink-1)"
+                  opacity={0.06 + c.v * 0.42}
+                />
+              ))
+            }
+            <rect class="pub-scan" x="28" y="46" width="112" height="16" fill="var(--accent-1)" opacity="0.16" />
+          </g>
+          <rect
+            x="28"
+            y="46"
+            width="112"
+            height="144"
+            rx="6"
+            fill="none"
+            stroke="var(--line-1)"
+          />
+
+          <!-- three complementary feature tracks -->
+          {
+            tracks.map((t, i) => (
+              <path
+                class="pub-track"
+                style={`--track-delay: ${i * 0.6}s`}
+                d={t.d}
+                fill="none"
+                stroke="var(--accent-1)"
+                stroke-opacity="0.5"
+                stroke-width="1.5"
+              />
+            ))
+          }
+          {
+            tracks.map((t) => (
+              <circle cx="150" cy={t.y} r="3" fill="var(--accent-1)" />
+            ))
+          }
+
+          <!-- soft voting, guarded -->
+          <path
+            class="pub-shield"
+            d="M262 78 L296 92 V124 C296 148, 280 164, 262 172 C244 164, 228 148, 228 124 V92 Z"
+            fill="url(#pub-shield)"
+            stroke="var(--accent-1)"
+            stroke-opacity="0.7"
+            stroke-width="1.5"
+          />
+          <path
+            d="M250 124 L259 134 L276 112"
+            fill="none"
+            stroke="var(--accent-1)"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <text x="262" y="196" text-anchor="middle" class="pub-cap">soft voting</text>
+          <text x="84" y="208" text-anchor="middle" class="pub-cap">binary as image</text>
+        </svg>
+      </div>
+
+      <div class="pub-body">
+        <p class="font-mono text-xs uppercase tracking-[0.15em] text-accent">
+          {paper.venue} &middot; {paper.arxivId}
+        </p>
+
+        <h3 class="mt-3 text-2xl font-semibold leading-snug tracking-tight text-ink">
+          <a
+            href={paper.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="transition-colors hover:text-accent"
+          >
+            {paper.title}
+          </a>
+        </h3>
+
+        <p class="mt-3 text-sm text-muted">{paper.authors}</p>
+        <p class="mt-1 text-sm text-muted">{paper.note}</p>
+
+        <p class="mt-5 text-sm leading-relaxed text-ink/80">{paper.summary}</p>
+
+        <dl class="pub-stats">
+          {
+            paper.stats.map((s) => (
+              <div>
+                <dt class="font-mono text-xl font-semibold text-ink">{s.value}</dt>
+                <dd class="mt-1 font-mono text-xs uppercase tracking-[0.12em] text-muted">
+                  {s.label}
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+
+        <div class="mt-7 flex flex-wrap gap-3">
+          <a class="pub-link" href={paper.url} target="_blank" rel="noopener noreferrer">
+            arXiv &#8599;
+          </a>
+          <a class="pub-link" href={paper.pdf} target="_blank" rel="noopener noreferrer">
+            pdf &#8595;
+          </a>
+          <a class="pub-link" href={paper.code} target="_blank" rel="noopener noreferrer">
+            code &#8599;
+          </a>
+        </div>
+      </div>
+    </div>
+  </article>
+</section>
+
+<style>
+  .pub-card {
+    overflow: hidden;
+  }
+
+  .pub-grid {
+    display: grid;
+    gap: 0;
+  }
+
+  @media (min-width: 900px) {
+    .pub-grid {
+      grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+      align-items: center;
+    }
+  }
+
+  .pub-figure {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.75rem 1.25rem;
+    background: color-mix(in srgb, var(--accent-1) 5%, transparent);
+    border-bottom: 1px solid var(--line-1);
+  }
+
+  @media (min-width: 900px) {
+    .pub-figure {
+      height: 100%;
+      border-bottom: 0;
+      border-right: 1px solid var(--line-1);
+    }
+  }
+
+  .pub-svg {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+  }
+
+  .pub-cap {
+    fill: var(--ink-2);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+  }
+
+  .pub-body {
+    padding: 2rem 1.75rem;
+  }
+
+  @media (min-width: 900px) {
+    .pub-body {
+      padding: 2.5rem;
+    }
+  }
+
+  .pub-stats {
+    margin-top: 1.75rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    border-top: 1px solid var(--line-1);
+    padding-top: 1.5rem;
+  }
+
+  .pub-link {
+    border-radius: 9999px;
+    border: 1px solid var(--line-1);
+    padding: 0.55rem 1.1rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--ink-2);
+    transition:
+      color 0.35s ease,
+      border-color 0.35s ease;
+  }
+
+  .pub-link:hover,
+  .pub-link:focus-visible {
+    color: var(--accent-1);
+    border-color: color-mix(in srgb, var(--accent-1) 50%, transparent);
+  }
+
+  /* the scan sweeping the sample, and signal travelling down each track */
+  .pub-scan {
+    animation: pub-sweep 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .pub-track {
+    stroke-dasharray: 6 9;
+    animation: pub-flow 3.2s linear infinite;
+    animation-delay: var(--track-delay, 0s);
+  }
+
+  .pub-shield {
+    animation: pub-pulse 6s ease-in-out infinite;
+  }
+
+  @keyframes pub-sweep {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(128px);
+    }
+  }
+
+  @keyframes pub-flow {
+    to {
+      stroke-dashoffset: -30;
+    }
+  }
+
+  @keyframes pub-pulse {
+    0%,
+    100% {
+      stroke-opacity: 0.7;
+    }
+    50% {
+      stroke-opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pub-scan,
+    .pub-track,
+    .pub-shield {
+      animation: none;
+    }
+  }
+</style>

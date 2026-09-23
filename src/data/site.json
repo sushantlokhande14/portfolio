@@ -83,13 +83,25 @@
       "logo": "/logos/mumbai.svg"
     }
   ],
-  "research": [
+  "publications": [
     {
-      "tag": "Paper · arXiv",
+      "venue": "arXiv · cs.CR",
       "title": "Image-Based Techniques and Ensemble Soft Voting for Malware Classification",
-      "detail": "S. Lokhande, F. Di Troia, M. Jurecek, M. Stamp · arXiv:2609.26281 · to appear as a chapter in Artificial Intelligence for Cyber Defense in Emerging Threats (Springer, 2027)",
-      "url": "https://arxiv.org/abs/2609.26281"
-    },
+      "authors": "S. Lokhande, F. Di Troia, M. Jurecek, M. Stamp",
+      "note": "Appearing as a chapter in Artificial Intelligence for Cyber Defense in Emerging Threats (Springer, 2027)",
+      "summary": "Malware binaries rendered as images across eight conversion strategies, then classified by three complementary feature tracks: handcrafted HOG and Haralick descriptors, frozen embeddings from VGG16, ResNet50 and ViT-B/16, and a custom CNN. A soft voting ensemble of fifteen selected voters outperforms every individual model.",
+      "stats": [
+        { "value": "80.2%", "label": "ensemble accuracy" },
+        { "value": "+2.4 pts", "label": "over best single model" },
+        { "value": "17", "label": "malware families" }
+      ],
+      "arxivId": "2609.26281",
+      "url": "https://arxiv.org/abs/2609.26281",
+      "pdf": "https://arxiv.org/pdf/2609.26281",
+      "code": "https://github.com/sushantlokhande14/Soft_Voting_Ensembled_Malware_Images_Classification"
+    }
+  ],
+  "research": [
     {
       "tag": "Conference",
       "title": "Comprehensive Big Data Analytics Dashboard on Chats",
