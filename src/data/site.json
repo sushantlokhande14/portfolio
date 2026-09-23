@@ -89,7 +89,7 @@
       "title": "Image-Based Techniques and Ensemble Soft Voting for Malware Classification",
       "authors": "S. Lokhande, F. Di Troia, M. Jurecek, M. Stamp",
       "note": "Appearing as a chapter in Artificial Intelligence for Cyber Defense in Emerging Threats (Springer, 2027)",
-      "summary": "Malware binaries rendered as images across eight conversion strategies, then classified by three complementary feature tracks: handcrafted HOG and Haralick descriptors, frozen embeddings from VGG16, ResNet50 and ViT-B/16, and a custom CNN. A soft voting ensemble of fifteen selected voters outperforms every individual model.",
+      "summary": "Malware binaries rendered as images across eight conversion strategies, then read by three complementary feature tracks: handcrafted HOG and Haralick descriptors, frozen VGG16, ResNet50 and ViT-B/16 embeddings, and a custom CNN. Fifteen selected voters beat every individual model.",
       "stats": [
         { "value": "80.2%", "label": "ensemble accuracy" },
         { "value": "+2.4 pts", "label": "over best single model" },

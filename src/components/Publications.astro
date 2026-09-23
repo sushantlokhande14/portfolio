@@ -4,22 +4,24 @@ import SectionHeading from './SectionHeading.astro';
 
 const paper = site.publications[0];
 
-// A deterministic "malware as image" grid: the paper's own input representation.
-// Fixed values rather than Math.random so the build output is stable.
-const GRID = 8;
-const cells = Array.from({ length: GRID * GRID }, (_, i) => {
-  const x = i % GRID;
-  const y = Math.floor(i / GRID);
-  // cheap reproducible hash, biased into bands so it reads as a binary texture
-  const n = (x * 37 + y * 101 + ((x * y) % 13) * 17) % 100;
-  return { x, y, v: n / 100 };
+// The paper's input representation: a binary rendered as an image. Deterministic
+// so the build output is stable, and tinted in places to stand for the eight
+// different conversion strategies rather than one flat greyscale.
+const COLS = 12;
+const ROWS = 14;
+const cells = Array.from({ length: COLS * ROWS }, (_, i) => {
+  const x = i % COLS;
+  const y = Math.floor(i / COLS);
+  const n = ((x * 53 + y * 97 + ((x * y) % 17) * 29) % 100) / 100;
+  const band = (y * 7 + x * 3) % 23;
+  return { x, y, v: n, tinted: band < 5 };
 });
 
-// the three feature tracks the paper ensembles
+// the three feature tracks, converging on the voting shield
 const tracks = [
-  { y: 62, d: 'M150 62 C 196 62, 208 104, 244 118', label: 'handcrafted' },
-  { y: 118, d: 'M150 118 C 196 118, 208 118, 244 124', label: 'pretrained' },
-  { y: 174, d: 'M150 174 C 196 174, 208 132, 244 130', label: 'custom CNN' },
+  { y: 44, d: 'M128 44 C 170 44, 176 92, 214 104' },
+  { y: 104, d: 'M128 104 C 170 104, 178 104, 214 110' },
+  { y: 164, d: 'M128 164 C 170 164, 176 120, 214 116' },
 ];
 ---
 
@@ -28,93 +30,100 @@ const tracks = [
 
   <article class="card pub-card rounded-2xl" data-reveal>
     <div class="pub-grid">
-      <!-- figure: malware image -> three feature tracks -> soft voting shield -->
       <div class="pub-figure" aria-hidden="true">
-        <svg viewBox="0 0 320 236" role="img" class="pub-svg">
+        <svg viewBox="0 0 300 208" class="pub-svg" preserveAspectRatio="xMidYMid meet">
           <defs>
-            <clipPath id="pub-grid-clip">
-              <rect x="28" y="46" width="112" height="144" rx="6" />
-            </clipPath>
-            <linearGradient id="pub-shield" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="var(--accent-1)" stop-opacity="0.28" />
-              <stop offset="1" stop-color="var(--accent-1)" stop-opacity="0.04" />
+            <radialGradient id="pub-glow" cx="50%" cy="50%" r="50%">
+              <stop offset="0" stop-color="var(--accent-1)" stop-opacity="0.45" />
+              <stop offset="1" stop-color="var(--accent-1)" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="pub-shield-fill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="var(--accent-1)" stop-opacity="0.55" />
+              <stop offset="1" stop-color="var(--accent-1)" stop-opacity="0.06" />
             </linearGradient>
+            <linearGradient id="pub-sweep-fill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="var(--accent-1)" stop-opacity="0" />
+              <stop offset="0.5" stop-color="var(--accent-1)" stop-opacity="0.55" />
+              <stop offset="1" stop-color="var(--accent-1)" stop-opacity="0" />
+            </linearGradient>
+            <clipPath id="pub-clip">
+              <rect x="26" y="30" width="96" height="148" rx="7" />
+            </clipPath>
           </defs>
 
-          <!-- the binary, rendered as an image -->
-          <g clip-path="url(#pub-grid-clip)">
+          <circle cx="238" cy="110" r="74" fill="url(#pub-glow)" class="pub-halo" />
+
+          <g clip-path="url(#pub-clip)">
             {
               cells.map((c) => (
                 <rect
-                  x={28 + c.x * 14}
-                  y={46 + c.y * 18}
-                  width="13"
-                  height="17"
-                  fill="var(--ink-1)"
-                  opacity={0.06 + c.v * 0.42}
+                  x={26 + c.x * 8}
+                  y={30 + c.y * 10.6}
+                  width="7"
+                  height="9.6"
+                  rx="1"
+                  fill={c.tinted ? 'var(--accent-1)' : 'var(--ink-1)'}
+                  opacity={(c.tinted ? 0.3 : 0.08) + c.v * 0.5}
                 />
               ))
             }
-            <rect class="pub-scan" x="28" y="46" width="112" height="16" fill="var(--accent-1)" opacity="0.16" />
+            <rect class="pub-scan" x="26" y="18" width="96" height="26" fill="url(#pub-sweep-fill)" />
           </g>
           <rect
-            x="28"
-            y="46"
-            width="112"
-            height="144"
-            rx="6"
+            x="26"
+            y="30"
+            width="96"
+            height="148"
+            rx="7"
             fill="none"
-            stroke="var(--line-1)"
+            stroke="var(--accent-1)"
+            stroke-opacity="0.35"
           />
 
-          <!-- three complementary feature tracks -->
+          {
+            tracks.map((t) => (
+              <path d={t.d} fill="none" stroke="var(--accent-1)" stroke-opacity="0.22" stroke-width="1.25" />
+            ))
+          }
           {
             tracks.map((t, i) => (
-              <path
-                class="pub-track"
-                style={`--track-delay: ${i * 0.6}s`}
-                d={t.d}
-                fill="none"
-                stroke="var(--accent-1)"
-                stroke-opacity="0.5"
-                stroke-width="1.5"
+              <circle
+                class="pub-pip"
+                style={`offset-path: path('${t.d}'); --pip-delay: ${i * 0.9}s`}
+                r="2.6"
+                fill="var(--accent-1)"
               />
             ))
           }
-          {
-            tracks.map((t) => (
-              <circle cx="150" cy={t.y} r="3" fill="var(--accent-1)" />
-            ))
-          }
+          {tracks.map((t) => <circle cx="128" cy={t.y} r="3.2" fill="var(--accent-1)" />)}
 
-          <!-- soft voting, guarded -->
           <path
             class="pub-shield"
-            d="M262 78 L296 92 V124 C296 148, 280 164, 262 172 C244 164, 228 148, 228 124 V92 Z"
-            fill="url(#pub-shield)"
+            d="M238 62 L272 76 V108 C272 134, 256 150, 238 158 C220 150, 204 134, 204 108 V76 Z"
+            fill="url(#pub-shield-fill)"
             stroke="var(--accent-1)"
-            stroke-opacity="0.7"
             stroke-width="1.5"
           />
           <path
-            d="M250 124 L259 134 L276 112"
+            d="M226 110 L235 120 L252 97"
             fill="none"
-            stroke="var(--accent-1)"
-            stroke-width="2.5"
+            stroke="var(--bg-surface)"
+            stroke-width="3.2"
             stroke-linecap="round"
             stroke-linejoin="round"
           />
-          <text x="262" y="196" text-anchor="middle" class="pub-cap">soft voting</text>
-          <text x="84" y="208" text-anchor="middle" class="pub-cap">binary as image</text>
+
+          <text x="74" y="196" text-anchor="middle" class="pub-cap">binary as image</text>
+          <text x="238" y="182" text-anchor="middle" class="pub-cap">soft voting</text>
         </svg>
       </div>
 
       <div class="pub-body">
-        <p class="font-mono text-xs uppercase tracking-[0.15em] text-accent">
+        <p class="font-mono text-[0.7rem] uppercase tracking-[0.15em] text-accent">
           {paper.venue} &middot; {paper.arxivId}
         </p>
 
-        <h3 class="mt-3 text-2xl font-semibold leading-snug tracking-tight text-ink">
+        <h3 class="mt-2.5 text-xl font-semibold leading-snug tracking-tight text-ink sm:text-2xl">
           <a
             href={paper.url}
             target="_blank"
@@ -125,17 +134,17 @@ const tracks = [
           </a>
         </h3>
 
-        <p class="mt-3 text-sm text-muted">{paper.authors}</p>
-        <p class="mt-1 text-sm text-muted">{paper.note}</p>
+        <p class="mt-2 text-sm text-muted">{paper.authors}</p>
+        <p class="mt-0.5 text-xs text-muted">{paper.note}</p>
 
-        <p class="mt-5 text-sm leading-relaxed text-ink/80">{paper.summary}</p>
+        <p class="mt-4 text-sm leading-relaxed text-ink/75">{paper.summary}</p>
 
         <dl class="pub-stats">
           {
             paper.stats.map((s) => (
               <div>
-                <dt class="font-mono text-xl font-semibold text-ink">{s.value}</dt>
-                <dd class="mt-1 font-mono text-xs uppercase tracking-[0.12em] text-muted">
+                <dt class="font-mono text-lg font-semibold leading-none text-ink">{s.value}</dt>
+                <dd class="mt-1.5 font-mono text-[0.62rem] uppercase leading-tight tracking-[0.1em] text-muted">
                   {s.label}
                 </dd>
               </div>
@@ -143,16 +152,10 @@ const tracks = [
           }
         </dl>
 
-        <div class="mt-7 flex flex-wrap gap-3">
-          <a class="pub-link" href={paper.url} target="_blank" rel="noopener noreferrer">
-            arXiv &#8599;
-          </a>
-          <a class="pub-link" href={paper.pdf} target="_blank" rel="noopener noreferrer">
-            pdf &#8595;
-          </a>
-          <a class="pub-link" href={paper.code} target="_blank" rel="noopener noreferrer">
-            code &#8599;
-          </a>
+        <div class="mt-5 flex flex-wrap gap-2.5">
+          <a class="pub-link" href={paper.url} target="_blank" rel="noopener noreferrer">arXiv &#8599;</a>
+          <a class="pub-link" href={paper.pdf} target="_blank" rel="noopener noreferrer">pdf &#8595;</a>
+          <a class="pub-link" href={paper.code} target="_blank" rel="noopener noreferrer">code &#8599;</a>
         </div>
       </div>
     </div>
@@ -166,28 +169,30 @@ const tracks = [
 
   .pub-grid {
     display: grid;
-    gap: 0;
   }
 
-  @media (min-width: 900px) {
+  @media (min-width: 880px) {
     .pub-grid {
-      grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
-      align-items: center;
+      grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+      align-items: stretch;
     }
   }
 
+  /* full-bleed panel: the figure is the anchor, not a boxed thumbnail */
   .pub-figure {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1.75rem 1.25rem;
-    background: color-mix(in srgb, var(--accent-1) 5%, transparent);
+    padding: 1rem 0.5rem;
+    background:
+      radial-gradient(120% 90% at 78% 50%, color-mix(in srgb, var(--accent-1) 14%, transparent), transparent 70%),
+      linear-gradient(135deg, color-mix(in srgb, var(--accent-1) 7%, transparent), transparent 60%);
     border-bottom: 1px solid var(--line-1);
   }
 
-  @media (min-width: 900px) {
+  @media (min-width: 880px) {
     .pub-figure {
-      height: 100%;
       border-bottom: 0;
       border-right: 1px solid var(--line-1);
     }
@@ -195,42 +200,43 @@ const tracks = [
 
   .pub-svg {
     width: 100%;
-    max-width: 320px;
     height: auto;
+    max-height: 250px;
   }
 
   .pub-cap {
     fill: var(--ink-2);
     font-family: var(--font-mono);
-    font-size: 9px;
-    letter-spacing: 0.08em;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
   }
 
   .pub-body {
-    padding: 2rem 1.75rem;
+    padding: 1.75rem;
   }
 
-  @media (min-width: 900px) {
+  @media (min-width: 880px) {
     .pub-body {
-      padding: 2.5rem;
+      padding: 2rem 2.25rem;
     }
   }
 
   .pub-stats {
-    margin-top: 1.75rem;
+    margin-top: 1.25rem;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1rem;
+    gap: 0.75rem;
     border-top: 1px solid var(--line-1);
-    padding-top: 1.5rem;
+    padding-top: 1.1rem;
   }
 
   .pub-link {
     border-radius: 9999px;
     border: 1px solid var(--line-1);
-    padding: 0.55rem 1.1rem;
+    padding: 0.45rem 0.95rem;
     font-family: var(--font-mono);
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--ink-2);
     transition:
       color 0.35s ease,
@@ -243,19 +249,40 @@ const tracks = [
     border-color: color-mix(in srgb, var(--accent-1) 50%, transparent);
   }
 
-  /* the scan sweeping the sample, and signal travelling down each track */
-  .pub-scan {
-    animation: pub-sweep 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  /* signal travelling each track, a sweep reading the sample, a breathing halo */
+  .pub-pip {
+    offset-distance: 0%;
+    animation: pub-travel 3.4s cubic-bezier(0.55, 0, 0.45, 1) infinite;
+    animation-delay: var(--pip-delay, 0s);
   }
 
-  .pub-track {
-    stroke-dasharray: 6 9;
-    animation: pub-flow 3.2s linear infinite;
-    animation-delay: var(--track-delay, 0s);
+  .pub-scan {
+    animation: pub-sweep 5.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+
+  .pub-halo {
+    animation: pub-breathe 5.5s ease-in-out infinite;
   }
 
   .pub-shield {
-    animation: pub-pulse 6s ease-in-out infinite;
+    animation: pub-lift 5.5s ease-in-out infinite;
+  }
+
+  @keyframes pub-travel {
+    0% {
+      offset-distance: 0%;
+      opacity: 0;
+    }
+    12% {
+      opacity: 1;
+    }
+    82% {
+      opacity: 1;
+    }
+    100% {
+      offset-distance: 100%;
+      opacity: 0;
+    }
   }
 
   @keyframes pub-sweep {
@@ -264,20 +291,24 @@ const tracks = [
       transform: translateY(0);
     }
     50% {
-      transform: translateY(128px);
+      transform: translateY(152px);
     }
   }
 
-  @keyframes pub-flow {
-    to {
-      stroke-dashoffset: -30;
-    }
-  }
-
-  @keyframes pub-pulse {
+  @keyframes pub-breathe {
     0%,
     100% {
-      stroke-opacity: 0.7;
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes pub-lift {
+    0%,
+    100% {
+      stroke-opacity: 0.65;
     }
     50% {
       stroke-opacity: 1;
@@ -285,10 +316,14 @@ const tracks = [
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .pub-pip,
     .pub-scan,
-    .pub-track,
+    .pub-halo,
     .pub-shield {
       animation: none;
+    }
+    .pub-pip {
+      offset-distance: 60%;
     }
   }
 </style>
