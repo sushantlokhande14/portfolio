@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1f1208"/><stop offset="1" stop-color="#0b0807"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="62%" cy="50%" r="55%">
+      <stop offset="0" stop-color="#fb923c" stop-opacity="0.22"/><stop offset="1" stop-color="#fb923c" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="spark" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#fff4e6"/><stop offset="0.5" stop-color="#fdba74"/><stop offset="1" stop-color="#fb923c"/>
+    </radialGradient>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <rect width="800" height="450" fill="url(#glow)"/>
+
+  <!-- before: a tangle of naive gates -->
+  <g stroke="#fb923c" stroke-width="1.4" opacity="0.28" stroke-linecap="round">
+    <path d="M96 150 L150 118 L214 150 L262 122"/>
+    <path d="M96 150 L128 208 L190 196 L214 150"/>
+    <path d="M150 118 L190 196 L246 214 L262 122"/>
+    <path d="M128 208 L112 276 L176 262 L190 196"/>
+    <path d="M176 262 L246 214 L270 290 L212 322"/>
+    <path d="M112 276 L150 334 L212 322 L176 262"/>
+    <path d="M150 334 L96 360 M270 290 L284 344 L212 322"/>
+    <path d="M246 214 L292 176 L262 122"/>
+  </g>
+  <g fill="#1f150c" stroke="#fb923c" stroke-width="1.4" opacity="0.5">
+    <circle cx="96" cy="150" r="9"/><circle cx="150" cy="118" r="9"/><circle cx="214" cy="150" r="9"/>
+    <circle cx="262" cy="122" r="9"/><circle cx="128" cy="208" r="9"/><circle cx="190" cy="196" r="9"/>
+    <circle cx="246" cy="214" r="9"/><circle cx="292" cy="176" r="9"/><circle cx="112" cy="276" r="9"/>
+    <circle cx="176" cy="262" r="9"/><circle cx="270" cy="290" r="9"/><circle cx="150" cy="334" r="9"/>
+    <circle cx="212" cy="322" r="9"/><circle cx="96" cy="360" r="9"/><circle cx="284" cy="344" r="9"/>
+  </g>
+
+  <!-- the forge: passes compress it -->
+  <g stroke="#fb923c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M330 196 L352 224 L330 252" opacity="0.35"/>
+    <path d="M358 196 L380 224 L358 252" opacity="0.6"/>
+    <path d="M386 196 L408 224 L386 252" opacity="0.95"/>
+  </g>
+  <g filter="url(#soft)">
+    <path d="M372 132 C372 150 381 159 399 159 C381 159 372 168 372 186 C372 168 363 159 345 159 C363 159 372 150 372 132 Z" fill="url(#spark)"/>
+  </g>
+
+  <!-- after: three clean gates -->
+  <g stroke="#fb923c" stroke-width="2.2" stroke-linecap="round">
+    <path d="M500 158 H548 L592 176"/>
+    <path d="M500 226 H528 L592 188"/>
+    <path d="M528 226 L592 270"/>
+    <path d="M500 294 H548 L592 282"/>
+    <path d="M636 182 L676 214"/>
+    <path d="M636 276 L676 236"/>
+    <path d="M722 225 H752"/>
+  </g>
+  <g fill="#2a1a0c" stroke="#fdba74" stroke-width="2">
+    <rect x="462" y="144" width="38" height="28" rx="8"/>
+    <rect x="462" y="212" width="38" height="28" rx="8"/>
+    <rect x="462" y="280" width="38" height="28" rx="8"/>
+  </g>
+  <g fill="#2a1a0c" stroke="#fb923c" stroke-width="2.5">
+    <path d="M592 160 H614 A22 22 0 0 1 614 204 H592 Z"/>
+    <path d="M592 254 H614 A22 22 0 0 1 614 298 H592 Z"/>
+    <path d="M672 202 Q700 202 722 225 Q700 248 672 248 Q684 225 672 202 Z"/>
+  </g>
+  <circle cx="758" cy="225" r="7" fill="#fdba74"/>
+
+  <!-- parallel lanes: regions on every core -->
+  <g stroke="#fb923c" stroke-width="3" stroke-linecap="round" opacity="0.55">
+    <path d="M462 356 H586"/><path d="M462 372 H640"/><path d="M462 388 H552"/><path d="M462 404 H612"/>
+  </g>
+  <g fill="#fdba74" opacity="0.9">
+    <circle cx="586" cy="356" r="3.5"/><circle cx="640" cy="372" r="3.5"/><circle cx="552" cy="388" r="3.5"/><circle cx="612" cy="404" r="3.5"/>
+  </g>
+
+  <!-- ambient sparks -->
+  <g fill="#fdba74" opacity="0.6">
+    <circle cx="420" cy="92" r="2"/><circle cx="702" cy="96" r="2.5"/><circle cx="742" cy="360" r="2"/><circle cx="330" cy="380" r="1.8"/>
+  </g>
+</svg>

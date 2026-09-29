@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#11122a"/><stop offset="1" stop-color="#07070f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="46%" r="55%">
+      <stop offset="0" stop-color="#818cf8" stop-opacity="0.24"/><stop offset="1" stop-color="#818cf8" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <rect width="800" height="450" fill="url(#glow)"/>
+
+  <!-- links: client -> coordinator -> workers, coordinator -> database -->
+  <g stroke="#818cf8" stroke-width="2" opacity="0.5" stroke-linecap="round">
+    <path d="M210 210 H322"/>
+    <path d="M478 186 L584 118"/>
+    <path d="M478 210 H584"/>
+    <path d="M478 234 L584 302"/>
+    <path d="M400 290 V332"/>
+  </g>
+  <g fill="#c7d2fe">
+    <circle cx="270" cy="210" r="3.5"/><circle cx="534" cy="150" r="3.5"/><circle cx="540" cy="210" r="3.5"/><circle cx="530" cy="264" r="3.5"/>
+  </g>
+
+  <!-- client: source files with fingerprint stripes -->
+  <g>
+    <rect x="98" y="150" width="96" height="118" rx="12" fill="#161838" stroke="#818cf8" stroke-width="2"/>
+    <rect x="86" y="162" width="96" height="118" rx="12" fill="#12142e" stroke="#818cf8" stroke-width="2" opacity="0.8"/>
+    <g fill="#a5b4fc" opacity="0.85">
+      <rect x="102" y="184" width="62" height="7" rx="3.5"/>
+      <rect x="102" y="200" width="46" height="7" rx="3.5"/>
+      <rect x="102" y="216" width="56" height="7" rx="3.5"/>
+    </g>
+    <g fill="#818cf8" opacity="0.7">
+      <rect x="102" y="244" width="8" height="18" rx="2"/><rect x="113" y="244" width="4" height="18" rx="2"/>
+      <rect x="120" y="244" width="10" height="18" rx="2"/><rect x="133" y="244" width="4" height="18" rx="2"/>
+      <rect x="140" y="244" width="7" height="18" rx="2"/><rect x="150" y="244" width="12" height="18" rx="2"/>
+    </g>
+  </g>
+
+  <!-- coordinator with the build graph inside -->
+  <rect x="322" y="132" width="156" height="156" rx="30" fill="#161838" stroke="#818cf8" stroke-width="2.5"/>
+  <g stroke="#a5b4fc" stroke-width="2" stroke-linecap="round" opacity="0.9">
+    <path d="M358 170 L398 208"/><path d="M358 208 H398"/><path d="M358 246 L398 208"/><path d="M406 208 H440"/>
+  </g>
+  <g filter="url(#soft)">
+    <circle cx="352" cy="170" r="8" fill="#a5b4fc"/><circle cx="352" cy="208" r="8" fill="#a5b4fc"/><circle cx="352" cy="246" r="8" fill="#a5b4fc"/>
+    <circle cx="402" cy="208" r="10" fill="#c7d2fe"/>
+    <rect x="436" y="198" width="20" height="20" rx="5" fill="#e0e7ff"/>
+  </g>
+
+  <!-- database -->
+  <g stroke="#818cf8" stroke-width="2" fill="#12142e">
+    <path d="M356 342 V384 A44 12 0 0 0 444 384 V342"/>
+    <ellipse cx="400" cy="342" rx="44" ry="12"/>
+    <path d="M356 362 A44 12 0 0 0 444 362" fill="none" opacity="0.6"/>
+  </g>
+
+  <!-- workers -->
+  <g fill="#161838" stroke="#818cf8" stroke-width="2">
+    <rect x="584" y="86" width="132" height="62" rx="16"/>
+    <rect x="584" y="180" width="132" height="62" rx="16"/>
+    <rect x="584" y="272" width="132" height="62" rx="16"/>
+  </g>
+  <g fill="#a5b4fc">
+    <rect x="604" y="108" width="18" height="18" rx="4"/><rect x="628" y="108" width="18" height="18" rx="4" opacity="0.7"/><rect x="652" y="108" width="18" height="18" rx="4" opacity="0.45"/>
+    <rect x="604" y="202" width="18" height="18" rx="4"/><rect x="628" y="202" width="18" height="18" rx="4" opacity="0.7"/>
+    <rect x="604" y="294" width="18" height="18" rx="4"/><rect x="628" y="294" width="18" height="18" rx="4" opacity="0.7"/><rect x="652" y="294" width="18" height="18" rx="4" opacity="0.45"/><rect x="676" y="294" width="18" height="18" rx="4" opacity="0.3"/>
+  </g>
+
+  <!-- ambient points -->
+  <g fill="#c7d2fe" opacity="0.6">
+    <circle cx="232" cy="96" r="2"/><circle cx="520" cy="72" r="2.5"/><circle cx="744" cy="380" r="2"/><circle cx="160" cy="372" r="1.8"/><circle cx="268" cy="330" r="2"/>
+  </g>
+</svg>
