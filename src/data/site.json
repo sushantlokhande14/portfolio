@@ -172,7 +172,7 @@
   "skills": [
     {
       "group": "Languages",
-      "items": ["Python", "C++", "TypeScript", "JavaScript", "SQL", "Java", "C", "Swift"]
+      "items": ["Python", "C++", "TypeScript", "JavaScript", "SQL", "Java", "C", "Verilog", "Swift"]
     },
     {
       "group": "Machine Learning",
@@ -192,7 +192,7 @@
     },
     {
       "group": "Systems & Tooling",
-      "items": ["Docker", "Kubernetes", "Kafka", "Temporal", "AWS (EC2)", "CI/CD", "Linux", "OpenTelemetry", "Prometheus & Grafana", "pybind11 & CMake", "GDB & sanitizers", "pytest", "Cursor & Claude Code"]
+      "items": ["Docker", "Kubernetes", "Kafka", "Temporal", "AWS (EC2)", "CI/CD", "Linux", "OpenTelemetry", "Prometheus & Grafana", "pybind11 & CMake", "GDB & sanitizers", "Yosys & Icarus Verilog", "pytest", "Cursor & Claude Code"]
     }
   ]
 }

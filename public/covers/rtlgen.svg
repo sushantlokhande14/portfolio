@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#141f08"/><stop offset="1" stop-color="#090c06"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="66%" cy="50%" r="55%">
+      <stop offset="0" stop-color="#a3e635" stop-opacity="0.18"/><stop offset="1" stop-color="#a3e635" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <rect width="800" height="450" fill="url(#glow)"/>
+
+  <!-- the description: a card of key/value lines -->
+  <g opacity="0.85">
+    <rect x="64" y="104" width="196" height="242" rx="14" fill="#18240b" stroke="#a3e635" stroke-opacity="0.45" stroke-width="1.5"/>
+    <path d="M88 136 q-10 0 -10 10 v20 q0 6 -6 6 q6 0 6 6 v20 q0 10 10 10" stroke="#bef264" stroke-width="2.2" stroke-linecap="round"/>
+    <g stroke-linecap="round" stroke-width="5">
+      <path d="M104 146 H150" stroke="#bef264" stroke-opacity="0.9"/><path d="M160 146 H214" stroke="#a3e635" stroke-opacity="0.45"/>
+      <path d="M104 168 H136" stroke="#bef264" stroke-opacity="0.9"/><path d="M146 168 H232" stroke="#a3e635" stroke-opacity="0.45"/>
+      <path d="M104 190 H162" stroke="#bef264" stroke-opacity="0.9"/><path d="M172 190 H204" stroke="#a3e635" stroke-opacity="0.45"/>
+      <path d="M118 222 H160" stroke="#bef264" stroke-opacity="0.7"/><path d="M170 222 H226" stroke="#a3e635" stroke-opacity="0.35"/>
+      <path d="M118 244 H146" stroke="#bef264" stroke-opacity="0.7"/><path d="M156 244 H212" stroke="#a3e635" stroke-opacity="0.35"/>
+      <path d="M118 266 H170" stroke="#bef264" stroke-opacity="0.7"/><path d="M180 266 H222" stroke="#a3e635" stroke-opacity="0.35"/>
+      <path d="M104 298 H140" stroke="#bef264" stroke-opacity="0.9"/><path d="M150 298 H196" stroke="#a3e635" stroke-opacity="0.45"/>
+    </g>
+  </g>
+
+  <!-- the generator -->
+  <g stroke="#a3e635" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M292 200 L314 225 L292 250" opacity="0.35"/>
+    <path d="M318 200 L340 225 L318 250" opacity="0.6"/>
+    <path d="M344 200 L366 225 L344 250" opacity="0.95"/>
+  </g>
+
+  <!-- the output: a top module with two specialized lanes inside -->
+  <rect x="404" y="88" width="340" height="274" rx="16" fill="#111a08" stroke="#a3e635" stroke-opacity="0.55" stroke-width="1.8"/>
+  <g fill="#a3e635">
+    <rect x="398" y="140" width="12" height="8" rx="2"/><rect x="398" y="186" width="12" height="8" rx="2"/>
+    <rect x="398" y="256" width="12" height="8" rx="2"/><rect x="398" y="302" width="12" height="8" rx="2"/>
+    <rect x="738" y="172" width="12" height="8" rx="2"/><rect x="738" y="288" width="12" height="8" rx="2"/>
+  </g>
+  <g fill="#18240b" stroke="#bef264" stroke-width="2">
+    <rect x="468" y="124" width="190" height="96" rx="10"/>
+    <rect x="468" y="240" width="190" height="96" rx="10"/>
+  </g>
+  <g stroke="#a3e635" stroke-width="2" stroke-linecap="round" opacity="0.8">
+    <path d="M410 144 H468"/><path d="M410 190 H468"/><path d="M410 260 H468"/><path d="M410 306 H468"/>
+    <path d="M658 176 H738"/><path d="M658 292 H738"/>
+  </g>
+  <!-- inside each lane: op -> mux -> register -->
+  <g stroke="#bef264" stroke-width="1.8" opacity="0.9">
+    <rect x="488" y="150" width="40" height="44" rx="6"/><path d="M552 148 L582 160 V188 L552 200 Z"/><rect x="604" y="154" width="36" height="40" rx="4"/>
+    <path d="M528 172 H552 M582 174 H604"/>
+    <rect x="488" y="266" width="40" height="44" rx="6"/><path d="M552 264 L582 276 V304 L552 316 Z"/><rect x="604" y="270" width="36" height="40" rx="4"/>
+    <path d="M528 288 H552 M582 290 H604"/>
+  </g>
+  <g fill="#bef264">
+    <path d="M604 186 L612 192 L604 198 Z"/><path d="M604 302 L612 308 L604 314 Z"/>
+  </g>
+
+  <!-- the check that passed -->
+  <g filter="url(#soft)">
+    <circle cx="744" cy="96" r="18" fill="#a3e635"/>
+    <path d="M735 96 L742 103 L754 89" stroke="#111a08" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- ambient bits -->
+  <g fill="#bef264" opacity="0.55">
+    <circle cx="300" cy="118" r="2"/><circle cx="356" cy="330" r="2.4"/><circle cx="96" cy="384" r="1.8"/><circle cx="700" cy="392" r="2"/>
+  </g>
+</svg>
