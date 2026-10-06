@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1c0a16"/><stop offset="1" stop-color="#0a0710"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="55%">
+      <stop offset="0" stop-color="#ff6fa5" stop-opacity="0.24"/><stop offset="1" stop-color="#ff6fa5" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="heart" cx="50%" cy="40%" r="60%">
+      <stop offset="0" stop-color="#ffe0ec"/><stop offset="0.5" stop-color="#ff9cc3"/><stop offset="1" stop-color="#ff6fa5"/>
+    </radialGradient>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <rect width="800" height="450" fill="url(#glow)"/>
+
+  <!-- the live connection between the two phones -->
+  <path d="M262 240 C330 200 470 200 538 240" stroke="#ff6fa5" stroke-width="2" stroke-opacity="0.55" stroke-dasharray="4 10" stroke-linecap="round"/>
+
+  <!-- phone A -->
+  <g>
+    <rect x="150" y="130" width="112" height="210" rx="22" fill="#2a0f20" stroke="#ff6fa5" stroke-width="2.5"/>
+    <rect x="190" y="142" width="32" height="6" rx="3" fill="#ff6fa5" opacity="0.5"/>
+    <circle cx="206" cy="210" r="26" fill="#3a1530" stroke="#ff9cc3" stroke-width="2"/>
+    <g fill="#ff9cc3" opacity="0.85">
+      <rect x="172" y="258" width="68" height="9" rx="4.5"/>
+      <rect x="182" y="276" width="48" height="9" rx="4.5"/>
+    </g>
+    <rect x="170" y="300" width="72" height="22" rx="11" fill="#ff6fa5" opacity="0.9"/>
+  </g>
+
+  <!-- phone B -->
+  <g>
+    <rect x="538" y="130" width="112" height="210" rx="22" fill="#2a0f20" stroke="#ff6fa5" stroke-width="2.5"/>
+    <rect x="578" y="142" width="32" height="6" rx="3" fill="#ff6fa5" opacity="0.5"/>
+    <circle cx="594" cy="210" r="26" fill="#3a1530" stroke="#ff9cc3" stroke-width="2"/>
+    <g fill="#ff9cc3" opacity="0.85">
+      <rect x="560" y="258" width="68" height="9" rx="4.5"/>
+      <rect x="570" y="276" width="48" height="9" rx="4.5"/>
+    </g>
+    <rect x="558" y="300" width="72" height="22" rx="11" fill="#ff6fa5" opacity="0.9"/>
+  </g>
+
+  <!-- heart in the middle -->
+  <g filter="url(#soft)">
+    <path d="M400 292 C352 258 338 232 350 212 C361 194 386 194 400 214 C414 194 439 194 450 212 C462 232 448 258 400 292 Z" fill="url(#heart)"/>
+  </g>
+
+  <!-- the Drop falling in -->
+  <g transform="rotate(-10 400 96)">
+    <rect x="370" y="76" width="60" height="42" rx="8" fill="#2a0f20" stroke="#ff9cc3" stroke-width="2"/>
+    <path d="M372 80 L400 102 L428 80" stroke="#ff9cc3" stroke-width="2" stroke-linejoin="round"/>
+  </g>
+  <g stroke="#ff9cc3" stroke-width="2" stroke-linecap="round" opacity="0.5">
+    <path d="M386 136 V150"/><path d="M400 140 V160"/><path d="M414 136 V150"/>
+  </g>
+
+  <!-- ambient sparkles -->
+  <g fill="#ff9cc3" opacity="0.7">
+    <path d="M110 92 C110 100 114 104 122 104 C114 104 110 108 110 116 C110 108 106 104 98 104 C106 104 110 100 110 92 Z"/>
+    <path d="M690 360 C690 366 693 369 699 369 C693 369 690 372 690 378 C690 372 687 369 681 369 C687 369 690 366 690 360 Z"/>
+    <path d="M700 90 C700 96 703 99 709 99 C703 99 700 102 700 108 C700 102 697 99 691 99 C697 99 700 96 700 90 Z"/>
+  </g>
+</svg>
