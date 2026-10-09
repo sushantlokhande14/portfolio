@@ -8,6 +8,7 @@ import Journey from '../components/Journey.astro';
 import Research from '../components/Research.astro';
 import Skills from '../components/Skills.astro';
 import About from '../components/About.astro';
+import Airstrip from '../components/Airstrip.astro';
 ---
 
 <Layout title="Sushant Lokhande — Software Engineer">
@@ -19,4 +20,7 @@ import About from '../components/About.astro';
   <Research />
   <Skills />
   <About />
+  <div class="mx-auto flex max-w-5xl justify-end px-6 pb-16">
+    <Airstrip runway={2} />
+  </div>
 </Layout>

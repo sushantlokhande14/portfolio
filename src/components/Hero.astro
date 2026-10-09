@@ -1,5 +1,6 @@
 ---
 import site from '../data/site.json';
+import Airstrip from './Airstrip.astro';
 ---
 
 <section class="relative flex min-h-screen flex-col justify-center overflow-hidden pt-14">
@@ -47,4 +48,6 @@ import site from '../data/site.json';
   <div class="absolute bottom-8 left-1/2 -translate-x-1/2" aria-hidden="true">
     <span class="scroll-line"></span>
   </div>
+
+  <Airstrip runway={1} class="reveal absolute bottom-9 right-4 sm:right-10" />
 </section>

@@ -1,0 +1,883 @@
+---
+// The hangar behind the FJ-6 easter egg: land the little plane on RWY 2 and its
+// card brings you here. A dark, scroll-told page about where the plane came from,
+// ending at the Electric Fan-Jet Lab itself.
+//
+// Every number is the lab's default design (github.com/sushantlokhande14/fanjet-lab,
+// src/physics.js), so if the model changes these should be re-run, not guessed.
+import Layout from '../layouts/Layout.astro';
+import FanjetPlane from '../components/FanjetPlane.astro';
+
+const LAB = 'https://claude.ai/artifact/3ghENPvWB2wYi1TkELYW5s';
+const REPO = 'https://github.com/sushantlokhande14/fanjet-lab';
+
+const stats = [
+  { value: 259, unit: 'm', label: 'of runway to get off the ground' },
+  { value: 137, unit: 'km', label: 'on one charge' },
+  { value: 39, unit: 'min', label: 'in the air' },
+];
+
+const findings = [
+  {
+    title: 'No stators, no flight.',
+    body: "Stators are the fixed vanes between the fans. Take them out and each fan piles its spin on top of the last one's until the blades stall. The plane never leaves the runway.",
+  },
+  {
+    title: 'The small nozzle costs range.',
+    body: 'It shoots a 345 km/h jet out of a 220 km/h plane, and the difference is energy left behind in the air. Open it up to 70% of the fan and it goes 141 km.',
+  },
+  {
+    title: 'One fan beats three.',
+    body: 'One fan per engine with that wider nozzle flies about 158 km. The extra fans, and the longer nacelles that hold them, cost more in weight and drag than they give back.',
+  },
+];
+
+// one side of the engine, mirrored for the other; y is measured down from the top, axis at 150
+const flip = (d: string) => d.replace(/(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/g, (_, x, y) => `${x},${300 - Number(y)}`);
+const COWL = 'M120,96 C109,95 108,85 120,84 C150,77 200,79 250,80 C360,82 470,98 560,114';
+const DUCT = 'M120,96 L230,90 L310,97 L385,103.5 L445,103.5 C490,104 530,112 560,117';
+const NOZZLE = 'M445,103.5 C490,104 530,112 560,117';
+// spinner, hub and tail cone as one closed outline: over the top, back underneath
+const HUB =
+  'M168,150 C176,134 198,127 225,127 L450,132 C490,134 515,143 530,150 C515,157 490,166 450,168 L225,173 C198,173 176,166 168,150 Z';
+const AIR = 'M10,106 C70,106 120,107 230,108.5 L385,118 L445,119 C500,122 530,129 560,133 L790,139';
+const fans = [
+  { x: 230, r0: 23, r1: 60, at: 0.2 },
+  { x: 310, r0: 20.5, r1: 53, at: 0.42 },
+  { x: 385, r0: 18, r1: 46.5, at: 0.48 },
+];
+const dots = Array.from({ length: 9 }, (_, i) => i);
+---
+
+<Layout
+  title="What if"
+  description="A stupid idea about a battery plane, and the lab I built to find out where it breaks."
+  noindex
+  bare
+>
+  <div class="wi">
+    <div class="wi-progress" aria-hidden="true"><span data-bar></span></div>
+    <p class="wi-tag" data-tag>FJ-6 · hangar</p>
+    <a class="wi-exit" href="/">← runway</a>
+
+    <section class="wi-screen wi-intro">
+      <p class="wi-line wi-first">
+        <span data-type="I had a stupid idea.">I had a stupid idea.</span><span class="wi-caret" aria-hidden="true"
+        ></span>
+      </p>
+      <p class="wi-cue" aria-hidden="true"><span>scroll</span><i></i></p>
+    </section>
+
+    <section class="wi-screen">
+      <h1 class="wi-whatif" data-in>What <em>if</em>...</h1>
+    </section>
+
+    <section class="wi-screen">
+      <p class="wi-line" data-in>...a plane had jet engines</p>
+      <p class="wi-line wi-dim" data-in style="--d: 250ms">with no fuel in them?</p>
+    </section>
+
+    <section class="wi-story" data-story style="--len: 330vh">
+      <div class="wi-sticky">
+        <p class="wi-kicker">Just a battery and fans.</p>
+        <svg class="wi-engine" viewBox="0 0 800 300" role="img" aria-label="Cross-section of one engine: an intake fan, two more fans behind it, and a converging nozzle">
+          <defs>
+            <linearGradient id="wi-jet-fade" x1="0" x2="1" y1="0" y2="0">
+              <stop offset="0" stop-color="#3bc4dd" stop-opacity="0.22"></stop>
+              <stop offset="1" stop-color="#3bc4dd" stop-opacity="0"></stop>
+            </linearGradient>
+          </defs>
+          <g class="wi-air" data-at="0.78">
+            <path d="M560,117 C640,114 720,108 790,104 L790,196 C720,192 640,186 560,183 Z" fill="url(#wi-jet-fade)" />
+            {
+              [AIR, flip(AIR)].map((path, side) =>
+                dots.map((i) => (
+                  <circle r="2.2">
+                    <animateMotion
+                      dur="2.6s"
+                      repeatCount="indefinite"
+                      begin={`${-(i * 2.6) / dots.length - side * 0.13}s`}
+                      path={path}
+                      keyPoints="0;0.5;1"
+                      keyTimes="0;0.66;1"
+                      calcMode="linear"
+                    />
+                  </circle>
+                )),
+              )
+            }
+          </g>
+          <path class="wi-stroke" pathLength="1" data-draw="0 0.18" d={COWL} />
+          <path class="wi-stroke" pathLength="1" data-draw="0 0.18" d={flip(COWL)} />
+          <path class="wi-stroke wi-thin" pathLength="1" data-draw="0.04 0.2" d={DUCT} />
+          <path class="wi-stroke wi-thin" pathLength="1" data-draw="0.04 0.2" d={flip(DUCT)} />
+          <path class="wi-hub" data-at="0.12" d={HUB} />
+          {
+            fans.map((f, i) => (
+              <g class="wi-fan" data-at={String(f.at)}>
+                <line x1={f.x} y1={150 - f.r1} x2={f.x} y2={150 - f.r0} />
+                <line x1={f.x} y1={150 + f.r0} x2={f.x} y2={150 + f.r1} />
+                <line class="wi-stator" x1={f.x + 17} y1={150 - f.r1 + 1} x2={f.x + 17} y2={150 - f.r0} />
+                <line class="wi-stator" x1={f.x + 17} y1={150 + f.r0} x2={f.x + 17} y2={150 + f.r1 - 1} />
+                <text x={f.x} y="58">{i + 1}</text>
+              </g>
+            ))
+          }
+          <path class="wi-stroke wi-hot" pathLength="1" data-draw="0.6 0.72" d={NOZZLE} />
+          <path class="wi-stroke wi-hot" pathLength="1" data-draw="0.6 0.72" d={flip(NOZZLE)} />
+          <g class="wi-speeds" data-at="0.82">
+            <text x="14" y="62">220 km/h</text>
+            <text x="790" y="96" text-anchor="end">345 km/h</text>
+          </g>
+        </svg>
+        <div class="wi-caps" aria-live="polite">
+          <p data-cap="0">A big fan up front.</p>
+          <p data-cap="0.4">Two more behind it, each with its own motor.</p>
+          <p data-cap="0.6">A small nozzle to squeeze it all into a jet.</p>
+          <p data-cap="0.8">Air comes in at 220 km/h and leaves at 345.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="wi-story" data-story style="--len: 240vh">
+      <div class="wi-sticky">
+        <FanjetPlane class="wi-plane" numbered />
+        <div class="wi-caps" aria-live="polite">
+          <p data-cap="0">Six of them.</p>
+          <p data-cap="0.42">Three under each wing.</p>
+          <p data-cap="0.72">On a small plane for four people.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="wi-screen">
+      <p class="wi-line" data-in>Would it actually fly?</p>
+    </section>
+
+    <section class="wi-screen">
+      <p class="wi-line" data-in>I couldn't stop wondering,</p>
+      <p class="wi-line wi-dim" data-in style="--d: 250ms">so I built a lab to find out.</p>
+      <p class="wi-body" data-in style="--d: 500ms">
+        A fan-by-fan engine model, a wing, a battery and a full flight from brake release to landing, with the
+        air drawn as it moves.
+      </p>
+    </section>
+
+    <section class="wi-screen">
+      <p class="wi-kicker" data-in>It flies.</p>
+      <div class="wi-stats">
+        {
+          stats.map((s, i) => (
+            <div class="wi-stat" data-in data-count-wrap style={`--d: ${i * 160}ms`}>
+              <p>
+                <b data-count={s.value}>{s.value}</b>
+                <span>{s.unit}</span>
+              </p>
+              <p class="wi-stat-label">{s.label}</p>
+            </div>
+          ))
+        }
+      </div>
+      <p class="wi-note" data-in style="--d: 520ms">Landing with 20% of the battery left, like you're supposed to.</p>
+    </section>
+
+    <section class="wi-screen">
+      <p class="wi-line" data-in>Then the numbers started arguing with me.</p>
+    </section>
+
+    <section class="wi-findings">
+      {
+        findings.map((f, i) => (
+          <article class="wi-finding" data-in>
+            <p class="wi-num">0{i + 1}</p>
+            <h2>{f.title}</h2>
+            <p>{f.body}</p>
+          </article>
+        ))
+      }
+    </section>
+
+    <section class="wi-screen">
+      <p class="wi-line" data-in>So the stupid idea was wrong.</p>
+      <p class="wi-line wi-dim" data-in style="--d: 250ms">Wrong in ways I could measure, which is the fun part.</p>
+    </section>
+
+    <section class="wi-screen wi-end">
+      <p class="wi-kicker" data-in>Try to make it fly farther.</p>
+      <div class="wi-cta" data-in style="--d: 200ms">
+        <a class="wi-go" href={LAB} target="_blank" rel="noopener noreferrer">Check it out ↗</a>
+        <a class="wi-src" href={REPO} target="_blank" rel="noopener noreferrer">Read the source ↗</a>
+      </div>
+      <p class="wi-ps" data-ps hidden>
+        P.S. You just flew a battery plane across a web page. You probably noticed the battery.
+      </p>
+      <a class="wi-home" href="/">← back to the portfolio</a>
+    </section>
+  </div>
+</Layout>
+
+<style is:global>
+  html,
+  body {
+    background: #050607;
+    color-scheme: dark;
+  }
+
+  /* the big plane is another component, so its styles live out here: engines
+     light up in pairs from the fuselage out */
+  .wi-plane {
+    width: min(520px, 78vw);
+    height: auto;
+    overflow: visible;
+    color: #c9d6df;
+    rotate: -90deg;
+  }
+
+  .wi-plane .fj-body,
+  .wi-plane .fj-wing {
+    fill: currentColor;
+  }
+
+  .wi-plane .fj-wing {
+    opacity: 0.55;
+  }
+
+  .wi-plane .fj-glass {
+    fill: #3bc4dd;
+    opacity: 0.5;
+  }
+
+  .wi-plane .fj-nacelle {
+    fill: #2a3740;
+    transition:
+      fill 0.4s ease,
+      filter 0.4s ease;
+  }
+
+  .wi-plane .fj-nacelle.on {
+    fill: #3bc4dd;
+    filter: drop-shadow(0 0 1.6px #3bc4dd);
+  }
+
+  .wi-plane .fj-jets line {
+    stroke: #3bc4dd;
+    stroke-width: 1;
+    stroke-dasharray: 2.4 2.4;
+    stroke-linecap: round;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    animation: wi-jet 0.35s linear infinite;
+  }
+
+  .wi-plane .fj-jets line.on {
+    opacity: 0.7;
+  }
+
+  @keyframes wi-jet {
+    to {
+      stroke-dashoffset: -4.8;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .wi-plane {
+      width: min(420px, 92vw);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wi-plane .fj-jets line {
+      animation: none;
+    }
+  }
+</style>
+
+<style>
+  .wi {
+    --ink: #eef3f6;
+    --dim: #8697a3;
+    --cyan: #3bc4dd;
+    --line: rgb(160 190 210 / 0.38);
+    position: relative;
+    min-height: 100vh;
+    overflow-x: clip;
+    background:
+      radial-gradient(70% 50% at 50% 0%, rgb(59 196 221 / 0.07), transparent 70%),
+      linear-gradient(rgb(160 190 210 / 0.035) 1px, transparent 1px) 0 0 / 48px 48px,
+      linear-gradient(90deg, rgb(160 190 210 / 0.035) 1px, transparent 1px) 0 0 / 48px 48px,
+      #050607;
+    color: var(--ink);
+  }
+
+  .wi-progress {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 5;
+    height: 2px;
+  }
+
+  .wi-progress span {
+    display: block;
+    height: 100%;
+    background: var(--cyan);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .wi-tag,
+  .wi-exit {
+    position: fixed;
+    top: 18px;
+    z-index: 5;
+    margin: 0;
+    font: 500 11px var(--font-mono);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .wi-tag {
+    left: 20px;
+  }
+
+  .wi-exit {
+    right: 20px;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .wi-exit:hover {
+    color: var(--ink);
+  }
+
+  .wi-screen {
+    display: flex;
+    min-height: 100svh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 96px 24px;
+    text-align: center;
+  }
+
+  .wi-line {
+    max-width: 18ch;
+    margin: 0;
+    font-size: clamp(34px, 6.4vw, 76px);
+    font-weight: 600;
+    line-height: 1.06;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .wi-dim {
+    color: var(--dim);
+  }
+
+  .wi-first {
+    max-width: none;
+  }
+
+  .wi-caret {
+    display: inline-block;
+    width: 0.08em;
+    height: 0.9em;
+    margin-left: 0.08em;
+    background: var(--cyan);
+    vertical-align: -0.08em;
+    animation: wi-blink 1.1s step-end infinite;
+  }
+
+  @keyframes wi-blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .wi-cue {
+    position: absolute;
+    bottom: 34px;
+    left: 50%;
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    margin: 0;
+    transform: translateX(-50%);
+    font: 500 10px var(--font-mono);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .wi-cue i {
+    display: block;
+    width: 1px;
+    height: 44px;
+    background: linear-gradient(var(--dim), transparent);
+    animation: wi-pulse 2.2s ease-in-out infinite;
+  }
+
+  @keyframes wi-pulse {
+    50% {
+      opacity: 0.25;
+    }
+  }
+
+  .wi-intro {
+    position: relative;
+  }
+
+  .wi-whatif {
+    margin: 0;
+    font-size: clamp(76px, 17vw, 230px);
+    font-weight: 650;
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+  }
+
+  .wi-whatif em {
+    font-style: normal;
+    color: var(--cyan);
+  }
+
+  .wi-kicker {
+    margin: 0;
+    font-size: clamp(26px, 4vw, 44px);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+  }
+
+  .wi-body {
+    max-width: 34rem;
+    margin: 10px 0 0;
+    color: var(--dim);
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  /* ---------- scroll stories: a tall section with a pinned stage */
+  .wi-story {
+    position: relative;
+    height: var(--len);
+  }
+
+  .wi-sticky {
+    position: sticky;
+    top: 0;
+    display: flex;
+    height: 100svh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    padding: 64px 20px;
+    text-align: center;
+  }
+
+  .wi-engine {
+    width: min(920px, 100%);
+    height: auto;
+    overflow: visible;
+  }
+
+  .wi-stroke {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+
+  .wi-thin {
+    stroke: var(--line);
+    stroke-width: 1.4;
+  }
+
+  .wi-hot {
+    stroke: var(--cyan);
+    stroke-width: 2.6;
+  }
+
+  .wi-hub {
+    fill: rgb(160 190 210 / 0.12);
+    stroke: var(--line);
+    stroke-width: 1;
+  }
+
+  .wi-fan line {
+    stroke: var(--cyan);
+    stroke-width: 5;
+    stroke-linecap: round;
+  }
+
+  .wi-fan .wi-stator {
+    stroke: var(--dim);
+    stroke-width: 2;
+  }
+
+  .wi-fan text,
+  .wi-speeds text {
+    fill: var(--dim);
+    font: 600 15px var(--font-mono);
+    text-anchor: middle;
+  }
+
+  .wi-speeds text {
+    fill: var(--ink);
+    font-size: 16px;
+    text-anchor: start;
+  }
+
+  .wi-speeds text[text-anchor='end'] {
+    text-anchor: end;
+    fill: var(--cyan);
+  }
+
+  .wi-air circle {
+    fill: var(--cyan);
+  }
+
+  [data-at] {
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+
+  .wi-fan[data-at] {
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scaleY(0.6);
+    transition:
+      opacity 0.5s ease,
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  [data-at].on {
+    opacity: 1;
+  }
+
+  .wi-fan[data-at].on {
+    transform: none;
+  }
+
+  .wi-caps {
+    position: relative;
+    display: grid;
+    min-height: 3.4em;
+    width: min(36rem, 100%);
+    color: var(--dim);
+    font-size: clamp(19px, 2.4vw, 26px);
+    font-weight: 500;
+    line-height: 1.35;
+  }
+
+  .wi-caps p {
+    grid-area: 1 / 1;
+    margin: 0;
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity 0.45s ease,
+      transform 0.45s ease;
+  }
+
+  .wi-caps p.on {
+    opacity: 1;
+    transform: none;
+    color: var(--ink);
+  }
+
+  /* ---------- reveals */
+  [data-in] {
+    opacity: 0;
+    transform: translateY(18px);
+    filter: blur(6px);
+    transition:
+      opacity 0.9s ease,
+      transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+      filter 0.9s ease;
+    transition-delay: var(--d, 0ms);
+  }
+
+  [data-in].is-in {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  .wi-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px;
+    width: min(860px, 100%);
+    margin-top: 26px;
+  }
+
+  .wi-stat p {
+    margin: 0;
+  }
+
+  .wi-stat b {
+    font-size: clamp(48px, 8vw, 96px);
+    font-weight: 650;
+    letter-spacing: -0.05em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .wi-stat span {
+    margin-left: 6px;
+    color: var(--cyan);
+    font: 500 clamp(14px, 1.6vw, 18px) var(--font-mono);
+  }
+
+  .wi-stat-label {
+    margin-top: 6px !important;
+    color: var(--dim);
+    font-size: 15px;
+  }
+
+  .wi-note {
+    margin: 18px 0 0;
+    color: var(--dim);
+    font: 500 12px var(--font-mono);
+    letter-spacing: 0.04em;
+  }
+
+  .wi-findings {
+    display: grid;
+    gap: 22vh;
+    width: min(760px, 100%);
+    margin: 0 auto;
+    padding: 6vh 24px 26vh;
+  }
+
+  .wi-finding {
+    padding-left: 22px;
+    border-left: 2px solid var(--cyan);
+  }
+
+  .wi-num {
+    margin: 0;
+    color: var(--cyan);
+    font: 600 12px var(--font-mono);
+    letter-spacing: 0.2em;
+  }
+
+  .wi-finding h2 {
+    margin: 10px 0 0;
+    font-size: clamp(30px, 4.6vw, 52px);
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.035em;
+  }
+
+  .wi-finding p:not(.wi-num) {
+    margin: 14px 0 0;
+    max-width: 38rem;
+    color: var(--dim);
+    font-size: 18px;
+    line-height: 1.6;
+  }
+
+  .wi-end {
+    gap: 22px;
+  }
+
+  .wi-cta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .wi-go,
+  .wi-src {
+    border-radius: 999px;
+    padding: 15px 28px;
+    font-size: 17px;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease,
+      border-color 0.25s ease;
+  }
+
+  .wi-go {
+    background: var(--cyan);
+    color: #04161b;
+    box-shadow: 0 0 0 0 rgb(59 196 221 / 0.5);
+    animation: wi-ping 2.4s ease-out infinite;
+  }
+
+  .wi-go:hover {
+    transform: translateY(-2px);
+  }
+
+  @keyframes wi-ping {
+    0% {
+      box-shadow: 0 0 0 0 rgb(59 196 221 / 0.45);
+    }
+    70%,
+    100% {
+      box-shadow: 0 0 0 18px rgb(59 196 221 / 0);
+    }
+  }
+
+  .wi-src {
+    border: 1px solid var(--line);
+    color: var(--ink);
+  }
+
+  .wi-src:hover {
+    border-color: var(--ink);
+  }
+
+  .wi-ps {
+    max-width: 30rem;
+    margin: 18px 0 0;
+    color: var(--dim);
+    font-size: 15px;
+    font-style: italic;
+  }
+
+  .wi-home {
+    margin-top: 28px;
+    color: var(--dim);
+    font: 500 12px var(--font-mono);
+    letter-spacing: 0.08em;
+    text-decoration: none;
+  }
+
+  .wi-home:hover {
+    color: var(--ink);
+  }
+
+  @media (max-width: 640px) {
+    .wi-stats {
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
+
+    /* the engine drawing shrinks to under half size on a phone */
+    .wi-fan text,
+    .wi-speeds text {
+      font-size: 26px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-in],
+    [data-at],
+    .wi-fan[data-at],
+    .wi-caps p {
+      transition: none;
+    }
+
+    .wi-caret,
+    .wi-cue i,
+    .wi-go {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+
+  // ---- how they got here
+  let landed = false;
+  try {
+    landed = localStorage.getItem('fj6') === '2';
+  } catch {}
+  const tag = document.querySelector<HTMLElement>('[data-tag]');
+  if (tag) tag.textContent = landed ? 'FJ-6 · parked in the hangar' : 'FJ-6 · no landing on record';
+  const ps = document.querySelector<HTMLElement>('[data-ps]');
+  if (ps) ps.hidden = !landed;
+
+  // ---- the first line types itself out
+  const typed = document.querySelector<HTMLElement>('[data-type]');
+  if (typed && !reduced) {
+    const text = typed.dataset.type ?? '';
+    typed.textContent = '';
+    let i = 0;
+    const tick = () => {
+      typed.textContent = text.slice(0, ++i);
+      if (i < text.length) window.setTimeout(tick, i === 1 ? 70 : 38 + Math.random() * 50);
+    };
+    window.setTimeout(tick, 650);
+  }
+
+  // ---- reveals and count-ups
+  const countUp = (wrap: Element) => {
+    const b = wrap.querySelector<HTMLElement>('[data-count]');
+    if (!b || reduced) return;
+    const to = Number(b.dataset.count);
+    const t0 = performance.now();
+    const step = () => {
+      const k = clamp((performance.now() - t0) / 1300);
+      b.textContent = String(Math.round(to * (1 - Math.pow(1 - k, 3))));
+      if (k < 1) window.setTimeout(step, 16);
+    };
+    b.textContent = '0';
+    step();
+  };
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        e.target.classList.add('is-in');
+        if (e.target.hasAttribute('data-count-wrap')) countUp(e.target);
+        io.unobserve(e.target);
+      }
+    },
+    { threshold: 0.3 },
+  );
+  document.querySelectorAll('[data-in]').forEach((el) => {
+    if (reduced) el.classList.add('is-in');
+    else io.observe(el);
+  });
+
+  // ---- scroll stories: progress through each tall section drives its drawing
+  const ENGINE_AT = [0.16, 0.16, 0.34, 0.34, 0.52, 0.52];
+  const stories = Array.from(document.querySelectorAll<HTMLElement>('[data-story]')).map((el) => ({
+    el,
+    draws: Array.from(el.querySelectorAll<SVGElement>('[data-draw]')).map((d) => {
+      const [a, b] = (d.dataset.draw ?? '0 1').split(' ').map(Number);
+      return { d, a, b };
+    }),
+    ats: Array.from(el.querySelectorAll<Element>('[data-at]')),
+    caps: Array.from(el.querySelectorAll<HTMLElement>('[data-cap]')),
+    engines: Array.from(el.querySelectorAll<SVGElement>('[data-engine], [data-jet]')),
+  }));
+  const bar = document.querySelector<HTMLElement>('[data-bar]');
+
+  function update() {
+    for (const s of stories) {
+      const r = s.el.getBoundingClientRect();
+      const p = reduced ? 1 : clamp(-r.top / Math.max(1, r.height - innerHeight));
+      for (const { d, a, b } of s.draws) d.style.strokeDashoffset = String(1 - clamp((p - a) / (b - a)));
+      for (const el of s.ats) el.classList.toggle('on', p >= Number(el.getAttribute('data-at')));
+      for (const el of s.engines) {
+        const n = Number(el.getAttribute('data-engine') ?? el.getAttribute('data-jet'));
+        el.classList.toggle('on', p >= ENGINE_AT[n - 1]);
+      }
+      let cur = 0;
+      s.caps.forEach((c, i) => {
+        if (p >= Number(c.dataset.cap)) cur = i;
+      });
+      s.caps.forEach((c, i) => c.classList.toggle('on', i === cur));
+    }
+    if (bar) {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      bar.style.transform = `scaleX(${max > 0 ? clamp(scrollY / max) : 0})`;
+    }
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+</script>

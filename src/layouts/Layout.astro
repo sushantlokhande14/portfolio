@@ -9,12 +9,15 @@ interface Props {
   title: string;
   description?: string;
   noindex?: boolean;
+  // a page that brings its own look: no nav, no footer, no backdrop
+  bare?: boolean;
 }
 
 const {
   title,
   description = 'Portfolio of Sushant Lokhande — software engineer and CS grad student at SJSU.',
   noindex = false,
+  bare = false,
 } = Astro.props;
 ---
 
@@ -40,12 +43,12 @@ const {
     <Beacon />
   </head>
   <body>
-    <div class="page-bg" aria-hidden="true"></div>
-    <Nav />
+    {!bare && <div class="page-bg" aria-hidden="true"></div>}
+    {!bare && <Nav />}
     <main>
       <slot />
     </main>
-    <Footer />
+    {!bare && <Footer />}
     <script>
       const io = new IntersectionObserver(
         (entries) => {

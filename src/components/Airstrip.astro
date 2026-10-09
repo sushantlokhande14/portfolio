@@ -1,0 +1,86 @@
+---
+// A tiny runway. RWY 1 sits in the corner of the hero with FJ-6 parked on it;
+// RWY 2 waits at the bottom of the page. Fly the plane from one to the other
+// (src/scripts/fanjet-egg.ts) and RWY 2's landing card leads to /what-if.
+import FanjetPlane from './FanjetPlane.astro';
+import '../styles/fanjet-egg.css';
+
+interface Props {
+  runway: 1 | 2;
+  class?: string;
+}
+
+const { runway, class: cls = '' } = Astro.props;
+const bars = [5, 8.2, 14.2, 17.4];
+const lights = Array.from({ length: 9 }, (_, i) => 8 + i * 18);
+---
+
+<!-- placement classes go on the wrapper: fanjet-egg.css is unlayered, so it would
+     win over Tailwind utilities on the same element -->
+<div class={cls}>
+<div class="fj-strip" data-strip={runway}>
+  <button type="button" class="fj-runway" data-runway={runway} aria-label={`Runway ${runway}`}>
+    <svg viewBox="0 0 160 24" aria-hidden="true" focusable="false">
+      <rect class="fj-tarmac" x="0" y="2" width="160" height="20" rx="2.5"></rect>
+      <g class="fj-paint">
+        {bars.map((y) => <rect x="4" y={y} width="7" height="1.6" />)}
+        {bars.map((y) => <rect x="149" y={y} width="7" height="1.6" />)}
+        <line x1="30" y1="12" x2="132" y2="12" stroke-dasharray="7 5"></line>
+        <text x="19" y="12" transform="rotate(90 19 12)">{runway}</text>
+      </g>
+      <g class="fj-lights">
+        {
+          lights.map((x, i) => (
+            <>
+              <circle cx={x} cy="0.6" r="0.95" style={`--i: ${i}`} />
+              <circle cx={x} cy="23.4" r="0.95" style={`--i: ${i}`} />
+            </>
+          ))
+        }
+      </g>
+    </svg>
+  </button>
+  <span class="fj-label" aria-hidden="true">RWY {runway}</span>
+  <div class="fj-slot" data-slot={runway}>
+    {
+      runway === 1 && (
+        <button type="button" id="fj6" class="fj-plane" aria-label="FJ-6, a small plane parked on runway 1">
+          <FanjetPlane class="fj-svg" />
+          <span class="fj-batt" aria-hidden="true">
+            <i />
+          </span>
+        </button>
+      )
+    }
+  </div>
+
+  {
+    runway === 2 && (
+      <dialog id="fj-modal" class="fj-modal" aria-labelledby="fj-modal-title">
+        <div class="fj-modal-card">
+          <p class="fj-modal-eyebrow">FJ-6 · touchdown on RWY 2</p>
+          <h2 id="fj-modal-title">You found it.</h2>
+          <p>
+            Most people scroll right past that little plane. You flew it all the way down here before the
+            battery gave out.
+          </p>
+          <p class="fj-modal-score" data-score hidden />
+          <p>It comes from a stupid idea I couldn't stop thinking about.</p>
+          <div class="fj-modal-actions">
+            <a class="fj-btn-primary" href="/what-if">
+              Taxi to the hangar →
+            </a>
+            <button type="button" class="fj-btn" data-close>
+              Stay on the runway
+            </button>
+          </div>
+        </div>
+      </dialog>
+    )
+  }
+</div>
+</div>
+
+<script>
+  import '../scripts/fanjet-egg';
+</script>
