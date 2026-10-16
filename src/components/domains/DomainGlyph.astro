@@ -1,0 +1,50 @@
+---
+import type { Glyph } from '../../data/domains';
+import '../../styles/domains.css';
+
+interface Props {
+  name: Glyph;
+  class?: string;
+  style?: string;
+}
+
+const { name, class: className, style } = Astro.props;
+
+// 24x24 line icons. Every shape gets pathLength="1" so CSS can draw it in
+// with a single dash, whatever its real length.
+const shapes: Record<Glyph, string> = {
+  spark:
+    '<path d="M12 3c.6 5.2 3.8 8.4 9 9-5.2.6-8.4 3.8-9 9-.6-5.2-3.8-8.4-9-9 5.2-.6 8.4-3.8 9-9z"/><path d="M19 2.5v4M17 4.5h4"/>',
+  nodes:
+    '<circle cx="6" cy="6" r="2.6"/><circle cx="18" cy="6" r="2.6"/><circle cx="12" cy="18" r="2.6"/><path d="M8.6 6h6.8M7.3 8.3l3.4 7.4M16.7 8.3l-3.4 7.4"/>',
+  bolt: '<path d="M13.5 2.5 4.5 14h7l-1 7.5 9-11.5h-7z"/>',
+  search:
+    '<circle cx="10.5" cy="10.5" r="7"/><path d="m15.6 15.6 5.4 5.4"/><path d="m7 12 2.2-2.6 2.4 1.8 2.2-3"/>',
+  window:
+    '<rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 8.8h18"/><path d="M6.2 6.4h.01M8.6 6.4h.01"/><path d="M7 13h6M7 16.2h10"/>',
+  chip:
+    '<rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9.5" y="9.5" width="5" height="5" rx=".8"/><path d="M9 2.8V6M12 2.8V6M15 2.8V6M9 18v3.2M12 18v3.2M15 18v3.2M2.8 9H6M2.8 12H6M2.8 15H6M18 9h3.2M18 12h3.2M18 15h3.2"/>',
+  eye: '<path d="M2.5 12C5 7.2 8.4 5 12 5s7 2.2 9.5 7c-2.5 4.8-5.9 7-9.5 7s-7-2.2-9.5-7z"/><circle cx="12" cy="12" r="3.2"/><path d="M12 12h.01"/>',
+  shield:
+    '<path d="M12 2.8 19.5 6v5.6c0 4.5-3.2 8.1-7.5 9.6-4.3-1.5-7.5-5.1-7.5-9.6V6z"/><path d="m8.6 12.1 2.4 2.4 4.5-4.8"/>',
+  database:
+    '<ellipse cx="12" cy="5.8" rx="7" ry="2.8"/><path d="M5 5.8v12.4c0 1.55 3.13 2.8 7 2.8s7-1.25 7-2.8V5.8"/><path d="M5 12c0 1.55 3.13 2.8 7 2.8s7-1.25 7-2.8"/>',
+  signal: '<path d="M4 8h15"/><path d="m15 4 4 4-4 4"/><path d="M20 16H5"/><path d="m9 12-4 4 4 4"/>',
+};
+
+const markup = shapes[name].replaceAll('/>', ' pathLength="1"/>');
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.6"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class:list={['dm-glyph', className]}
+  style={style}
+  aria-hidden="true"
+  set:html={markup}
+/>
