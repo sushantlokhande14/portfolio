@@ -1,0 +1,55 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { Domain } from '../../lib/domains';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  // why it sits in the domain being shown
+  angle: string;
+  // the other domains it also sits in
+  also: Domain[];
+}
+
+const { project, angle, also } = Astro.props;
+const { title, subtitle, summary, cover, tech } = project.data;
+---
+
+<article class="dm-card card">
+  {
+    cover && (
+      <div class="dm-card-cover">
+        <img src={cover} alt="" loading="lazy" />
+      </div>
+    )
+  }
+  <div class="dm-card-body">
+    <div class="flex items-start justify-between gap-3">
+      <div>
+        <h3 class="text-lg font-semibold tracking-tight text-ink">
+          <a href={`/projects/${project.id}/`} class="dm-card-link">{title}</a>
+        </h3>
+        {subtitle && <p class="mt-1 text-sm font-medium text-accent">{subtitle}</p>}
+      </div>
+      <span class="dm-card-tick" aria-hidden="true">↗</span>
+    </div>
+    <div class="flex-1">
+      <p class="dm-card-angle mt-4">{angle}</p>
+      <p class="mt-3 line-clamp-3 text-sm leading-relaxed text-muted">{summary}</p>
+    </div>
+    <ul class="mt-5 flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs text-muted">
+      {tech.slice(0, 6).map((t) => <li>{t}</li>)}
+    </ul>
+    {
+      also.length > 0 && (
+        <div class="dm-also">
+          <span class="dm-also-label">also in</span>
+          {also.map((d) => (
+            <a href={`/domains/${d.id}/`} class="dm-chip dm-hue" style={`--h: ${d.hue}`}>
+              {d.label}
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</article>

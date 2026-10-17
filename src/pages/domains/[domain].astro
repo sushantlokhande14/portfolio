@@ -1,0 +1,132 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import DomainGlyph from '../../components/domains/DomainGlyph.astro';
+import DomainProjectCard from '../../components/domains/DomainProjectCard.astro';
+import { getDomains, domainsByProject, pad, type Domain } from '../../lib/domains';
+import '../../styles/domains.css';
+
+export async function getStaticPaths() {
+  const domains = await getDomains();
+  return domains.map((domain) => ({ params: { domain: domain.id }, props: { domain, domains } }));
+}
+
+interface Props {
+  domain: Domain;
+  domains: Domain[];
+}
+
+const { domain, domains } = Astro.props;
+const memberships = domainsByProject(domains);
+const n = domains.length;
+const prev = domains[(domain.rank - 1 + n) % n];
+const next = domains[(domain.rank + 1) % n];
+---
+
+<Layout
+  title={`${domain.name} — Sushant Lokhande`}
+  description={`${domain.name} projects by Sushant Lokhande. ${domain.tagline}`}
+>
+  <div class="dm-page dm-hue" style={`--h: ${domain.hue}`}>
+    <div class="dm-aurora" aria-hidden="true"><span></span><span></span></div>
+
+    <section class="mx-auto max-w-5xl px-6 pb-32 pt-32">
+      <a href="/projects/" class="font-mono text-xs text-muted transition-colors hover:text-accent">
+        ← all domains
+      </a>
+
+      <nav class="dm-rail" aria-label="Domains">
+        <div class="dm-rail-track">
+          {
+            domains.map((d) => (
+              <a
+                href={`/domains/${d.id}/`}
+                class:list={['dm-pill dm-hue', d.id === domain.id && 'is-on']}
+                style={`--h: ${d.hue}`}
+                aria-current={d.id === domain.id ? 'page' : undefined}
+              >
+                <span class="dm-pill-dot" />
+                {d.label}
+                <span class="dm-pill-n">{d.entries.length}</span>
+              </a>
+            ))
+          }
+        </div>
+      </nav>
+
+      <header class="mt-14">
+        <div class="dm-head-glyph" data-reveal>
+          <DomainGlyph name={domain.glyph} />
+        </div>
+        <p class="reveal mt-8 font-mono text-xs uppercase tracking-[0.2em] text-muted" style="--delay: 60ms">
+          <span class="dm-ink">{pad(domain.rank + 1)}</span> / {pad(n)} — domain
+        </p>
+        <h1
+          class="reveal mt-4 text-4xl font-semibold tracking-tight text-ink sm:text-6xl"
+          style="--delay: 120ms"
+        >
+          {domain.name}<span class="dm-ink">.</span>
+        </h1>
+        <p class="reveal mt-5 max-w-2xl text-lg leading-relaxed text-muted" style="--delay: 180ms">
+          {domain.tagline}
+        </p>
+        <div class="reveal mt-8 flex flex-wrap items-center gap-x-6 gap-y-3" style="--delay: 240ms">
+          <p class="font-mono text-xs text-muted">
+            <span class="dm-ink text-base font-semibold">{domain.entries.length}</span>
+            {domain.entries.length === 1 ? 'project' : 'projects'}
+          </p>
+          <ul class="dm-stack-list">
+            {domain.tech.map((t) => <li>{t}</li>)}
+          </ul>
+        </div>
+      </header>
+
+      <div class="mt-16 grid gap-5 sm:grid-cols-2">
+        {
+          domain.entries.map(({ project, angle }, i) => (
+            <div data-reveal style={`--reveal-delay: ${(i % 2) * 90}ms`}>
+              <DomainProjectCard
+                project={project}
+                angle={angle}
+                also={(memberships.get(project.id) ?? []).filter((d) => d.id !== domain.id)}
+              />
+            </div>
+          ))
+        }
+      </div>
+
+      <nav class="mt-24 grid gap-4 sm:grid-cols-2" aria-label="More domains">
+        {
+          [
+            { d: prev, dir: '← previous' },
+            { d: next, dir: 'next →' },
+          ].map(({ d, dir }) => (
+            <a href={`/domains/${d.id}/`} class="dm-hop card dm-hue" style={`--h: ${d.hue}`}>
+              <DomainGlyph name={d.glyph} />
+              <span>
+                <span class="block font-mono text-[11px] uppercase tracking-[0.16em] text-muted">{dir}</span>
+                <span class="mt-1 block font-semibold tracking-tight text-ink">{d.name}</span>
+              </span>
+            </a>
+          ))
+        }
+      </nav>
+
+      <p class="mt-12 text-center">
+        <a href="/projects/all/" class="font-mono text-sm text-muted transition-colors hover:text-accent">
+          see every project at once →
+        </a>
+      </p>
+    </section>
+  </div>
+</Layout>
+
+<script>
+  import { spotlight } from '../../scripts/spotlight';
+
+  spotlight('.dm-card');
+
+  // start the rail scrolled so the current domain sits in the middle
+  const track = document.querySelector<HTMLElement>('.dm-rail-track');
+  const on = track?.querySelector<HTMLElement>('.is-on');
+  if (track && on) track.scrollLeft = on.offsetLeft - (track.clientWidth - on.offsetWidth) / 2;
+</script>
