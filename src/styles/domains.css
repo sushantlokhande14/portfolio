@@ -384,3 +384,254 @@
     transition: none;
   }
 }
+
+/* ---------- /projects: the domain index ---------- */
+
+/* every word sits in the same grid cell, so the line never changes height */
+.dm-cycle {
+  display: grid;
+}
+
+.dm-word {
+  grid-area: 1 / 1;
+  padding-bottom: 0.08em;
+  background: linear-gradient(100deg, var(--dm), var(--dm-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  opacity: 0;
+  filter: blur(10px);
+  transform: translateY(0.38em);
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dm-word.is-on {
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+
+.dm-word.is-out {
+  transform: translateY(-0.38em);
+}
+
+.dm-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.dm-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 1.25rem;
+  overflow: hidden;
+  border-radius: 1rem;
+  padding: 1.1rem 1.4rem;
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s ease,
+    box-shadow 0.45s ease;
+}
+
+.dm-row::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(380px circle at var(--mx, 30%) var(--my, 50%), var(--dm-soft), transparent 70%);
+  transition: opacity 0.35s ease;
+}
+
+.dm-row:hover,
+.dm-row:focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--dm-line);
+  box-shadow: 0 22px 60px -24px var(--dm-line);
+  outline: none;
+}
+
+.dm-row:hover::before,
+.dm-row:focus-visible::before {
+  opacity: 1;
+}
+
+.dm-row > * {
+  position: relative;
+}
+
+.dm-row-rank {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-2);
+  transition: color 0.3s ease;
+}
+
+.dm-row:hover .dm-row-rank {
+  color: var(--dm);
+}
+
+.dm-row-glyph {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--line-1);
+  border-radius: 0.85rem;
+  color: var(--dm);
+  transition:
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.dm-row-glyph .dm-glyph {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.dm-row:hover .dm-row-glyph {
+  border-color: var(--dm-line);
+  background-color: var(--dm-soft);
+  transform: rotate(-8deg) scale(1.08);
+}
+
+.dm-row-main {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.dm-row-name {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink-1);
+}
+
+.dm-row-tag {
+  margin-top: 0.15rem;
+  overflow: hidden;
+  font-size: 0.875rem;
+  color: var(--ink-2);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* share of the biggest domain, grown in on reveal */
+.dm-row-bar {
+  display: block;
+  height: 3px;
+  margin-top: 0.7rem;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: var(--line-1);
+}
+
+.dm-row-bar > span {
+  display: block;
+  width: calc(var(--share) * 100%);
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--dm), var(--dm-2));
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+[data-reveal].is-visible .dm-row-bar > span {
+  transform: scaleX(1);
+  transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(var(--reveal-delay, 0ms) + 300ms);
+}
+
+.dm-row-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.55rem;
+}
+
+.dm-row-count {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.dm-row-count strong {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink-1);
+}
+
+/* the domain's covers, stacked; they fan out on hover */
+.dm-row-stack {
+  display: flex;
+  padding-left: 18px;
+}
+
+.dm-row-stack img {
+  width: 46px;
+  height: 27px;
+  margin-left: -18px;
+  border: 2px solid var(--bg-surface);
+  border-radius: 7px;
+  object-fit: cover;
+  box-shadow: 0 2px 8px var(--card-shadow);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition-delay: calc(var(--j) * 30ms);
+}
+
+.dm-row:hover .dm-row-stack img {
+  transform: translateX(calc((var(--j) - 3) * 7px)) translateY(-2px) rotate(calc((var(--j) - 1.5) * 5deg));
+}
+
+.dm-row-arrow {
+  color: var(--ink-2);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s ease;
+}
+
+.dm-row:hover .dm-row-arrow {
+  color: var(--dm);
+  transform: translateX(4px);
+}
+
+@media (max-width: 639px) {
+  .dm-row {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 0.9rem;
+    padding: 1rem;
+  }
+
+  .dm-row-rank,
+  .dm-row-stack,
+  .dm-row-arrow {
+    display: none;
+  }
+
+  .dm-row-tag {
+    white-space: normal;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dm-word {
+    transition: none;
+  }
+
+  .dm-row,
+  .dm-row:hover,
+  .dm-row:hover .dm-row-glyph,
+  .dm-row:hover .dm-row-stack img {
+    transform: none;
+  }
+
+  .dm-row-bar > span {
+    transform: none;
+  }
+}

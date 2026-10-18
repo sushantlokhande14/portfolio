@@ -1,33 +1,171 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import ProjectCard from '../../components/ProjectCard.astro';
+import DomainGlyph from '../../components/domains/DomainGlyph.astro';
+import { getDomains, pad } from '../../lib/domains';
+import '../../styles/domains.css';
 
-const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const domains = await getDomains();
+const projectCount = (await getCollection('projects')).length;
+const most = domains[0].entries.length;
 ---
 
 <Layout
   title="Projects — Sushant Lokhande"
-  description="All projects by Sushant Lokhande — ML systems, backends, distributed pipelines, and LLM apps."
+  description="Projects by Sushant Lokhande, grouped by domain: AI and LLM systems, distributed backends, C++ systems, search, hardware tooling and more."
 >
   <section class="mx-auto max-w-5xl px-6 pb-32 pt-36">
     <a href="/#projects" class="font-mono text-xs text-muted transition-colors hover:text-accent">
       ← home
     </a>
-    <p class="mt-8 font-mono text-xs uppercase tracking-[0.2em] text-muted">
-      <span class="text-accent">01</span> — projects
+    <p class="reveal mt-8 font-mono text-xs uppercase tracking-[0.2em] text-muted">
+      <span class="text-accent">02</span> — projects
     </p>
-    <h1 class="mt-4 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
-      All projects<span class="text-accent">.</span>
+    <h1
+      class="reveal mt-4 text-[clamp(2.4rem,6.4vw,4.75rem)] font-semibold leading-[1.04] tracking-tight text-ink"
+      style="--delay: 80ms"
+    >
+      <span class="sr-only">Projects by domain</span>
+      <span aria-hidden="true">
+        <span class="block">Looking for</span>
+        <span class="dm-cycle" data-cycle>
+          {
+            domains.map((d, i) => (
+              <span
+                class:list={['dm-word dm-hue', i === 0 && 'is-on']}
+                style={`--h: ${d.hue}`}
+                data-d={d.id}
+              >
+                {d.short}?
+              </span>
+            ))
+          }
+        </span>
+      </span>
     </h1>
-    <div class="mt-14 grid gap-5 sm:grid-cols-2">
+    <p class="reveal mt-7 max-w-2xl text-lg leading-relaxed text-muted" style="--delay: 160ms">
+      Ranked by how much I have built in each. Pick the one you are hiring for and see only the work
+      that fits it. A project that crosses lines shows up in every domain it belongs to.
+    </p>
+    <p class="reveal mt-6 font-mono text-xs text-muted" style="--delay: 220ms">
+      <span class="text-ink" data-count={projectCount}>{projectCount}</span> projects
+      <span class="mx-2 opacity-40">/</span>
+      <span class="text-ink" data-count={domains.length}>{domains.length}</span> domains
+    </p>
+
+    <ol class="dm-list mt-14">
       {
-        projects.map((project, i) => (
-          <div data-reveal style={`--reveal-delay: ${(i % 2) * 80}ms`}>
-            <ProjectCard project={project} />
-          </div>
+        domains.map((d, i) => (
+          <li data-reveal style={`--reveal-delay: ${i * 55}ms`}>
+            <a
+              href={`/domains/${d.id}/`}
+              class="dm-row card dm-hue"
+              style={`--h: ${d.hue}; --share: ${d.entries.length / most}`}
+              data-d={d.id}
+            >
+              <span class="dm-row-rank">{pad(i + 1)}</span>
+              <span class="dm-row-glyph">
+                <DomainGlyph name={d.glyph} />
+              </span>
+              <span class="dm-row-main">
+                <span class="dm-row-name">{d.name}</span>
+                <span class="dm-row-tag">{d.tagline}</span>
+                <span class="dm-row-bar" aria-hidden="true">
+                  <span />
+                </span>
+              </span>
+              <span class="dm-row-side">
+                <span class="dm-row-count">
+                  <strong>{d.entries.length}</strong> {d.entries.length === 1 ? 'project' : 'projects'}
+                </span>
+                <span class="dm-row-stack" aria-hidden="true">
+                  {d.entries
+                    .slice(0, 4)
+                    .map(({ project }, j) =>
+                      project.data.cover ? (
+                        <img src={project.data.cover} alt="" loading="lazy" style={`--j: ${j}`} />
+                      ) : null
+                    )}
+                </span>
+              </span>
+              <span class="dm-row-arrow" aria-hidden="true">
+                →
+              </span>
+            </a>
+          </li>
         ))
       }
-    </div>
+    </ol>
+
+    <p class="mt-14 text-center" data-reveal>
+      <a href="/projects/all/" class="font-mono text-sm text-muted transition-colors hover:text-accent">
+        or see all {projectCount} projects in one grid →
+      </a>
+    </p>
   </section>
 </Layout>
+
+<script>
+  import { spotlight } from '../../scripts/spotlight';
+
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const words = Array.from(document.querySelectorAll<HTMLElement>('[data-cycle] .dm-word'));
+  const rows = Array.from(document.querySelectorAll<HTMLElement>('.dm-row'));
+  const order = words.map((w) => w.dataset.d!);
+  let current = order[0];
+
+  // the headline word: the new one rises in from below, the old one leaves upward
+  function show(id: string) {
+    if (id === current) return;
+    current = id;
+    for (const w of words) {
+      if (w.dataset.d === id) {
+        w.style.transition = 'none';
+        w.classList.remove('is-out');
+        void w.offsetWidth;
+        w.style.transition = '';
+        w.classList.add('is-on');
+      } else if (w.classList.contains('is-on')) {
+        w.classList.remove('is-on');
+        w.classList.add('is-out');
+      }
+    }
+  }
+
+  // idle tour through the domains in rank order; any hover pauses it for a while
+  let pausedUntil = 0;
+  for (const row of rows) {
+    row.addEventListener('pointerenter', () => {
+      pausedUntil = Infinity;
+      show(row.dataset.d!);
+    });
+    row.addEventListener('pointerleave', () => {
+      pausedUntil = Date.now() + 4000;
+    });
+    row.addEventListener('focus', () => show(row.dataset.d!));
+  }
+
+  if (!reduced) {
+    setInterval(() => {
+      if (document.hidden || Date.now() < pausedUntil) return;
+      show(order[(order.indexOf(current) + 1) % order.length]);
+    }, 2600);
+  }
+
+  // count the totals up from zero
+  if (!reduced) {
+    for (const el of document.querySelectorAll<HTMLElement>('[data-count]')) {
+      const target = Number(el.dataset.count);
+      const start = performance.now();
+      const tick = (now: number) => {
+        const t = Math.min((now - start) / 1100, 1);
+        el.textContent = String(Math.round(target * (1 - Math.pow(1 - t, 3))));
+        if (t < 1) requestAnimationFrame(tick);
+      };
+      el.textContent = '0';
+      requestAnimationFrame(tick);
+    }
+  }
+
+  spotlight('.dm-row');
+</script>
