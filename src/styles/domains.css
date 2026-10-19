@@ -387,6 +387,38 @@
 
 /* ---------- /projects: the domain index ---------- */
 
+/* phones stack heading, map, list; wide screens keep the map beside both */
+.dm-index {
+  display: grid;
+  grid-template-areas: 'head' 'map' 'list' 'foot';
+  row-gap: 3rem;
+}
+
+.dm-index-head {
+  grid-area: head;
+}
+
+.dm-index-map {
+  grid-area: map;
+}
+
+.dm-index-list {
+  grid-area: list;
+}
+
+.dm-index-foot {
+  grid-area: foot;
+  margin-top: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .dm-index {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr);
+    grid-template-areas: 'head map' 'list map' 'foot foot';
+    column-gap: 3.5rem;
+  }
+}
+
 /* every word sits in the same grid cell, so the line never changes height */
 .dm-cycle {
   display: grid;
@@ -426,12 +458,12 @@
 .dm-row {
   position: relative;
   display: grid;
-  grid-template-columns: auto auto minmax(0, 1fr) auto auto;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1.1rem;
   overflow: hidden;
   border-radius: 1rem;
-  padding: 1.1rem 1.4rem;
+  padding: 1.1rem 1.25rem;
   transition:
     transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
     border-color 0.35s ease,
@@ -507,6 +539,13 @@
   flex-direction: column;
 }
 
+.dm-row-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
 .dm-row-name {
   font-size: 1.0625rem;
   font-weight: 600;
@@ -514,20 +553,44 @@
   color: var(--ink-1);
 }
 
-.dm-row-tag {
-  margin-top: 0.15rem;
-  overflow: hidden;
-  font-size: 0.875rem;
+.dm-row-count {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
   color: var(--ink-2);
-  text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.dm-row-count strong {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink-1);
+  transition: color 0.3s ease;
+}
+
+.dm-row:hover .dm-row-count strong {
+  color: var(--dm);
+}
+
+.dm-row-tag {
+  margin-top: 0.2rem;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+
+.dm-row-foot {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.75rem;
 }
 
 /* share of the biggest domain, grown in on reveal */
 .dm-row-bar {
   display: block;
+  flex: 1;
   height: 3px;
-  margin-top: 0.7rem;
   overflow: hidden;
   border-radius: 9999px;
   background: var(--line-1);
@@ -549,35 +612,16 @@
   transition-delay: calc(var(--reveal-delay, 0ms) + 300ms);
 }
 
-.dm-row-side {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.55rem;
-}
-
-.dm-row-count {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--ink-2);
-  white-space: nowrap;
-}
-
-.dm-row-count strong {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--ink-1);
-}
-
 /* the domain's covers, stacked; they fan out on hover */
 .dm-row-stack {
   display: flex;
+  flex: none;
   padding-left: 18px;
 }
 
 .dm-row-stack img {
-  width: 46px;
-  height: 27px;
+  width: 42px;
+  height: 25px;
   margin-left: -18px;
   border: 2px solid var(--bg-surface);
   border-radius: 7px;
@@ -603,19 +647,15 @@
 
 @media (max-width: 639px) {
   .dm-row {
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
     gap: 0.9rem;
     padding: 1rem;
   }
 
   .dm-row-rank,
-  .dm-row-stack,
   .dm-row-arrow {
     display: none;
-  }
-
-  .dm-row-tag {
-    white-space: normal;
   }
 }
 
@@ -633,5 +673,282 @@
 
   .dm-row-bar > span {
     transform: none;
+  }
+}
+
+/* ---------- the constellation map on /projects ---------- */
+
+.dm-map {
+  margin: 0;
+}
+
+.dm-map-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  font-family: var(--font-mono);
+}
+
+.dm-map-ring {
+  fill: none;
+  stroke: var(--line-1);
+  stroke-dasharray: 2 5;
+}
+
+.dm-link {
+  stroke: var(--ink-2);
+  stroke-width: 1;
+  stroke-linecap: round;
+  opacity: 0.28;
+  stroke-dasharray: var(--len);
+  stroke-dashoffset: var(--len);
+  transition:
+    opacity 0.4s ease,
+    stroke 0.4s ease,
+    stroke-width 0.4s ease;
+}
+
+.dm-map.is-in .dm-link {
+  stroke-dashoffset: 0;
+  transition:
+    stroke-dashoffset 1.3s cubic-bezier(0.65, 0, 0.35, 1) calc(var(--i) * 22ms + 250ms),
+    opacity 0.4s ease,
+    stroke 0.4s ease;
+}
+
+/* once drawn, the lines stretch with the drifting nodes, so drop the draw dash */
+.dm-map.is-drawn .dm-link {
+  stroke-dasharray: none;
+}
+
+.dm-map.has-focus .dm-link {
+  opacity: 0.06;
+}
+
+.dm-map.has-focus .dm-link.is-lit {
+  stroke: var(--dm);
+  stroke-width: 1.6;
+  opacity: 1;
+}
+
+/* lit lines carry a stream of dashes toward their domain */
+.dm-map.is-drawn.has-focus .dm-link.is-lit {
+  stroke-dasharray: 3 6;
+  animation: dm-flow 0.9s linear infinite;
+}
+
+@keyframes dm-flow {
+  from {
+    stroke-dashoffset: 9;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.dm-pnode,
+.dm-dnode {
+  transition: opacity 0.4s ease;
+}
+
+.dm-pnode {
+  cursor: default;
+}
+
+.dm-pnode-hit {
+  fill: transparent;
+}
+
+.dm-pnode-dot {
+  fill: var(--bg-surface);
+  stroke: var(--ink-2);
+  stroke-width: 1.4;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0);
+  transition:
+    transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+    fill 0.3s ease,
+    stroke 0.3s ease;
+}
+
+.dm-map.is-in .dm-pnode-dot {
+  transform: scale(1);
+  transition-delay: calc(var(--i) * 45ms + 900ms), 0s, 0s;
+}
+
+.dm-map.is-drawn .dm-pnode-dot {
+  transition-delay: 0s;
+}
+
+.dm-pnode-label {
+  font-size: 12px;
+  fill: var(--ink-1);
+  paint-order: stroke;
+  stroke: var(--bg-base);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.dm-map.has-focus .dm-pnode {
+  opacity: 0.22;
+}
+
+.dm-map.has-focus .dm-pnode.is-lit {
+  opacity: 1;
+}
+
+.dm-pnode.is-lit .dm-pnode-dot {
+  fill: var(--ink-1);
+  stroke: var(--ink-1);
+  transform: scale(1.25);
+}
+
+.dm-pnode.is-named .dm-pnode-label {
+  opacity: 1;
+}
+
+.dm-dnode {
+  outline: none;
+}
+
+.dm-dnode-halo {
+  fill: var(--dm-soft);
+  stroke: var(--dm-line);
+  stroke-width: 1;
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.dm-map.is-in .dm-dnode-halo {
+  opacity: 1;
+  transition-delay: calc(var(--i) * 60ms + 400ms);
+}
+
+.dm-dnode-core {
+  fill: var(--dm);
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0);
+  transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.dm-map.is-in .dm-dnode-core {
+  transform: scale(1);
+  transition-delay: calc(var(--i) * 60ms + 200ms);
+}
+
+.dm-map.is-drawn .dm-dnode-core,
+.dm-map.is-drawn .dm-dnode-halo {
+  transition-delay: 0s;
+}
+
+.dm-dnode-count {
+  font-size: 10px;
+  font-weight: 600;
+  fill: var(--bg-surface);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.dm-dnode-label {
+  font-size: 13px;
+  fill: var(--ink-2);
+  opacity: 0;
+  transition:
+    opacity 0.5s ease,
+    fill 0.3s ease;
+}
+
+.dm-map.is-in .dm-dnode-count,
+.dm-map.is-in .dm-dnode-label {
+  opacity: 1;
+  transition-delay: calc(var(--i) * 60ms + 700ms), 0s;
+}
+
+.dm-map.is-drawn .dm-dnode-count,
+.dm-map.is-drawn .dm-dnode-label {
+  transition-delay: 0s;
+}
+
+.dm-map.has-focus .dm-dnode {
+  opacity: 0.32;
+}
+
+.dm-map.has-focus .dm-dnode.is-lit {
+  opacity: 1;
+}
+
+.dm-dnode.is-lit .dm-dnode-label {
+  fill: var(--dm);
+}
+
+.dm-dnode.is-lit .dm-dnode-halo {
+  animation: dm-pulse 1.8s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+@keyframes dm-pulse {
+  from {
+    transform: scale(0.85);
+  }
+  60% {
+    transform: scale(1.35);
+    opacity: 0.25;
+  }
+  to {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+}
+
+.dm-map-cap {
+  min-height: 3.6rem;
+  margin-top: 1rem;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  text-align: center;
+}
+
+.dm-map-cap strong {
+  display: block;
+  font-weight: 600;
+  color: var(--dm, var(--ink-1));
+}
+
+@media (max-width: 639px) {
+  .dm-dnode-label {
+    font-size: 20px;
+  }
+
+  .dm-dnode-count {
+    font-size: 12px;
+  }
+
+  .dm-pnode-label {
+    font-size: 17px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dm-link,
+  .dm-pnode-dot,
+  .dm-dnode-core,
+  .dm-dnode-halo,
+  .dm-dnode-count,
+  .dm-dnode-label {
+    transition: none;
+  }
+
+  .dm-dnode.is-lit .dm-dnode-halo,
+  .dm-map.is-drawn.has-focus .dm-link.is-lit {
+    animation: none;
   }
 }

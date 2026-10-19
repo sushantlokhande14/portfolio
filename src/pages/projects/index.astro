@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import Constellation from '../../components/domains/Constellation.astro';
 import DomainGlyph from '../../components/domains/DomainGlyph.astro';
 import { getDomains, pad } from '../../lib/domains';
 import '../../styles/domains.css';
@@ -14,46 +15,48 @@ const most = domains[0].entries.length;
   title="Projects — Sushant Lokhande"
   description="Projects by Sushant Lokhande, grouped by domain: AI and LLM systems, distributed backends, C++ systems, search, hardware tooling and more."
 >
-  <section class="mx-auto max-w-5xl px-6 pb-32 pt-36">
-    <a href="/#projects" class="font-mono text-xs text-muted transition-colors hover:text-accent">
-      ← home
-    </a>
-    <p class="reveal mt-8 font-mono text-xs uppercase tracking-[0.2em] text-muted">
-      <span class="text-accent">02</span> — projects
-    </p>
-    <h1
-      class="reveal mt-4 text-[clamp(2.4rem,6.4vw,4.75rem)] font-semibold leading-[1.04] tracking-tight text-ink"
-      style="--delay: 80ms"
-    >
-      <span class="sr-only">Projects by domain</span>
-      <span aria-hidden="true">
-        <span class="block">Looking for</span>
-        <span class="dm-cycle" data-cycle>
-          {
-            domains.map((d, i) => (
-              <span
-                class:list={['dm-word dm-hue', i === 0 && 'is-on']}
-                style={`--h: ${d.hue}`}
-                data-d={d.id}
-              >
-                {d.short}?
-              </span>
-            ))
-          }
+  <section class="dm-index mx-auto max-w-6xl px-6 pb-32 pt-36">
+    <header class="dm-index-head">
+      <a href="/#projects" class="font-mono text-xs text-muted transition-colors hover:text-accent">
+        ← home
+      </a>
+      <p class="reveal mt-8 font-mono text-xs uppercase tracking-[0.2em] text-muted">
+        <span class="text-accent">02</span> — projects
+      </p>
+      <h1
+        class="reveal mt-4 text-[clamp(2.2rem,7.4vw,3.6rem)] font-semibold leading-[1.04] tracking-tight text-ink lg:text-[clamp(2.3rem,3.3vw,2.6rem)]"
+        style="--delay: 80ms"
+      >
+        <span class="sr-only">Projects by domain</span>
+        <span aria-hidden="true">
+          <span class="block">Looking for</span>
+          <span class="dm-cycle" data-cycle>
+            {
+              domains.map((d, i) => (
+                <span
+                  class:list={['dm-word dm-hue', i === 0 && 'is-on']}
+                  style={`--h: ${d.hue}`}
+                  data-d={d.id}
+                >
+                  {d.short}?
+                </span>
+              ))
+            }
+          </span>
         </span>
-      </span>
-    </h1>
-    <p class="reveal mt-7 max-w-2xl text-lg leading-relaxed text-muted" style="--delay: 160ms">
-      Ranked by how much I have built in each. Pick the one you are hiring for and see only the work
-      that fits it. A project that crosses lines shows up in every domain it belongs to.
-    </p>
-    <p class="reveal mt-6 font-mono text-xs text-muted" style="--delay: 220ms">
-      <span class="text-ink" data-count={projectCount}>{projectCount}</span> projects
-      <span class="mx-2 opacity-40">/</span>
-      <span class="text-ink" data-count={domains.length}>{domains.length}</span> domains
-    </p>
+      </h1>
+      <p class="reveal mt-7 max-w-2xl text-lg leading-relaxed text-muted" style="--delay: 160ms">
+        Ranked by how much I have built in each. Pick the one you are hiring for and see only the work
+        that fits it. A project that crosses lines shows up in every domain it belongs to.
+      </p>
+      <p class="reveal mt-6 font-mono text-xs text-muted" style="--delay: 220ms">
+        <span class="text-ink" data-count={projectCount}>{projectCount}</span> projects
+        <span class="mx-2 opacity-40">/</span>
+        <span class="text-ink" data-count={domains.length}>{domains.length}</span> domains
+      </p>
+    </header>
 
-    <ol class="dm-list mt-14">
+    <ol class="dm-list dm-index-list">
       {
         domains.map((d, i) => (
           <li data-reveal style={`--reveal-delay: ${i * 55}ms`}>
@@ -68,24 +71,26 @@ const most = domains[0].entries.length;
                 <DomainGlyph name={d.glyph} />
               </span>
               <span class="dm-row-main">
-                <span class="dm-row-name">{d.name}</span>
+                <span class="dm-row-top">
+                  <span class="dm-row-name">{d.name}</span>
+                  <span class="dm-row-count">
+                    <strong>{d.entries.length}</strong> {d.entries.length === 1 ? 'project' : 'projects'}
+                  </span>
+                </span>
                 <span class="dm-row-tag">{d.tagline}</span>
-                <span class="dm-row-bar" aria-hidden="true">
-                  <span />
-                </span>
-              </span>
-              <span class="dm-row-side">
-                <span class="dm-row-count">
-                  <strong>{d.entries.length}</strong> {d.entries.length === 1 ? 'project' : 'projects'}
-                </span>
-                <span class="dm-row-stack" aria-hidden="true">
-                  {d.entries
-                    .slice(0, 4)
-                    .map(({ project }, j) =>
-                      project.data.cover ? (
-                        <img src={project.data.cover} alt="" loading="lazy" style={`--j: ${j}`} />
-                      ) : null
-                    )}
+                <span class="dm-row-foot">
+                  <span class="dm-row-bar" aria-hidden="true">
+                    <span />
+                  </span>
+                  <span class="dm-row-stack" aria-hidden="true">
+                    {d.entries
+                      .slice(0, 4)
+                      .map(({ project }, j) =>
+                        project.data.cover ? (
+                          <img src={project.data.cover} alt="" loading="lazy" style={`--j: ${j}`} />
+                        ) : null
+                      )}
+                  </span>
                 </span>
               </span>
               <span class="dm-row-arrow" aria-hidden="true">
@@ -97,7 +102,13 @@ const most = domains[0].entries.length;
       }
     </ol>
 
-    <p class="mt-14 text-center" data-reveal>
+    <div class="dm-index-map">
+      <div class="lg:sticky lg:top-24" data-reveal>
+        <Constellation domains={domains} />
+      </div>
+    </div>
+
+    <p class="dm-index-foot text-center" data-reveal>
       <a href="/projects/all/" class="font-mono text-sm text-muted transition-colors hover:text-accent">
         or see all {projectCount} projects in one grid →
       </a>
@@ -111,6 +122,7 @@ const most = domains[0].entries.length;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const words = Array.from(document.querySelectorAll<HTMLElement>('[data-cycle] .dm-word'));
   const rows = Array.from(document.querySelectorAll<HTMLElement>('.dm-row'));
+  const map = document.querySelector<HTMLElement>('[data-dm-map]');
   const order = words.map((w) => w.dataset.d!);
   let current = order[0];
 
@@ -132,23 +144,51 @@ const most = domains[0].entries.length;
     }
   }
 
+  const focusMap = (key: string | null) => map?.dispatchEvent(new CustomEvent('dm-focus', { detail: key }));
+
   // idle tour through the domains in rank order; any hover pauses it for a while
   let pausedUntil = 0;
+  let touring = false;
+  const pause = () => {
+    pausedUntil = Infinity;
+    touring = false;
+  };
+  const resume = () => {
+    pausedUntil = Date.now() + 4000;
+  };
+
   for (const row of rows) {
+    const id = row.dataset.d!;
     row.addEventListener('pointerenter', () => {
-      pausedUntil = Infinity;
-      show(row.dataset.d!);
+      pause();
+      show(id);
+      focusMap(id);
     });
     row.addEventListener('pointerleave', () => {
-      pausedUntil = Date.now() + 4000;
+      resume();
+      focusMap(null);
     });
-    row.addEventListener('focus', () => show(row.dataset.d!));
+    row.addEventListener('focus', () => {
+      show(id);
+      focusMap(id);
+    });
   }
+
+  map?.addEventListener('dm-hover', (e) => {
+    const key = (e as CustomEvent<string | null>).detail;
+    if (key === null) return resume();
+    pause();
+    if (!key.startsWith('p:')) show(key);
+  });
 
   if (!reduced) {
     setInterval(() => {
       if (document.hidden || Date.now() < pausedUntil) return;
-      show(order[(order.indexOf(current) + 1) % order.length]);
+      // the first step lights up the word already showing; later steps move on
+      const next = touring ? order[(order.indexOf(current) + 1) % order.length] : current;
+      touring = true;
+      show(next);
+      focusMap(next);
     }, 2600);
   }
 

@@ -1,0 +1,209 @@
+---
+import type { Domain } from '../../lib/domains';
+import { MAP, layoutMap } from '../../lib/constellation';
+import '../../styles/domains.css';
+
+interface Props {
+  domains: Domain[];
+}
+
+const { domains } = Astro.props;
+const { domains: nodes, projects, links } = layoutMap(domains);
+const names = new Map(domains.map((d) => [d.id, d.name]));
+---
+
+<figure class="dm-map" data-dm-map>
+  <svg
+    viewBox={`0 0 ${MAP.width} ${MAP.height}`}
+    class="dm-map-svg"
+    role="img"
+    aria-label="Map of every project and the domains it belongs to"
+  >
+    <circle class="dm-map-ring" cx={MAP.cx} cy={MAP.cy} r={MAP.ring} />
+    <g>
+      {
+        links.map((l, i) => (
+          <line
+            class="dm-link dm-hue"
+            style={`--h: ${l.hue}; --len: ${l.len + 16}; --i: ${i}`}
+            data-d={l.d}
+            data-p={l.p}
+            x1={l.x1}
+            y1={l.y1}
+            x2={l.x2}
+            y2={l.y2}
+          />
+        ))
+      }
+    </g>
+    <g>
+      {
+        projects.map((p, i) => (
+          <g class="dm-pnode" data-p={p.id} data-ds={p.domains.join(' ')} data-x={p.x} data-y={p.y} style={`--i: ${i}`}>
+            <circle class="dm-pnode-hit" cx={p.x} cy={p.y} r="13" />
+            <circle class="dm-pnode-dot" cx={p.x} cy={p.y} r={p.r} />
+            <text class="dm-pnode-label" x={p.lx} y={p.ly} text-anchor={p.anchor}>
+              {p.title}
+            </text>
+          </g>
+        ))
+      }
+    </g>
+    <g>
+      {
+        nodes.map((d, i) => (
+          <a
+            href={`/domains/${d.id}/`}
+            class="dm-dnode dm-hue"
+            style={`--h: ${d.hue}; --i: ${i}`}
+            data-d={d.id}
+            data-x={d.x}
+            data-y={d.y}
+            aria-label={`${names.get(d.id)}, ${d.count} projects`}
+          >
+            <circle class="dm-dnode-halo" cx={d.x} cy={d.y} r={d.r + 7} />
+            <circle class="dm-dnode-core" cx={d.x} cy={d.y} r={d.r} />
+            <text class="dm-dnode-count" x={d.x} y={d.y + 3.6} text-anchor="middle">
+              {d.count}
+            </text>
+            <text class="dm-dnode-label" x={d.lx} y={d.ly} text-anchor={d.anchor}>
+              {d.label}
+            </text>
+          </a>
+        ))
+      }
+    </g>
+  </svg>
+
+  <figcaption class="dm-map-cap" aria-live="polite">
+    <span data-cap="">Each line is a project joining a domain. Hover one to trace it.</span>
+    {
+      domains.map((d) => (
+        <span data-cap={d.id} class="dm-hue" style={`--h: ${d.hue}`} hidden>
+          <strong>{d.name}</strong>
+          {d.entries.map(({ project }) => project.data.title).join(' · ')}
+        </span>
+      ))
+    }
+    {
+      projects.map((p) => (
+        <span data-cap={`p:${p.id}`} hidden>
+          <strong>{p.title}</strong>
+          {p.domains.map((id) => names.get(id)).join(' · ')}
+        </span>
+      ))
+    }
+  </figcaption>
+</figure>
+
+<script>
+  // Hover a node to light up what it connects to. The page can also focus the
+  // map by dispatching `dm-focus` (detail: a domain id, "p:<project id>" or
+  // null), and the map reports its own hovers as a bubbling `dm-hover`.
+  function initMap(root: HTMLElement) {
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const pnodes = Array.from(root.querySelectorAll<SVGGElement>('.dm-pnode'));
+    const dnodes = Array.from(root.querySelectorAll<SVGAElement>('.dm-dnode'));
+    const links = Array.from(root.querySelectorAll<SVGLineElement>('.dm-link'));
+    const caps = Array.from(root.querySelectorAll<HTMLElement>('[data-cap]'));
+
+    let focused: string | null = null;
+
+    function focus(key: string | null) {
+      if (key === focused) return;
+      focused = key;
+      const litD = new Set<string>();
+      const litP = new Set<string>();
+      if (key?.startsWith('p:')) {
+        const node = pnodes.find((p) => p.dataset.p === key.slice(2));
+        if (node) {
+          litP.add(node.dataset.p!);
+          node.dataset.ds!.split(' ').forEach((d) => litD.add(d));
+        }
+      } else if (key) {
+        litD.add(key);
+        links.forEach((l) => l.dataset.d === key && litP.add(l.dataset.p!));
+      }
+      root.classList.toggle('has-focus', key !== null);
+      links.forEach((l) => l.classList.toggle('is-lit', litD.has(l.dataset.d!) && litP.has(l.dataset.p!)));
+      pnodes.forEach((p) => {
+        p.classList.toggle('is-lit', litP.has(p.dataset.p!));
+        // name only the hovered project; a whole domain's names would collide
+        p.classList.toggle('is-named', key === `p:${p.dataset.p}`);
+      });
+      dnodes.forEach((d) => d.classList.toggle('is-lit', litD.has(d.dataset.d!)));
+      caps.forEach((c) => (c.hidden = c.dataset.cap !== (key ?? '')));
+    }
+
+    root.addEventListener('dm-focus', (e) => focus((e as CustomEvent<string | null>).detail));
+
+    const hover = (key: string | null) => {
+      focus(key);
+      root.dispatchEvent(new CustomEvent('dm-hover', { detail: key, bubbles: true }));
+    };
+    pnodes.forEach((p) => {
+      p.addEventListener('pointerenter', () => hover(`p:${p.dataset.p}`));
+      p.addEventListener('pointerleave', () => hover(null));
+    });
+    dnodes.forEach((d) => {
+      d.addEventListener('pointerenter', () => hover(d.dataset.d!));
+      d.addEventListener('pointerleave', () => hover(null));
+      d.addEventListener('focus', () => hover(d.dataset.d!));
+      d.addEventListener('blur', () => hover(null));
+    });
+
+    // draw in the first time the map is on screen
+    const drawIn = () => {
+      root.classList.add('is-in');
+      setTimeout(() => root.classList.add('is-drawn'), reduced ? 0 : 2400);
+    };
+
+    // every node drifts on its own slow orbit; the lines follow their ends
+    const bodies = [...pnodes, ...dnodes].map((el, i) => ({
+      el,
+      x: Number(el.dataset.x),
+      y: Number(el.dataset.y),
+      amp: el.classList.contains('dm-pnode') ? 3.4 : 1.6,
+      speed: 0.00042 + (i % 7) * 0.00005,
+      phase: i * 1.93,
+      ox: 0,
+      oy: 0,
+    }));
+    const byKey = new Map(bodies.map((b) => [b.el.dataset.p ?? `d:${b.el.dataset.d}`, b]));
+    const ends = links.map((el) => ({ el, p: byKey.get(el.dataset.p!)!, d: byKey.get(`d:${el.dataset.d}`)! }));
+
+    let raf = 0;
+    const frame = (t: number) => {
+      for (const b of bodies) {
+        b.ox = Math.sin(t * b.speed + b.phase) * b.amp;
+        b.oy = Math.cos(t * b.speed * 1.27 + b.phase * 0.6) * b.amp;
+        b.el.setAttribute('transform', `translate(${b.ox.toFixed(2)} ${b.oy.toFixed(2)})`);
+      }
+      for (const { el, p, d } of ends) {
+        el.setAttribute('x1', (p.x + p.ox).toFixed(2));
+        el.setAttribute('y1', (p.y + p.oy).toFixed(2));
+        el.setAttribute('x2', (d.x + d.ox).toFixed(2));
+        el.setAttribute('y2', (d.y + d.oy).toFixed(2));
+      }
+      raf = requestAnimationFrame(frame);
+    };
+
+    let onScreen = false;
+    const run = () => {
+      cancelAnimationFrame(raf);
+      if (!reduced && onScreen && !document.hidden) raf = requestAnimationFrame(frame);
+    };
+    document.addEventListener('visibilitychange', run);
+
+    new IntersectionObserver(
+      ([entry]) => {
+        onScreen = entry.isIntersecting;
+        if (onScreen && !root.classList.contains('is-in')) drawIn();
+        run();
+      },
+      { threshold: 0.15 }
+    ).observe(root);
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-dm-map]').forEach((el) => initMap(el));
+</script>
