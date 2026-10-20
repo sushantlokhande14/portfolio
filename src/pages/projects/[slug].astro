@@ -1,6 +1,8 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import { getDomains, domainsByProject } from '../../lib/domains';
+import '../../styles/domains.css';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -12,11 +14,16 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { Content } = await render(project);
+const domains = domainsByProject(await getDomains()).get(project.id) ?? [];
 ---
 
 <Layout title={`${project.data.title} — Sushant Lokhande`} description={project.data.summary}>
   <article class="mx-auto max-w-3xl px-6 pb-28 pt-36">
-    <a href="/#projects" class="font-mono text-xs text-muted transition-colors hover:text-accent">
+    <a
+      href="/#projects"
+      class="font-mono text-xs text-muted transition-colors hover:text-accent"
+      data-back
+    >
       ← all projects
     </a>
     <h1 class="mt-8 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
@@ -37,6 +44,22 @@ const { Content } = await render(project);
         <a href={project.data.live} class="text-accent hover:underline">live ↗</a>
       )}
     </div>
+    {domains.length > 0 && (
+      <div class="mt-5 flex flex-wrap items-center gap-2">
+        <span class="dm-also-label">domains</span>
+        {domains.map((d) => (
+          <a
+            href={`/domains/${d.id}/`}
+            class="dm-chip dm-hue"
+            style={`--h: ${d.hue}`}
+            data-d={d.id}
+            data-name={d.name}
+          >
+            {d.name}
+          </a>
+        ))}
+      </div>
+    )}
     {project.data.cover && (
       <img
         src={project.data.cover}
@@ -52,3 +75,29 @@ const { Content } = await render(project);
     </div>
   </article>
 </Layout>
+
+<script>
+  // Came here from a domain page or the index? Point "back" there, and go back
+  // through history so the visitor lands where they were on that page.
+  const back = document.querySelector<HTMLAnchorElement>('[data-back]');
+  try {
+    const ref = new URL(document.referrer);
+    if (back && ref.origin === location.origin) {
+      const id = ref.pathname.match(/^\/domains\/([^/]+)\/?$/)?.[1];
+      const chip = id ? document.querySelector<HTMLElement>(`.dm-chip[data-d="${id}"]`) : null;
+      const index = /^\/projects\/(all\/)?$/.test(ref.pathname);
+      if (chip || index) {
+        back.href = ref.pathname;
+        if (chip) back.textContent = `← ${chip.dataset.name}`;
+        back.addEventListener('click', (e) => {
+          if (history.length > 1) {
+            e.preventDefault();
+            history.back();
+          }
+        });
+      }
+    }
+  } catch {
+    // no referrer: keep the default link home
+  }
+</script>
