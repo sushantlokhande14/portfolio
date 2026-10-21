@@ -11,6 +11,9 @@ interface Props {
   noindex?: boolean;
   // a page that brings its own look: no nav, no footer, no backdrop
   bare?: boolean;
+  // morph between pages that also opt in (the domain pages and case studies);
+  // the morph styles live in styles/domains.css
+  viewTransitions?: boolean;
 }
 
 const {
@@ -18,6 +21,7 @@ const {
   description = 'Portfolio of Sushant Lokhande — software engineer and CS grad student at SJSU.',
   noindex = false,
   bare = false,
+  viewTransitions = false,
 } = Astro.props;
 ---
 
@@ -29,7 +33,26 @@ const {
       // defaults to light unless the visitor has explicitly chosen dark
       const stored = localStorage.getItem('theme');
       document.documentElement.classList.toggle('dark', stored === 'dark');
+      // arriving through a view transition: the morph is the entrance, so marked
+      // elements skip their load-time reveal. pagereveal fires before first
+      // paint, so this has to be in the head.
+      addEventListener('pagereveal', (e) => {
+        if (e.viewTransition) document.documentElement.classList.add('vt-arrive');
+      });
     </script>
+    {/* inline rather than in a stylesheet, so the opt-in is already there when
+        the page being opened is revealed */}
+    {
+      viewTransitions && (
+        <style is:inline>
+          @media (prefers-reduced-motion: no-preference) {
+            @view-transition {
+              navigation: auto;
+            }
+          }
+        </style>
+      )
+    }
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

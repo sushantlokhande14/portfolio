@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
+import '../../styles/domains.css';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 ---
@@ -9,6 +10,7 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.order -
 <Layout
   title="All projects — Sushant Lokhande"
   description="All projects by Sushant Lokhande — ML systems, backends, distributed pipelines, and LLM apps."
+  viewTransitions
 >
   <section class="mx-auto max-w-5xl px-6 pb-32 pt-36">
     <a href="/projects/" class="font-mono text-xs text-muted transition-colors hover:text-accent">

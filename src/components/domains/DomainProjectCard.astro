@@ -18,7 +18,7 @@ const { title, subtitle, summary, cover, tech } = project.data;
   {
     cover && (
       <div class="dm-card-cover">
-        <img src={cover} alt="" loading="lazy" />
+        <img src={cover} alt="" loading="lazy" style={`view-transition-name: cover-${project.id}`} />
       </div>
     )
   }

@@ -13,7 +13,13 @@ const { project } = Astro.props;
   class="card group flex h-full flex-col overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:border-ink/20"
 >
   {project.data.cover && (
-    <img src={project.data.cover} alt="" loading="lazy" class="aspect-[16/8] w-full object-cover" />
+    <img
+      src={project.data.cover}
+      alt=""
+      loading="lazy"
+      class="aspect-[16/8] w-full object-cover"
+      style={`view-transition-name: cover-${project.id}`}
+    />
   )}
   <div class="flex flex-1 flex-col justify-between p-6">
     <div>

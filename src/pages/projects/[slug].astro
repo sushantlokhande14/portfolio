@@ -17,7 +17,11 @@ const { Content } = await render(project);
 const domains = domainsByProject(await getDomains()).get(project.id) ?? [];
 ---
 
-<Layout title={`${project.data.title} — Sushant Lokhande`} description={project.data.summary}>
+<Layout
+  title={`${project.data.title} — Sushant Lokhande`}
+  description={project.data.summary}
+  viewTransitions
+>
   <article class="mx-auto max-w-3xl px-6 pb-28 pt-36">
     <a
       href="/#projects"
@@ -64,6 +68,7 @@ const domains = domainsByProject(await getDomains()).get(project.id) ?? [];
       <img
         src={project.data.cover}
         alt=""
+        style={`view-transition-name: cover-${project.id}`}
         class="mt-10 aspect-[16/7] w-full rounded-2xl border border-line object-cover"
       />
     )}

@@ -25,6 +25,7 @@ const next = domains[(domain.rank + 1) % n];
 <Layout
   title={`${domain.name} — Sushant Lokhande`}
   description={`${domain.name} projects by Sushant Lokhande. ${domain.tagline}`}
+  viewTransitions
 >
   <div class="dm-page dm-hue" style={`--h: ${domain.hue}`}>
     <div class="dm-aurora" aria-hidden="true"><span></span><span></span></div>
@@ -54,7 +55,12 @@ const next = domains[(domain.rank + 1) % n];
       </nav>
 
       <header class="mt-14">
-        <div class="dm-head-glyph" data-reveal>
+        <div
+          class="dm-head-glyph"
+          style={`view-transition-name: dm-glyph-${domain.id}`}
+          data-reveal
+          data-vt
+        >
           <DomainGlyph name={domain.glyph} />
         </div>
         <p class="reveal mt-8 font-mono text-xs uppercase tracking-[0.2em] text-muted" style="--delay: 60ms">
@@ -63,8 +69,11 @@ const next = domains[(domain.rank + 1) % n];
         <h1
           class="reveal mt-4 text-4xl font-semibold tracking-tight text-ink sm:text-6xl"
           style="--delay: 120ms"
+          data-vt
         >
-          {domain.name}<span class="dm-ink">.</span>
+          <span class="inline-block" style={`view-transition-name: dm-name-${domain.id}`}>
+            {domain.name}
+          </span><span class="dm-ink">.</span>
         </h1>
         <p class="reveal mt-5 max-w-2xl text-lg leading-relaxed text-muted" style="--delay: 180ms">
           {domain.tagline}

@@ -14,6 +14,7 @@ const most = domains[0].entries.length;
 <Layout
   title="Projects — Sushant Lokhande"
   description="Projects by Sushant Lokhande, grouped by domain: AI and LLM systems, distributed backends, C++ systems, search, hardware tooling and more."
+  viewTransitions
 >
   <section class="dm-index mx-auto max-w-6xl px-6 pb-32 pt-36">
     <header class="dm-index-head">
@@ -67,12 +68,14 @@ const most = domains[0].entries.length;
               data-d={d.id}
             >
               <span class="dm-row-rank">{pad(i + 1)}</span>
-              <span class="dm-row-glyph">
+              <span class="dm-row-glyph" style={`view-transition-name: dm-glyph-${d.id}`}>
                 <DomainGlyph name={d.glyph} />
               </span>
               <span class="dm-row-main">
                 <span class="dm-row-top">
-                  <span class="dm-row-name">{d.name}</span>
+                  <span class="dm-row-name" style={`view-transition-name: dm-name-${d.id}`}>
+                    {d.name}
+                  </span>
                   <span class="dm-row-count">
                     <strong>{d.entries.length}</strong> {d.entries.length === 1 ? 'project' : 'projects'}
                   </span>

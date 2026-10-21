@@ -952,3 +952,51 @@
     animation: none;
   }
 }
+
+/* ---------- view transitions: /projects <-> /domains/<id> <-> case studies ---------- */
+
+/* pages opt in through Layout's viewTransitions prop; the nav stays put across the swap */
+#site-nav {
+  view-transition-name: site-nav;
+}
+
+::view-transition-group(*) {
+  animation-duration: 0.6s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+::view-transition-old(root) {
+  animation: 0.25s ease both dm-vt-out;
+}
+
+::view-transition-new(root) {
+  animation: 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both dm-vt-in;
+}
+
+@keyframes dm-vt-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes dm-vt-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+/* arriving through a transition (.vt-arrive, set in Layout.astro): the
+   morph is the entrance, so the elements that morph skip their own reveal */
+.vt-arrive [data-vt],
+.vt-arrive .dm-list > [data-reveal] {
+  animation: none;
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+.vt-arrive [data-vt] .dm-glyph > * {
+  stroke-dashoffset: 0;
+  transition: none;
+}
