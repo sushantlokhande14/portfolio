@@ -14,6 +14,7 @@ Personal portfolio. Dark, technical, minimal. Built with [Astro](https://astro.b
 | What | Where |
 | :-- | :-- |
 | Add/edit a project | Drop a `.md` file in `src/content/projects/` — `featured: true` puts it on the homepage, each file gets its own page at `/projects/<filename>/` |
+| Put a project in a domain | Add it to that domain's `projects` in `src/data/domains.ts`, with one line on why it belongs there. A project can sit in several domains; `/projects/` ranks domains by how many projects they hold and each gets a page at `/domains/<id>/`. The build fails if a project is in no domain |
 | Add/edit experience | Drop a `.md` file in `src/content/experience/` |
 | Name, tagline, links, about, skills | Edit `src/data/site.json` |
 | Résumé | Replace `public/resume.pdf` |
