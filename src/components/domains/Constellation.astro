@@ -10,6 +10,7 @@ interface Props {
 const { domains } = Astro.props;
 const { domains: nodes, projects, links } = layoutMap(domains);
 const names = new Map(domains.map((d) => [d.id, d.name]));
+const info = new Map(domains.flatMap((d) => d.entries.map(({ project }) => [project.id, project.data] as const)));
 ---
 
 <figure class="dm-map" data-dm-map>
@@ -39,13 +40,22 @@ const names = new Map(domains.map((d) => [d.id, d.name]));
     <g>
       {
         projects.map((p, i) => (
-          <g class="dm-pnode" data-p={p.id} data-ds={p.domains.join(' ')} data-x={p.x} data-y={p.y} style={`--i: ${i}`}>
+          <a
+            href={`/projects/${p.id}/`}
+            class="dm-pnode"
+            style={`--i: ${i}`}
+            data-p={p.id}
+            data-ds={p.domains.join(' ')}
+            data-x={p.x}
+            data-y={p.y}
+            data-title={p.title}
+            data-cover={info.get(p.id)?.cover}
+            data-summary={info.get(p.id)?.summary}
+            aria-label={p.title}
+          >
             <circle class="dm-pnode-hit" cx={p.x} cy={p.y} r="13" />
             <circle class="dm-pnode-dot" cx={p.x} cy={p.y} r={p.r} />
-            <text class="dm-pnode-label" x={p.lx} y={p.ly} text-anchor={p.anchor}>
-              {p.title}
-            </text>
-          </g>
+          </a>
         ))
       }
     </g>
@@ -75,8 +85,16 @@ const names = new Map(domains.map((d) => [d.id, d.name]));
     </g>
   </svg>
 
+  <!-- hover card for a project dot, filled from the dot's data attributes -->
+  <div class="dm-tip card" aria-hidden="true">
+    <img class="dm-tip-cover" alt="" />
+    <span class="dm-tip-body">
+      <strong class="dm-tip-title"></strong>
+      <span class="dm-tip-desc"></span>
+    </span>
+  </div>
+
   <figcaption class="dm-map-cap" aria-live="polite">
-    <span data-cap="">Each line is a project joining a domain. Hover one to trace it.</span>
     {
       domains.map((d) => (
         <span data-cap={d.id} class="dm-hue" style={`--h: ${d.hue}`} hidden>
@@ -100,12 +118,18 @@ const names = new Map(domains.map((d) => [d.id, d.name]));
   // Hover a node to light up what it connects to. The page can also focus the
   // map by dispatching `dm-focus` (detail: a domain id, "p:<project id>" or
   // null), and the map reports its own hovers as a bubbling `dm-hover`.
+  // Clicking a project dot fires a cancelable `dm-pick` first; a page that
+  // handles it (the home carousel) can keep the dot from navigating.
   function initMap(root: HTMLElement) {
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const pnodes = Array.from(root.querySelectorAll<SVGGElement>('.dm-pnode'));
+    const pnodes = Array.from(root.querySelectorAll<SVGAElement>('.dm-pnode'));
     const dnodes = Array.from(root.querySelectorAll<SVGAElement>('.dm-dnode'));
     const links = Array.from(root.querySelectorAll<SVGLineElement>('.dm-link'));
     const caps = Array.from(root.querySelectorAll<HTMLElement>('[data-cap]'));
+    const tip = root.querySelector<HTMLElement>('.dm-tip')!;
+    const tipCover = tip.querySelector<HTMLImageElement>('.dm-tip-cover')!;
+    const tipTitle = tip.querySelector<HTMLElement>('.dm-tip-title')!;
+    const tipDesc = tip.querySelector<HTMLElement>('.dm-tip-desc')!;
 
     let focused: string | null = null;
 
@@ -126,24 +150,60 @@ const names = new Map(domains.map((d) => [d.id, d.name]));
       }
       root.classList.toggle('has-focus', key !== null);
       links.forEach((l) => l.classList.toggle('is-lit', litD.has(l.dataset.d!) && litP.has(l.dataset.p!)));
-      pnodes.forEach((p) => {
-        p.classList.toggle('is-lit', litP.has(p.dataset.p!));
-        // name only the hovered project; a whole domain's names would collide
-        p.classList.toggle('is-named', key === `p:${p.dataset.p}`);
-      });
+      pnodes.forEach((p) => p.classList.toggle('is-lit', litP.has(p.dataset.p!)));
       dnodes.forEach((d) => d.classList.toggle('is-lit', litD.has(d.dataset.d!)));
-      caps.forEach((c) => (c.hidden = c.dataset.cap !== (key ?? '')));
+      caps.forEach((c) => (c.hidden = c.dataset.cap !== key));
     }
 
-    root.addEventListener('dm-focus', (e) => focus((e as CustomEvent<string | null>).detail));
+    // focus asked for before the lines have drawn in waits, so the draw-in
+    // plays across the whole map first
+    let pending: string | null | undefined;
+    root.addEventListener('dm-focus', (e) => {
+      const key = (e as CustomEvent<string | null>).detail;
+      if (root.classList.contains('is-drawn')) focus(key);
+      else pending = key;
+    });
+
+    // the hover card sits above the dot, or below it near the top of the map
+    function showTip(node: SVGAElement) {
+      const dot = node.querySelector('.dm-pnode-dot')!.getBoundingClientRect();
+      const box = root.getBoundingClientRect();
+      const half = Math.min(140, box.width / 2 - 8);
+      const x = Math.min(Math.max(dot.left + dot.width / 2 - box.left, half + 4), box.width - half - 4);
+      const below = dot.top - box.top < box.height * 0.32;
+      tip.style.setProperty('--x', `${x}px`);
+      tip.style.setProperty('--y', `${(below ? dot.bottom : dot.top) - box.top}px`);
+      tip.classList.toggle('is-below', below);
+      const cover = node.dataset.cover;
+      tipCover.hidden = !cover;
+      if (cover) tipCover.src = cover;
+      tipTitle.textContent = node.dataset.title ?? '';
+      tipDesc.textContent = node.dataset.summary ?? '';
+      tip.classList.add('is-on');
+    }
+    const hideTip = () => tip.classList.remove('is-on');
 
     const hover = (key: string | null) => {
       focus(key);
       root.dispatchEvent(new CustomEvent('dm-hover', { detail: key, bubbles: true }));
     };
     pnodes.forEach((p) => {
-      p.addEventListener('pointerenter', () => hover(`p:${p.dataset.p}`));
-      p.addEventListener('pointerleave', () => hover(null));
+      const enter = () => {
+        hover(`p:${p.dataset.p}`);
+        showTip(p);
+      };
+      const leave = () => {
+        hover(null);
+        hideTip();
+      };
+      p.addEventListener('pointerenter', enter);
+      p.addEventListener('pointerleave', leave);
+      p.addEventListener('focus', enter);
+      p.addEventListener('blur', leave);
+      p.addEventListener('click', (e) => {
+        const pick = new CustomEvent('dm-pick', { detail: p.dataset.p, bubbles: true, cancelable: true });
+        if (!root.dispatchEvent(pick)) e.preventDefault();
+      });
     });
     dnodes.forEach((d) => {
       d.addEventListener('pointerenter', () => hover(d.dataset.d!));
@@ -155,7 +215,14 @@ const names = new Map(domains.map((d) => [d.id, d.name]));
     // draw in the first time the map is on screen
     const drawIn = () => {
       root.classList.add('is-in');
-      setTimeout(() => root.classList.add('is-drawn'), reduced ? 0 : 2400);
+      setTimeout(
+        () => {
+          root.classList.add('is-drawn');
+          if (pending !== undefined && focused === null) focus(pending);
+          pending = undefined;
+        },
+        reduced ? 0 : 2400
+      );
     };
 
     // every node drifts on its own slow orbit; the lines follow their ends

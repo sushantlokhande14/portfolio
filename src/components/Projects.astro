@@ -1,12 +1,15 @@
 ---
 import { getCollection } from 'astro:content';
 import SectionHeading from './SectionHeading.astro';
+import Constellation from './domains/Constellation.astro';
+import { getDomains } from '../lib/domains';
 
 // show every project; featured ones lead, then the rest, each by order
 const projects = (await getCollection('projects')).sort((a, b) => {
   if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
   return a.data.order - b.data.order;
 });
+const domains = await getDomains();
 ---
 
 <section id="projects" class="scroll-mt-14 overflow-x-clip py-32">
@@ -33,7 +36,7 @@ const projects = (await getCollection('projects')).sort((a, b) => {
     <div class="pc-stage">
       {
         projects.map((p, i) => (
-          <a href={`/projects/${p.id}/`} class="pc-slide" data-index={i}>
+          <a href={`/projects/${p.id}/`} class="pc-slide" data-index={i} data-id={p.id}>
             <article class="pc-card card">
               {p.data.cover && <img src={p.data.cover} alt="" class="pc-cover" />}
               <div class="pc-body">
@@ -86,7 +89,12 @@ const projects = (await getCollection('projects')).sort((a, b) => {
     }
   </div>
 
-  <div class="mt-12 text-center" data-reveal>
+  <!-- which domains the centered project belongs to; click a dot to spin to it -->
+  <div class="mx-auto mt-16 max-w-2xl px-6" data-reveal>
+    <Constellation domains={domains} />
+  </div>
+
+  <div class="mt-10 text-center" data-reveal>
     <a href="/projects/" class="font-mono text-sm text-muted transition-colors hover:text-accent">
       all projects →
     </a>
@@ -159,10 +167,34 @@ const projects = (await getCollection('projects')).sort((a, b) => {
       dots.forEach((dot, i) => dot.classList.toggle('is-on', i === active));
     }
 
+    // the domain map under the carousel traces the centered project; hovering
+    // the map shows something else for a moment, and leaving it comes back here
+    const map = section?.querySelector<HTMLElement>('[data-dm-map]');
+    const showOnMap = () =>
+      map?.dispatchEvent(new CustomEvent('dm-focus', { detail: `p:${slides[active].dataset.id}` }));
+
     function go(to: number) {
       active = ((to % n) + n) % n;
       layout();
+      showOnMap();
     }
+
+    map?.addEventListener('dm-hover', (e) => {
+      if ((e as CustomEvent<string | null>).detail === null) showOnMap();
+    });
+
+    // clicking a project dot spins the carousel to it instead of leaving the page
+    map?.addEventListener('dm-pick', (e) => {
+      const i = slides.findIndex((s) => s.dataset.id === (e as CustomEvent<string>).detail);
+      if (i < 0) return;
+      e.preventDefault();
+      go(i);
+      const r = root.getBoundingClientRect();
+      if (r.top < 0 || r.bottom > innerHeight) {
+        const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        root.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
+      }
+    });
 
     prevBtn?.addEventListener('click', () => go(active - 1));
     nextBtn?.addEventListener('click', () => go(active + 1));
@@ -234,6 +266,7 @@ const projects = (await getCollection('projects')).sort((a, b) => {
 
     metrics();
     layout();
+    showOnMap();
     requestAnimationFrame(() => root.classList.add('is-ready'));
   }
 

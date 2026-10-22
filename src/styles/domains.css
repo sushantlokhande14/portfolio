@@ -387,7 +387,7 @@
 /* phones stack heading, map, list; wide screens keep the map beside both */
 .dm-index {
   display: grid;
-  grid-template-areas: 'head' 'map' 'list' 'foot';
+  grid-template-areas: 'head' 'map' 'list';
   row-gap: 3rem;
 }
 
@@ -403,15 +403,10 @@
   grid-area: list;
 }
 
-.dm-index-foot {
-  grid-area: foot;
-  margin-top: 1rem;
-}
-
 @media (min-width: 1024px) {
   .dm-index {
     grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr);
-    grid-template-areas: 'head map' 'list map' 'foot foot';
+    grid-template-areas: 'head map' 'list map';
     column-gap: 3.5rem;
   }
 }
@@ -676,6 +671,7 @@
 /* ---------- the constellation map on /projects ---------- */
 
 .dm-map {
+  position: relative;
   margin: 0;
 }
 
@@ -750,7 +746,7 @@
 }
 
 .dm-pnode {
-  cursor: default;
+  outline: none;
 }
 
 .dm-pnode-hit {
@@ -779,18 +775,6 @@
   transition-delay: 0s;
 }
 
-.dm-pnode-label {
-  font-size: 12px;
-  fill: var(--ink-1);
-  paint-order: stroke;
-  stroke: var(--bg-base);
-  stroke-width: 4px;
-  stroke-linejoin: round;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
 .dm-map.has-focus .dm-pnode {
   opacity: 0.22;
 }
@@ -803,10 +787,6 @@
   fill: var(--ink-1);
   stroke: var(--ink-1);
   transform: scale(1.25);
-}
-
-.dm-pnode.is-named .dm-pnode-label {
-  opacity: 1;
 }
 
 .dm-dnode {
@@ -905,6 +885,74 @@
   }
 }
 
+/* hover card for a project dot: its cover and the first line of its summary */
+.dm-tip {
+  position: absolute;
+  top: var(--y, 0);
+  left: var(--x, 0);
+  z-index: 5;
+  display: flex;
+  width: min(280px, calc(100% - 8px));
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 0.85rem;
+  padding: 0.5rem 0.75rem 0.5rem 0.5rem;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, calc(-100% - 14px)) scale(0.96);
+  transform-origin: 50% 100%;
+  transition:
+    opacity 0.22s ease,
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dm-tip.is-below {
+  transform: translate(-50%, 14px) scale(0.96);
+  transform-origin: 50% 0;
+}
+
+.dm-tip.is-on {
+  opacity: 1;
+  transform: translate(-50%, calc(-100% - 10px));
+}
+
+.dm-tip.is-below.is-on {
+  transform: translate(-50%, 10px);
+}
+
+.dm-tip-cover {
+  flex: none;
+  width: 76px;
+  height: 43px;
+  border: 1px solid var(--line-1);
+  border-radius: 0.5rem;
+  object-fit: cover;
+}
+
+.dm-tip-body {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.dm-tip-title {
+  overflow: hidden;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ink-1);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dm-tip-desc {
+  overflow: hidden;
+  font-size: 0.75rem;
+  color: var(--ink-2);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .dm-map-cap {
   min-height: 3.6rem;
   margin-top: 1rem;
@@ -928,13 +976,10 @@
   .dm-dnode-count {
     font-size: 12px;
   }
-
-  .dm-pnode-label {
-    font-size: 17px;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .dm-tip,
   .dm-link,
   .dm-pnode-dot,
   .dm-dnode-core,

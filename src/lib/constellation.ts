@@ -28,9 +28,6 @@ export interface MapProject {
   x: number;
   y: number;
   r: number;
-  lx: number;
-  ly: number;
-  anchor: Anchor;
 }
 
 export interface MapLink {
@@ -181,22 +178,14 @@ export function layoutMap(domains: Domain[]) {
     }
   }
 
-  const projects: MapProject[] = entries.map(([id, m], i) => {
-    const x = round(pts[i].x);
-    const y = round(pts[i].y);
-    const right = x >= cx;
-    return {
-      id,
-      title: m.title,
-      domains: m.ds.map((di) => domains[di].id),
-      x,
-      y,
-      r: m.featured ? 5 : 4,
-      lx: round(x + (right ? 10 : -10)),
-      ly: round(y + 4),
-      anchor: right ? 'start' : 'end',
-    };
-  });
+  const projects: MapProject[] = entries.map(([id, m], i) => ({
+    id,
+    title: m.title,
+    domains: m.ds.map((di) => domains[di].id),
+    x: round(pts[i].x),
+    y: round(pts[i].y),
+    r: m.featured ? 5 : 4,
+  }));
 
   const links: MapLink[] = projects.flatMap((p) =>
     members.get(p.id)!.ds.map((di) => {
