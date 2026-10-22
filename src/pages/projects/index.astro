@@ -1,5 +1,4 @@
 ---
-import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Constellation from '../../components/domains/Constellation.astro';
 import DomainGlyph from '../../components/domains/DomainGlyph.astro';
@@ -7,7 +6,6 @@ import { getDomains, pad } from '../../lib/domains';
 import '../../styles/domains.css';
 
 const domains = await getDomains();
-const projectCount = (await getCollection('projects')).length;
 const most = domains[0].entries.length;
 ---
 
@@ -49,11 +47,6 @@ const most = domains[0].entries.length;
       <p class="reveal mt-7 max-w-2xl text-lg leading-relaxed text-muted" style="--delay: 160ms">
         Ranked by how much I have built in each. Pick the one you are hiring for and see only the work
         that fits it. A project that crosses lines shows up in every domain it belongs to.
-      </p>
-      <p class="reveal mt-6 font-mono text-xs text-muted" style="--delay: 220ms">
-        <span class="text-ink" data-count={projectCount}>{projectCount}</span> projects
-        <span class="mx-2 opacity-40">/</span>
-        <span class="text-ink" data-count={domains.length}>{domains.length}</span> domains
       </p>
     </header>
 
@@ -110,12 +103,6 @@ const most = domains[0].entries.length;
         <Constellation domains={domains} />
       </div>
     </div>
-
-    <p class="dm-index-foot text-center" data-reveal>
-      <a href="/projects/all/" class="font-mono text-sm text-muted transition-colors hover:text-accent">
-        or see all {projectCount} projects in one grid →
-      </a>
-    </p>
   </section>
 </Layout>
 
@@ -193,21 +180,6 @@ const most = domains[0].entries.length;
       show(next);
       focusMap(next);
     }, 2600);
-  }
-
-  // count the totals up from zero
-  if (!reduced) {
-    for (const el of document.querySelectorAll<HTMLElement>('[data-count]')) {
-      const target = Number(el.dataset.count);
-      const start = performance.now();
-      const tick = (now: number) => {
-        const t = Math.min((now - start) / 1100, 1);
-        el.textContent = String(Math.round(target * (1 - Math.pow(1 - t, 3))));
-        if (t < 1) requestAnimationFrame(tick);
-      };
-      el.textContent = '0';
-      requestAnimationFrame(tick);
-    }
   }
 
   spotlight('.dm-row');
