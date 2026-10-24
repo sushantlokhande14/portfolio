@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#241a08"/><stop offset="1" stop-color="#080705"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="40%" cy="42%" r="60%">
+      <stop offset="0" stop-color="#f59e0b" stop-opacity="0.20"/><stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <rect width="800" height="450" fill="url(#glow)"/>
+
+  <!-- the data file: a grid of physical blocks -->
+  <g transform="translate(70 62)">
+    <g fill="#f59e0b" opacity="0.13">
+      <rect x="0" y="0" width="34" height="34" rx="5"/><rect x="42" y="0" width="34" height="34" rx="5"/><rect x="84" y="0" width="34" height="34" rx="5"/><rect x="126" y="0" width="34" height="34" rx="5"/><rect x="168" y="0" width="34" height="34" rx="5"/><rect x="210" y="0" width="34" height="34" rx="5"/><rect x="252" y="0" width="34" height="34" rx="5"/><rect x="294" y="0" width="34" height="34" rx="5"/>
+      <rect x="0" y="42" width="34" height="34" rx="5"/><rect x="84" y="42" width="34" height="34" rx="5"/><rect x="126" y="42" width="34" height="34" rx="5"/><rect x="210" y="42" width="34" height="34" rx="5"/><rect x="252" y="42" width="34" height="34" rx="5"/><rect x="294" y="42" width="34" height="34" rx="5"/>
+      <rect x="0" y="84" width="34" height="34" rx="5"/><rect x="42" y="84" width="34" height="34" rx="5"/><rect x="126" y="84" width="34" height="34" rx="5"/><rect x="168" y="84" width="34" height="34" rx="5"/><rect x="252" y="84" width="34" height="34" rx="5"/>
+      <rect x="0" y="126" width="34" height="34" rx="5"/><rect x="42" y="126" width="34" height="34" rx="5"/><rect x="84" y="126" width="34" height="34" rx="5"/><rect x="168" y="126" width="34" height="34" rx="5"/><rect x="210" y="126" width="34" height="34" rx="5"/><rect x="294" y="126" width="34" height="34" rx="5"/>
+      <rect x="42" y="168" width="34" height="34" rx="5"/><rect x="84" y="168" width="34" height="34" rx="5"/><rect x="126" y="168" width="34" height="34" rx="5"/><rect x="210" y="168" width="34" height="34" rx="5"/><rect x="252" y="168" width="34" height="34" rx="5"/><rect x="294" y="168" width="34" height="34" rx="5"/>
+    </g>
+    <!-- live blocks -->
+    <g fill="#fbbf24" opacity="0.55">
+      <rect x="42" y="42" width="34" height="34" rx="5"/><rect x="168" y="42" width="34" height="34" rx="5"/><rect x="210" y="84" width="34" height="34" rx="5"/><rect x="0" y="168" width="34" height="34" rx="5"/><rect x="168" y="168" width="34" height="34" rx="5"/>
+    </g>
+    <!-- an old version kept by a snapshot -->
+    <rect x="84" y="84" width="34" height="34" rx="5" stroke="#7dd3fc" stroke-width="2.5" stroke-dasharray="5 4"/>
+    <!-- the new version, written to a fresh block -->
+    <rect x="294" y="84" width="34" height="34" rx="5" fill="#fde68a" filter="url(#soft)"/>
+    <!-- redirect: the map entry moves from the old block to the new one -->
+    <path d="M118 101 C180 70 240 70 290 98" stroke="#fde68a" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M281 90 L292 99 L279 104" stroke="#fde68a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- a block checked against its checksum -->
+    <path d="M134 141 l6 6 l12 -13" stroke="#86efac" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" transform="translate(-8 0)"/>
+  </g>
+
+  <!-- the write-ahead log: records, with commit markers closing each group -->
+  <g transform="translate(70 318)">
+    <rect x="0" y="0" width="660" height="40" rx="8" stroke="#f59e0b" stroke-opacity="0.35" stroke-width="1.5"/>
+    <g fill="#f59e0b" opacity="0.45">
+      <rect x="10" y="10" width="30" height="20" rx="3"/><rect x="46" y="10" width="30" height="20" rx="3"/>
+      <rect x="104" y="10" width="30" height="20" rx="3"/>
+      <rect x="162" y="10" width="30" height="20" rx="3"/><rect x="198" y="10" width="30" height="20" rx="3"/><rect x="234" y="10" width="30" height="20" rx="3"/>
+      <rect x="292" y="10" width="30" height="20" rx="3"/><rect x="328" y="10" width="30" height="20" rx="3"/>
+      <rect x="386" y="10" width="30" height="20" rx="3"/>
+      <rect x="444" y="10" width="30" height="20" rx="3"/><rect x="480" y="10" width="30" height="20" rx="3"/>
+    </g>
+    <g fill="#fbbf24">
+      <rect x="82" y="7" width="8" height="26" rx="2"/><rect x="140" y="7" width="8" height="26" rx="2"/><rect x="270" y="7" width="8" height="26" rx="2"/>
+      <rect x="364" y="7" width="8" height="26" rx="2"/><rect x="422" y="7" width="8" height="26" rx="2"/><rect x="516" y="7" width="8" height="26" rx="2"/>
+    </g>
+    <!-- the torn tail: an unfinished group that recovery cuts off -->
+    <g opacity="0.55">
+      <rect x="540" y="10" width="30" height="20" rx="3" fill="#fda4af" opacity="0.7"/>
+      <path d="M578 10 h14 l-6 10 l8 10 h-16" stroke="#fda4af" stroke-width="2" stroke-linejoin="round"/>
+    </g>
+  </g>
+
+  <!-- two checkpoint slots -->
+  <g transform="translate(470 70)">
+    <rect x="0" y="0" width="120" height="78" rx="8" stroke="#fbbf24" stroke-width="2"/>
+    <rect x="140" y="0" width="120" height="78" rx="8" stroke="#fbbf24" stroke-opacity="0.45" stroke-width="2" stroke-dasharray="6 5"/>
+    <g fill="#fbbf24" opacity="0.6">
+      <rect x="16" y="18" width="88" height="6" rx="3"/><rect x="16" y="34" width="64" height="6" rx="3"/><rect x="16" y="50" width="76" height="6" rx="3"/>
+    </g>
+    <g fill="#fbbf24" opacity="0.3">
+      <rect x="156" y="18" width="88" height="6" rx="3"/><rect x="156" y="34" width="70" height="6" rx="3"/>
+    </g>
+  </g>
+
+  <!-- the newest checkpoint covers the log up to this commit; replay starts after it -->
+  <path d="M530 152 C530 230 498 262 496 312" stroke="#fbbf24" stroke-opacity="0.45" stroke-width="2" stroke-dasharray="4 6" stroke-linecap="round"/>
+</svg>

@@ -90,6 +90,8 @@ export const DOMAINS: DomainDef[] = [
     projects: {
       proxima:
         'SIMD distance kernels in C++17: 1.8 times faster than hnswlib and 2.5 times faster than FAISS at 0.999 recall.',
+      blockstore:
+        'A block cache, batched parallel reads and 64 lock partitions: 3.5 times the read throughput on 16-block batches under O_DIRECT.',
       logicforge:
         'A work-stealing pool runs 3.0 to 3.5 times faster on 16 threads, with identical output at any thread count.',
       'fleet-guard': 'A deterministic C++17 driving simulator running about 4,000 drives a second on 22 threads.',
@@ -194,6 +196,8 @@ export const DOMAINS: DomainDef[] = [
     hue: 118,
     glyph: 'database',
     projects: {
+      blockstore:
+        'Storage engine internals: a write-ahead log, double-buffered checkpoints and checksums, crashed at every file-system call to prove recovery.',
       'fleet-guard':
         'SQL views and five SQL classifiers over 100,000 drives and their telemetry, ingested with COPY in 26 seconds.',
       'melody-metrics': 'A million messy records joined with C++ MapReduce on Hadoop, then queried in Hive.',

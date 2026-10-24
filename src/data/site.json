@@ -188,7 +188,7 @@
     },
     {
       "group": "Data & Storage",
-      "items": ["PostgreSQL", "PL/SQL", "DBA", "MongoDB", "Neo4j", "Qdrant", "Redis", "SQLite", "MinIO (S3)", "Hadoop, Hive & HBase"]
+      "items": ["PostgreSQL", "PL/SQL", "DBA", "MongoDB", "Neo4j", "Qdrant", "Redis", "SQLite", "MinIO (S3)", "Hadoop, Hive & HBase", "Storage engines (WAL, crash recovery)"]
     },
     {
       "group": "Systems & Tooling",
