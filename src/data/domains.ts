@@ -45,6 +45,9 @@ export const DOMAINS: DomainDef[] = [
       'autograde-ai':
         'Six specialized agents grade in parallel under Temporal, and a confidence gate sends only the shaky grades to a human.',
       relay: 'An LLM gateway that matches prompts by meaning, so 78 percent of requests never reach the model.',
+      portcullis:
+        'Guards what agents can do: a default-deny policy on every MCP tool call, and tool output checked before the model reads it.',
+      teller: 'A model learns a back-office task once; the recorded capability then replays with no model in the loop.',
       reelrank:
         'Answers free-text requests like "Arrival but funnier" with a two-tower retriever and a neural ranker.',
       'ai-learning-aggregator':
@@ -64,6 +67,10 @@ export const DOMAINS: DomainDef[] = [
     projects: {
       distcompile:
         'A gRPC coordinator schedules the build graph out of PostgreSQL, and workers pull tasks and survive crashes.',
+      edgecast:
+        'A five-region relay tree with pull-through edges and backpressure, beside a WebRTC SFU and an HLS origin, in 21 containers.',
+      'fleet-guard':
+        'A Postgres work queue with SKIP LOCKED claims, COPY ingest, a FastAPI service and Prometheus alerting.',
       'autograde-ai': 'Temporal workflows, Kafka and gRPC between services, with Postgres, Redis and Qdrant behind them.',
       relay: 'An async FastAPI gateway with SSE streaming; the typical answer comes back in 44 milliseconds.',
       'duo-drops': 'One Durable Object per room keeps two phones in lockstep over WebSockets, on the free plan.',
@@ -85,6 +92,7 @@ export const DOMAINS: DomainDef[] = [
         'SIMD distance kernels in C++17: 1.8 times faster than hnswlib and 2.5 times faster than FAISS at 0.999 recall.',
       logicforge:
         'A work-stealing pool runs 3.0 to 3.5 times faster on 16 threads, with identical output at any thread count.',
+      'fleet-guard': 'A deterministic C++17 driving simulator running about 4,000 drives a second on 22 threads.',
       distcompile:
         'Content-hash caching ran the compiler 84 percent fewer times than make over a scripted 20-step edit workload.',
       rtlgen: 'C++17 with graph checks before a single file is written, built and tested under ASan and UBSan.',
@@ -134,7 +142,11 @@ export const DOMAINS: DomainDef[] = [
     projects: {
       'malware-classification':
         'Three vision models vote on malware rendered as images, across 17 families. Now a first-author paper on arXiv.',
+      'fall-detection':
+        'A 1D CNN on raw phone sensor windows detected falls at 99.35 percent, and 98.1 with every test subject unseen.',
       'palmprint-authentication': 'Four models study every palm scan and vote, reaching 99.75 percent AUC.',
+      'gait-biometrics':
+        'A feature network identified ten walkers at 90 percent from six-channel phone data; an LSTM on the raw signal underfit at 57.',
       reelrank: 'A two-tower retrieval model and a neural ranker, built in PyTorch.',
       'melody-metrics': 'XGBoost on the cleaned data to find what actually makes a song popular.',
     },
@@ -161,13 +173,16 @@ export const DOMAINS: DomainDef[] = [
     name: 'Security & Identity',
     short: 'security',
     label: 'Security',
-    tagline: 'Malware and biometric identity, approached as vision problems.',
+    tagline: 'Guarding AI agents, recognizing malware, and proving identity from a palm or a walk.',
     hue: 18,
     glyph: 'shield',
     projects: {
+      portcullis:
+        'Credentials redacted, injected instructions fenced, hidden Unicode decoded and stripped, every decision audited.',
       'malware-classification':
         'Recognizes the malware family from a picture of the file instead of a byte signature. My thesis.',
       'palmprint-authentication': 'Contactless identity from a palm scan, verified by a four-model ensemble.',
+      'gait-biometrics': 'Verifies a person from the way they walk, at a 2 to 3 percent equal error rate.',
     },
   },
   {
@@ -179,6 +194,8 @@ export const DOMAINS: DomainDef[] = [
     hue: 118,
     glyph: 'database',
     projects: {
+      'fleet-guard':
+        'SQL views and five SQL classifiers over 100,000 drives and their telemetry, ingested with COPY in 26 seconds.',
       'melody-metrics': 'A million messy records joined with C++ MapReduce on Hadoop, then queried in Hive.',
       'graph-connect':
         '50 thousand relationships in Neo4j for two-hop queries, with profiles and content in MongoDB alongside.',
@@ -189,10 +206,12 @@ export const DOMAINS: DomainDef[] = [
     name: 'Networking & Protocols',
     short: 'networking',
     label: 'Networking',
-    tagline: 'Protocols built by hand, from TCP’s sliding window to Web Push encryption.',
+    tagline: 'Protocols measured and built by hand, from TCP’s sliding window to Media over QUIC.',
     hue: 222,
     glyph: 'signal',
     projects: {
+      edgecast:
+        'Media over QUIC, WebRTC and HLS under one network emulator: startup, stalls, loss recovery and relay failure.',
       'tcp-simulator':
         'TCP rebuilt over raw sockets: the handshake, the sliding window and retransmission, with a live packet dashboard.',
       'duo-drops': 'WebSockets for live play, and Web Push message encryption (RFC 8291) written from scratch.',

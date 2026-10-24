@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2a0f1f"/><stop offset="1" stop-color="#0b0609"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="46%" cy="46%" r="55%">
+      <stop offset="0" stop-color="#f472b6" stop-opacity="0.22"/><stop offset="1" stop-color="#f472b6" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <rect width="800" height="450" fill="url(#glow)"/>
+
+  <!-- a legacy console: title bar, menu frame, table-layout form -->
+  <rect x="110" y="70" width="460" height="310" rx="16" fill="#1f0c18" stroke="#f472b6" stroke-width="2" opacity="0.95"/>
+  <path d="M110 108 H570" stroke="#f472b6" stroke-width="2" opacity="0.6"/>
+  <g fill="#f9a8d4" opacity="0.7"><circle cx="134" cy="89" r="5"/><circle cx="152" cy="89" r="5" opacity="0.6"/><circle cx="170" cy="89" r="5" opacity="0.4"/></g>
+  <path d="M232 108 V380" stroke="#f472b6" stroke-width="2" opacity="0.4"/>
+  <g fill="#f9a8d4" opacity="0.55">
+    <rect x="132" y="134" width="76" height="8" rx="4"/><rect x="132" y="158" width="58" height="8" rx="4"/>
+    <rect x="132" y="182" width="70" height="8" rx="4"/><rect x="132" y="206" width="50" height="8" rx="4"/>
+  </g>
+  <g stroke="#f472b6" stroke-width="1.5" opacity="0.3">
+    <path d="M254 176 H548"/><path d="M254 222 H548"/><path d="M254 268 H548"/><path d="M380 130 V314"/>
+  </g>
+  <g fill="#f9a8d4" opacity="0.6">
+    <rect x="270" y="146" width="80" height="8" rx="4"/><rect x="270" y="192" width="64" height="8" rx="4"/><rect x="270" y="238" width="90" height="8" rx="4"/>
+  </g>
+  <g fill="#3a1630" stroke="#f472b6" stroke-width="1.5" opacity="0.9">
+    <rect x="396" y="140" width="136" height="22" rx="4"/><rect x="396" y="186" width="136" height="22" rx="4"/>
+  </g>
+  <rect x="396" y="284" width="92" height="28" rx="6" fill="#f472b6" opacity="0.85"/>
+
+  <!-- numbered targets the model may act on -->
+  <g stroke="#fb7185" stroke-width="2.5" filter="url(#soft)">
+    <rect x="126" y="150" width="88" height="24" rx="5"/>
+    <rect x="390" y="134" width="148" height="34" rx="6"/>
+    <rect x="390" y="278" width="104" height="40" rx="8"/>
+  </g>
+  <g fill="#fb7185">
+    <rect x="114" y="140" width="20" height="20" rx="5"/><rect x="378" y="124" width="20" height="20" rx="5"/><rect x="378" y="268" width="20" height="20" rx="5"/>
+  </g>
+  <g fill="#0b0609" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="13" font-weight="700" text-anchor="middle">
+    <text x="124" y="155">1</text><text x="388" y="139">2</text><text x="388" y="283">3</text>
+  </g>
+
+  <!-- replay loop: recorded once, played back with no model -->
+  <g transform="translate(668 226)">
+    <circle r="62" fill="#1f0c18" stroke="#f472b6" stroke-width="2.5"/>
+    <path d="M-34 -16 A38 38 0 1 1 -30 22" stroke="#f9a8d4" stroke-width="4" stroke-linecap="round"/>
+    <path d="M-44 -30 L-34 -14 L-18 -24" stroke="#f9a8d4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M-8 -16 L18 0 L-8 16 Z" fill="#f472b6"/>
+  </g>
+  <path d="M570 226 H606" stroke="#f472b6" stroke-width="2" stroke-dasharray="4 6" opacity="0.6"/>
+
+  <!-- ambient points -->
+  <g fill="#fbcfe8" opacity="0.5">
+    <circle cx="640" cy="80" r="2"/><circle cx="720" cy="350" r="2.5"/><circle cx="70" cy="400" r="2"/><circle cx="610" cy="400" r="1.8"/><circle cx="60" cy="110" r="2"/>
+  </g>
+</svg>

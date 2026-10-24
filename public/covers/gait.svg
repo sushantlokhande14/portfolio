@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1b1230"/><stop offset="1" stop-color="#08060d"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="55%">
+      <stop offset="0" stop-color="#a78bfa" stop-opacity="0.22"/><stop offset="1" stop-color="#a78bfa" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <g id="foot">
+      <ellipse cx="0" cy="8" rx="15" ry="24"/>
+      <circle cx="-9" cy="-24" r="4.5"/><circle cx="-1" cy="-28" r="4.5"/><circle cx="7" cy="-26" r="4"/><circle cx="13" cy="-20" r="3.5"/>
+    </g>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <rect width="800" height="450" fill="url(#glow)"/>
+
+  <!-- six sensor channels: accelerometer and gyroscope, x y z -->
+  <g stroke="#a78bfa" stroke-width="1.6" stroke-linecap="round" fill="none">
+    <path d="M40 300 q20 -16 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0" opacity="0.55"/>
+    <path d="M40 330 q20 10 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0" opacity="0.4"/>
+    <path d="M40 356 q10 -8 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0" opacity="0.3"/>
+    <path d="M40 380 q20 -6 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0" stroke="#c4b5fd" opacity="0.28"/>
+    <path d="M40 402 q20 8 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0" stroke="#c4b5fd" opacity="0.2"/>
+    <path d="M40 424 q10 -5 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0" stroke="#c4b5fd" opacity="0.15"/>
+  </g>
+  <!-- one five-second window -->
+  <rect x="320" y="282" width="160" height="156" rx="10" stroke="#c4b5fd" stroke-width="1.8" stroke-dasharray="5 6" opacity="0.6"/>
+
+  <!-- footprints walking up and across -->
+  <g fill="#a78bfa">
+    <use href="#foot" transform="translate(150 230) rotate(62)" opacity="0.35"/>
+    <use href="#foot" transform="translate(244 178) rotate(58)" opacity="0.5"/>
+    <use href="#foot" transform="translate(338 222) rotate(62)" opacity="0.65"/>
+    <use href="#foot" transform="translate(432 170) rotate(58)" opacity="0.8"/>
+  </g>
+  <g fill="#ddd6fe" filter="url(#soft)">
+    <use href="#foot" transform="translate(526 214) rotate(62)"/>
+  </g>
+  <g fill="#a78bfa" opacity="0.4">
+    <use href="#foot" transform="translate(620 162) rotate(58)"/>
+  </g>
+
+  <!-- the verdict -->
+  <g transform="translate(700 100)">
+    <circle r="34" fill="#1f1438" stroke="#a78bfa" stroke-width="2.5"/>
+    <path d="M-13 1 l9 9 l18 -19" stroke="#ddd6fe" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- ambient points -->
+  <g fill="#ddd6fe" opacity="0.45">
+    <circle cx="90" cy="80" r="2"/><circle cx="300" cy="70" r="2.5"/><circle cx="560" cy="60" r="2"/><circle cx="740" cy="250" r="1.8"/>
+  </g>
+</svg>
