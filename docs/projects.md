@@ -155,6 +155,84 @@ A Python implementation of the TCP sliding window protocol built over raw socket
 
 ---
 
+## 13. EdgeCast
+**Subtitle:** Media over QUIC, WebRTC and HLS on the same bad network
+**Stack:** Go, quic-go, Pion WebRTC, HLS, Docker Compose, Prometheus, Grafana
+**GitHub:** github.com/sushantlokhande14/edgecast
+
+A single-command testbed (one Go binary, 21 containers) that compares three live media delivery models under the same network impairment: a five-region Media over QUIC relay tree, a WebRTC SFU and an HLS origin. Impairment is a userspace emulator because Docker Desktop's WSL2 kernel has no netem. An experiment controller runs a protocol x profile x repetition matrix and writes per-second session timelines.
+
+**Key numbers:** 72 matrix runs, a 9-run A/B and a relay-failure experiment. MoQ reached first media fastest in 7 of 8 profiles (239 / 688 / 1,269 ms on a clean network). Pinning the publisher from 5,000 to 1,000 kbps cut stalled time 72 to 83 percent with goodput unchanged. Found and fixed a relay bug where a publisher restart blackholed every edge region.
+
+**Why it matters:** Real networking and distributed-systems work with an experimental method, honest caveats and a non-obvious finding (publisher-side adaptation cannot see the last mile).
+
+---
+
+## 14. portcullis
+**Subtitle:** A policy gateway between AI agents and their tools
+**Stack:** Rust, Tokio, MCP / JSON-RPC, TOML policy
+**GitHub:** github.com/sushantlokhande14/portcullis
+
+A Rust gateway for the Model Context Protocol. It fronts several MCP servers as one, applies a default-deny policy to every tool call, scans tool output before the model reads it (credential redaction, instruction-shaped text fenced, hidden Unicode tag text decoded and stripped), and writes a JSONL audit record per decision. `portcullis explain` shows what a policy would do without running anything. Five crates with one-way dependencies.
+
+**Key numbers:** 224 tests; CI on Linux, Windows and macOS plus an MSRV build and a dependency audit. Known gaps (heuristic injection detectors, resources and prompts refused rather than mediated) are stated in the README and filed as issues.
+
+**Why it matters:** AI agent security is a live problem, and this is a working, tested answer in Rust. Covers both the security and the AI infrastructure angle.
+
+---
+
+## 15. Fleet Guard
+**Subtitle:** Catching driving regressions before a build ships
+**Stack:** C++17, Python, PostgreSQL, FastAPI, Prometheus, Grafana, React, Ollama
+**GitHub:** github.com/sushantlokhande14/fleet-guard
+
+A validation platform for autonomous-driving builds. A deterministic C++17 simulator replays the same seeded scenarios through a baseline and a candidate build (shared random draws, so differences come from the build), drives are compared on route distance, five SQL classifiers find disengagements, latency spikes, route deviations, perception errors and control instability, and each failure cluster becomes a report that replays bit for bit from its seed. A local model writes the narrative and a guard checks it against the facts.
+
+**Key numbers:** one 100,000-drive campaign end to end in 52 s on 22 threads. Seeded benchmark: 38 of 50 injected bugs reproduced on unseen seeds, 1 of 10 clean controls flagged. 208 flagged scenarios collapsed into 10 cluster reports for one release candidate. The guard accepted 28 of 30 narratives.
+
+**Why it matters:** Test infrastructure at scale with a measured benchmark, which is exactly what autonomy and robotics validation teams build.
+
+---
+
+## 16. teller
+**Subtitle:** Let the model learn a task once, then replay it without one
+**Stack:** Python, Playwright, Pydantic, Ollama, Chrome DevTools Protocol
+**GitHub:** github.com/sushantlokhande14/teller
+
+Computer-use automation for legacy web apps with no API, built as a take-home. A model works a task out once inside a fictional legacy banking console; the run is recorded as a typed capability that replays with no model, classifies every result (business outcome, recoverable fault, fatal failure, unknown screen), and hands the live browser to a person over CDP when it meets something new. Policy allowlist, risky-action approval and redaction are built in.
+
+**Key numbers:** the same capability replays at a second institution with a fifteen-line tenant overlay; 37 tests. Evidence recorded with qwen2.5:7b through local Ollama.
+
+**Why it matters:** A grounded take on computer-use agents: the model is used once, and the system around it handles reliability.
+
+---
+
+## 17. Smartphone Fall Detection
+**Subtitle:** Telling a fall from sitting down
+**Stack:** Python, TensorFlow / Keras, scikit-learn, XGBoost
+**GitHub:** github.com/sushantlokhande14/sensor-spectrogram-har-and-fall-prediction
+
+CS 286 (Wearable AI and mHealth) project with Mrunal Kotkar on MobiFall v2.0. Compares classical models on handcrafted features, deep networks on raw sensor windows, and transfer learning from UCI HAR and from ImageNet models on spectrograms, with leave-one-subject-out and leave-one-event-out evaluation.
+
+**Key numbers:** 1D CNN at 99.35 percent accuracy on binary fall detection, 98.14 percent under leave-one-subject-out.
+
+**Why it matters:** Shows evaluation discipline (subject-level generalization) on a health problem.
+
+---
+
+## 18. Gait Biometrics
+**Subtitle:** Who you are, from how you walk
+**Stack:** Python, TensorFlow / Keras, scikit-learn
+**GitHub:** github.com/sushantlokhande14/Gait-biometrics-using-neural-networks
+
+CS 288 (Biometric Security with AI) project: identify and verify ten people from phone accelerometer and gyroscope data, comparing a feature network (78 features, PCA to 10) with an LSTM on raw windows.
+
+**Key numbers:** feature network 90 percent identification and 3 percent EER for verification; LSTM 57 percent identification (underfit) and 2 percent EER.
+
+**Why it matters:** Pairs with palmprint authentication as a second biometrics project.
+
+---
+
 ## The Bigger Story
 
 Three projects are connected into one system: **Proxima** is the retrieval engine, **Relay** uses it to cache LLM calls, and **Reel Rank** uses it to power a production-style movie recommender. That arc (write the engine, use it in one product, use it in another) is more convincing than three unrelated demos.

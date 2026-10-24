@@ -172,11 +172,11 @@
   "skills": [
     {
       "group": "Languages",
-      "items": ["Python", "C++", "TypeScript", "JavaScript", "SQL", "Java", "C", "Verilog", "Swift"]
+      "items": ["Python", "C++", "Go", "Rust", "TypeScript", "JavaScript", "SQL", "Java", "C", "Verilog", "Swift"]
     },
     {
       "group": "Machine Learning",
-      "items": ["PyTorch", "scikit-learn", "OpenCV", "NumPy & Pandas", "CNNs", "Ensemble learning", "CUDA (PyTorch)"]
+      "items": ["PyTorch", "TensorFlow & Keras", "scikit-learn", "OpenCV", "NumPy & Pandas", "CNNs", "Ensemble learning", "CUDA (PyTorch)"]
     },
     {
       "group": "LLM & GenAI",
@@ -192,7 +192,7 @@
     },
     {
       "group": "Systems & Tooling",
-      "items": ["Docker", "Kubernetes", "Kafka", "Temporal", "AWS (EC2)", "CI/CD", "Linux", "OpenTelemetry", "Prometheus & Grafana", "pybind11 & CMake", "GDB & sanitizers", "Yosys & Icarus Verilog", "pytest", "Cursor & Claude Code"]
+      "items": ["Docker", "Kubernetes", "Kafka", "Temporal", "AWS (EC2)", "CI/CD", "Linux", "OpenTelemetry", "Prometheus & Grafana", "pybind11 & CMake", "GDB & sanitizers", "Yosys & Icarus Verilog", "pytest", "Playwright", "Cursor & Claude Code"]
     }
   ]
 }
