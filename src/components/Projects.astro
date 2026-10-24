@@ -167,20 +167,23 @@ const domains = await getDomains();
       dots.forEach((dot, i) => dot.classList.toggle('is-on', i === active));
     }
 
-    // the domain map under the carousel traces the centered project; hovering
-    // the map shows something else for a moment, and leaving it comes back here
+    // the domain map under the carousel starts with nothing lit; once the
+    // visitor turns the carousel it traces the centered project, and leaving a
+    // hover on the map comes back to it
     const map = section?.querySelector<HTMLElement>('[data-dm-map]');
+    let turned = false;
     const showOnMap = () =>
       map?.dispatchEvent(new CustomEvent('dm-focus', { detail: `p:${slides[active].dataset.id}` }));
 
     function go(to: number) {
       active = ((to % n) + n) % n;
+      turned = true;
       layout();
       showOnMap();
     }
 
     map?.addEventListener('dm-hover', (e) => {
-      if ((e as CustomEvent<string | null>).detail === null) showOnMap();
+      if ((e as CustomEvent<string | null>).detail === null && turned) showOnMap();
     });
 
     // clicking a project dot spins the carousel to it instead of leaving the page
@@ -266,7 +269,6 @@ const domains = await getDomains();
 
     metrics();
     layout();
-    showOnMap();
     requestAnimationFrame(() => root.classList.add('is-ready'));
   }
 

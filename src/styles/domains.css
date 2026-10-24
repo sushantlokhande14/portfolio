@@ -953,21 +953,6 @@
   white-space: nowrap;
 }
 
-.dm-map-cap {
-  min-height: 3.6rem;
-  margin-top: 1rem;
-  font-size: 0.8125rem;
-  line-height: 1.55;
-  color: var(--ink-2);
-  text-align: center;
-}
-
-.dm-map-cap strong {
-  display: block;
-  font-weight: 600;
-  color: var(--dm, var(--ink-1));
-}
-
 @media (max-width: 639px) {
   .dm-dnode-label {
     font-size: 20px;

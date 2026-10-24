@@ -93,25 +93,6 @@ const info = new Map(domains.flatMap((d) => d.entries.map(({ project }) => [proj
       <span class="dm-tip-desc"></span>
     </span>
   </div>
-
-  <figcaption class="dm-map-cap" aria-live="polite">
-    {
-      domains.map((d) => (
-        <span data-cap={d.id} class="dm-hue" style={`--h: ${d.hue}`} hidden>
-          <strong>{d.name}</strong>
-          {d.entries.map(({ project }) => project.data.title).join(' · ')}
-        </span>
-      ))
-    }
-    {
-      projects.map((p) => (
-        <span data-cap={`p:${p.id}`} hidden>
-          <strong>{p.title}</strong>
-          {p.domains.map((id) => names.get(id)).join(' · ')}
-        </span>
-      ))
-    }
-  </figcaption>
 </figure>
 
 <script>
@@ -125,7 +106,6 @@ const info = new Map(domains.flatMap((d) => d.entries.map(({ project }) => [proj
     const pnodes = Array.from(root.querySelectorAll<SVGAElement>('.dm-pnode'));
     const dnodes = Array.from(root.querySelectorAll<SVGAElement>('.dm-dnode'));
     const links = Array.from(root.querySelectorAll<SVGLineElement>('.dm-link'));
-    const caps = Array.from(root.querySelectorAll<HTMLElement>('[data-cap]'));
     const tip = root.querySelector<HTMLElement>('.dm-tip')!;
     const tipCover = tip.querySelector<HTMLImageElement>('.dm-tip-cover')!;
     const tipTitle = tip.querySelector<HTMLElement>('.dm-tip-title')!;
@@ -152,7 +132,6 @@ const info = new Map(domains.flatMap((d) => d.entries.map(({ project }) => [proj
       links.forEach((l) => l.classList.toggle('is-lit', litD.has(l.dataset.d!) && litP.has(l.dataset.p!)));
       pnodes.forEach((p) => p.classList.toggle('is-lit', litP.has(p.dataset.p!)));
       dnodes.forEach((d) => d.classList.toggle('is-lit', litD.has(d.dataset.d!)));
-      caps.forEach((c) => (c.hidden = c.dataset.cap !== key));
     }
 
     // focus asked for before the lines have drawn in waits, so the draw-in
