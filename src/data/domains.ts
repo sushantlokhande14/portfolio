@@ -43,6 +43,8 @@ export const DOMAINS: DomainDef[] = [
     hue: 295,
     glyph: 'spark',
     projects: {
+      drydock:
+        'Runs coding agents in locked-down sandboxes and judges every patch in a second, clean one against tests the agent never saw.',
       'autograde-ai':
         'Six specialized agents grade in parallel under Temporal, and a confidence gate sends only the shaky grades to a human.',
       relay: 'An LLM gateway that matches prompts by meaning, so 78 percent of requests never reach the model.',
@@ -66,6 +68,8 @@ export const DOMAINS: DomainDef[] = [
     hue: 250,
     glyph: 'nodes',
     projects: {
+      drydock:
+        'A Go scheduler with a bounded queue, a warm pool and an append-only event log; 128 agents ran at once, and every run rebuilds from its log after a restart.',
       distcompile:
         'A gRPC coordinator schedules the build graph out of PostgreSQL, and workers pull tasks and survive crashes.',
       edgecast:
@@ -194,6 +198,8 @@ export const DOMAINS: DomainDef[] = [
     hue: 18,
     glyph: 'shield',
     projects: {
+      drydock:
+        'Model-chosen commands run with no network, no capabilities and a read-only root, and tests attack each limit from inside the box.',
       portcullis:
         'Credentials redacted, injected instructions fenced, hidden Unicode decoded and stripped, every decision audited.',
       'malware-classification':
