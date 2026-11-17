@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2a0f18"/><stop offset="1" stop-color="#0a0507"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="34%" cy="50%" r="55%">
+      <stop offset="0" stop-color="#fb7185" stop-opacity="0.24"/><stop offset="1" stop-color="#fb7185" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <rect width="800" height="450" fill="url(#glow)"/>
+
+  <!-- the phone -->
+  <rect x="150" y="52" width="216" height="346" rx="30" stroke="#fda4af" stroke-width="2.5" opacity="0.75"/>
+  <path d="M232 70h52" stroke="#fda4af" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- the deck: the card underneath, then the card being swiped away -->
+  <rect x="180" y="118" width="156" height="196" rx="18" fill="#fb7185" opacity="0.14" stroke="#fb7185" stroke-opacity="0.35" stroke-width="1.5"/>
+  <g transform="rotate(11 300 216)" filter="url(#soft)">
+    <rect x="204" y="112" width="156" height="196" rx="18" fill="#3a1420" stroke="#fda4af" stroke-width="2.5"/>
+    <circle cx="282" cy="180" r="26" stroke="#fda4af" stroke-width="2.5"/>
+    <path d="M232 250h100M232 272h64" stroke="#fda4af" stroke-width="5" stroke-linecap="round" opacity="0.75"/>
+  </g>
+
+  <!-- pass and like -->
+  <circle cx="222" cy="352" r="19" stroke="#fda4af" stroke-width="2" opacity="0.6"/>
+  <path d="m215 345 14 14m0-14-14 14" stroke="#fda4af" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+  <circle cx="294" cy="352" r="19" fill="#fb7185"/>
+  <path d="M294 361c-9-6-12-10-12-14a6 6 0 0 1 12-3 6 6 0 0 1 12 3c0 4-3 8-12 14z" fill="#2a0f18"/>
+
+  <!-- five requests, one after another -->
+  <g stroke-linecap="round" stroke-width="9" stroke="#fda4af" opacity="0.32">
+    <path d="M450 120h34"/><path d="M490 142h46"/><path d="M542 164h106"/><path d="M654 186h30"/><path d="M690 208h40"/>
+  </g>
+  <path d="M736 108v112" stroke="#fda4af" stroke-width="1.5" stroke-dasharray="5 6" opacity="0.4"/>
+
+  <!-- the same five, started together: done when the slowest is -->
+  <g stroke-linecap="round" stroke-width="9" stroke="#fb7185" filter="url(#soft)">
+    <path d="M450 270h34"/><path d="M450 292h46"/><path d="M450 314h106"/><path d="M450 336h30"/><path d="M450 358h40"/>
+  </g>
+  <path d="M562 258v112" stroke="#fb7185" stroke-width="2" stroke-dasharray="5 6"/>
+  <path d="M572 314h152" stroke="#fb7185" stroke-width="1.5" stroke-dasharray="2 8" opacity="0.45"/>
+  <path d="m716 308 8 6-8 6" stroke="#fb7185" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"/>
+
+  <!-- ambient points -->
+  <g fill="#fecdd3" opacity="0.5">
+    <circle cx="96" cy="96" r="2"/><circle cx="420" cy="64" r="2.2"/><circle cx="610" cy="412" r="2"/><circle cx="760" cy="60" r="1.8"/><circle cx="92" cy="380" r="2.4"/>
+  </g>
+</svg>

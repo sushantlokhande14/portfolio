@@ -30,6 +30,7 @@ const shapes: Record<Glyph, string> = {
   database:
     '<ellipse cx="12" cy="5.8" rx="7" ry="2.8"/><path d="M5 5.8v12.4c0 1.55 3.13 2.8 7 2.8s7-1.25 7-2.8V5.8"/><path d="M5 12c0 1.55 3.13 2.8 7 2.8s7-1.25 7-2.8"/>',
   signal: '<path d="M4 8h15"/><path d="m15 4 4 4-4 4"/><path d="M20 16H5"/><path d="m9 12-4 4 4 4"/>',
+  phone: '<rect x="6.5" y="2.5" width="11" height="19" rx="2.8"/><path d="M10.4 5.4h3.2"/><path d="M9.6 10.2h4.8M9.6 13.2h3"/><path d="M12 18.3h.01"/>',
 };
 
 const markup = shapes[name].replaceAll('/>', ' pathLength="1"/>');

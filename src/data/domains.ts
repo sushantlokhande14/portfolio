@@ -15,7 +15,8 @@ export type Glyph =
   | 'eye'
   | 'shield'
   | 'database'
-  | 'signal';
+  | 'signal'
+  | 'phone';
 
 export interface DomainDef {
   id: string;
@@ -131,6 +132,20 @@ export const DOMAINS: DomainDef[] = [
       kairo: 'React, TypeScript and FastAPI with voice through Vapi, shipped end to end in a week.',
       'graph-connect': 'A TypeScript front end and FastAPI back end for a social graph, running on AWS.',
       'hnsw-lab': 'A zero-dependency TypeScript and Canvas app you can click, drag and break on purpose.',
+    },
+  },
+  {
+    id: 'mobile',
+    name: 'Mobile & Android',
+    short: 'mobile and Android',
+    label: 'Mobile',
+    tagline: 'Apps that live on a phone, where the network drops, the process dies and the user walks away mid-task.',
+    hue: 5,
+    glyph: 'phone',
+    projects: {
+      connect:
+        'A native Kotlin and Compose app whose loading, offline and failure paths each have a test or a benchmark behind them.',
+      'duo-drops': 'An installable PWA built for two phones, with Web Push delivery and no app store in between.',
     },
   },
   {
