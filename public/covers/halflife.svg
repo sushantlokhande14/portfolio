@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1d1606"/><stop offset="1" stop-color="#070604"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="66%" cy="40%" r="55%">
+      <stop offset="0" stop-color="#f5b83d" stop-opacity="0.2"/><stop offset="1" stop-color="#f5b83d" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <rect width="800" height="450" fill="url(#glow)"/>
+
+  <!-- axes: share of the move priced in, against trading time -->
+  <path d="M80 380H740" stroke="#f5b83d" stroke-width="1.5" opacity="0.35"/>
+  <path d="M80 380V70" stroke="#f5b83d" stroke-width="1.5" opacity="0.35"/>
+  <path d="M80 100H740" stroke="#f5b83d" stroke-width="1" opacity="0.25"/>
+  <path d="M80 240H740" stroke="#fde68a" stroke-width="1" stroke-dasharray="5 7" opacity="0.4"/>
+
+  <!-- the night takes no time: a narrow closed band where the curve cannot move -->
+  <rect x="402" y="70" width="14" height="310" fill="#f5b83d" opacity="0.06"/>
+  <path d="M402 70V380M416 70V380" stroke="#f5b83d" stroke-width="1" stroke-dasharray="2 6" opacity="0.35"/>
+
+  <!-- the filing -->
+  <path d="M120 380V90" stroke="#fde68a" stroke-width="1.5" opacity="0.5"/>
+  <circle cx="120" cy="90" r="5" fill="#fde68a"/>
+
+  <!-- after-hours: a noisy start that wanders, mostly flat -->
+  <path d="M120 378 C140 360 150 395 168 352 S205 338 226 350 S270 330 300 336 S360 322 402 318" stroke="#f5b83d" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- pre-market, then the open: the jump that carries a quarter of the move -->
+  <path d="M416 318 C450 314 470 302 500 296 C512 294 518 290 522 286" stroke="#f5b83d" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M522 286 L530 168" stroke="#f5b83d" stroke-width="4" stroke-linecap="round" filter="url(#soft)"/>
+  <!-- the regular session settles it -->
+  <path d="M530 168 C570 150 610 128 650 116 S710 102 740 100" stroke="#f5b83d" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+  <!-- the half-life: the first moment the path crosses half the move -->
+  <circle cx="527" cy="240" r="11" stroke="#fde68a" stroke-width="2"/>
+  <circle cx="527" cy="240" r="3.5" fill="#fde68a"/>
+
+  <!-- the ledger: a short hash chain of predictions, top left -->
+  <g transform="translate(150 118)">
+    <rect x="0" y="0" width="34" height="24" rx="5" stroke="#f5b83d" stroke-width="2" opacity="0.8"/>
+    <rect x="52" y="0" width="34" height="24" rx="5" stroke="#f5b83d" stroke-width="2" opacity="0.8"/>
+    <rect x="104" y="0" width="34" height="24" rx="5" stroke="#f5b83d" stroke-width="2" opacity="0.8"/>
+    <path d="M34 12h18M86 12h18" stroke="#f5b83d" stroke-width="2" opacity="0.8"/>
+    <path d="M8 9h18M8 15h12M60 9h18M60 15h12M112 9h18M112 15h12" stroke="#fde68a" stroke-width="1.6" opacity="0.6"/>
+  </g>
+
+  <!-- ambient points -->
+  <g fill="#fde68a" opacity="0.45">
+    <circle cx="660" cy="60" r="2"/><circle cx="740" cy="190" r="2.2"/><circle cx="300" cy="420" r="2"/><circle cx="60" cy="40" r="1.8"/><circle cx="590" cy="410" r="2.4"/>
+  </g>
+</svg>

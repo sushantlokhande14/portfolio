@@ -161,6 +161,8 @@ export const DOMAINS: DomainDef[] = [
     hue: 150,
     glyph: 'eye',
     projects: {
+      halflife:
+        'Walk-forward models that cannot see past the decision, tested per trading day, with the best candidates scored live in a ledger nobody can edit.',
       'malware-classification':
         'Three vision models vote on malware rendered as images, across 17 families. Now a first-author paper on arXiv.',
       'fall-detection':
@@ -217,6 +219,8 @@ export const DOMAINS: DomainDef[] = [
     hue: 118,
     glyph: 'database',
     projects: {
+      halflife:
+        'Every S&P 500 filing over six weeks joined to 2-minute prices on a trading clock where nights take no time, with a placebo to set the bar.',
       blockstore:
         'Storage engine internals: a write-ahead log, double-buffered checkpoints and checksums, crashed at every file-system call to prove recovery.',
       'fleet-guard':
